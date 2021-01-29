@@ -1,0 +1,26 @@
+{
+    "title": "Invalid -- 2 inputs for NOT",
+    "query": {
+        "WHERE": {
+            "NOT": {
+                "LT": {
+                    "courses_year": 2018
+                },
+                "GT": {
+                    "courses_avg": 90
+                }
+            }
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "courses_dept",
+                "courses_id",
+                "courses_instructor",
+                "courses_avg"
+            ],
+            "ORDER": "courses_avg"
+        }
+    },
+    "isQueryValid": false,
+    "result": "InsightError"
+}

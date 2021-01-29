@@ -1,0 +1,37 @@
+{
+    "title": "Valid but no results -- CPSC courses with avg < 10 in 2012",
+    "query": {
+        "WHERE": {
+            "AND": [
+                {
+                    "LT": {
+                        "courses_avg": 10
+                    }
+                },
+                {
+                    "AND": [
+                        {
+                            "IS": {
+                                "courses_dept": "cpsc"
+                            }
+                        },
+                        {
+                            "EQ": {
+                                "courses_year": 2012
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "courses_dept",
+                "courses_id"
+            ],
+            "ORDER": "courses_id"
+        }
+    },
+    "isQueryValid": true,
+    "result": []
+}

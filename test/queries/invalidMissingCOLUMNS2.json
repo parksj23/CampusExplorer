@@ -1,0 +1,15 @@
+{
+    "title": "invalid --missing COLUMNS",
+    "query": {
+        "WHERE": {
+            "EQ": {
+                "courses_year": 2013
+            }
+        },
+        "OPTIONS": {
+            "ORDER": "courses_avg"
+        }
+    },
+    "isQueryValid": false,
+    "result": "InsightError"
+}

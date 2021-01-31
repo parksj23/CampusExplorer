@@ -1,0 +1,11 @@
+{
+    "title": "invalid --missing COLUMN and empty WHERE",
+    "query": {
+        "WHERE": {},
+        "OPTIONS": {
+            "ORDER": "courses_avg"
+        }
+    },
+    "isQueryValid": false,
+    "result": "InsightError"
+}

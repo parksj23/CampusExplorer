@@ -1,0 +1,23 @@
+{
+    "title": "invalid --extra before WHERE",
+    "query": {
+        "EQ": {
+            "courses_year": 2011
+        },
+        "WHERE": {
+            "GT": {
+                "courses_pass": 100
+            }
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "courses_dept",
+                "courses_id",
+                "courses_avg"
+            ],
+            "ORDER": "courses_avg"
+        }
+    },
+    "isQueryValid": false,
+    "result": "InsightError"
+}

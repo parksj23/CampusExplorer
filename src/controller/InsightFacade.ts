@@ -23,10 +23,10 @@ export default class InsightFacade implements IInsightFacade {
         kind: InsightDatasetKind,
     ): Promise<string[]> {
         return Promise.reject("Not implemented.");
-        // TODO: This is the code I was writing but it was having issues
-        //  so I'm commenting it out so at least you can see it
+        // // TODO: This is the code I was writing but it was having issues
+        // //  so I'm commenting it out so at least you can see it
         // return new Promise<string[]>((resolve, reject) => {
-        //     var zip = new JSZip();
+        //     let zip = new JSZip();
         //
         //     zip.loadAsync(content, {base64: true}).then(function (zipper) {
         //         Object.keys(zip.files).forEach(function (fileName) {
@@ -38,8 +38,9 @@ export default class InsightFacade implements IInsightFacade {
         //                     return reject(new InsightError());
         //                 } else if (data.result.length > 0) {
         //                     data.result.forEach(function() {
-        //                         // let course = new Course();
+        //                         let course = new Course();
         //                         // TODO: create Course class with getters, set fields
+        //                         course.
         //                     });
         //                 }
         //                 }

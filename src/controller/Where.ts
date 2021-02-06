@@ -24,7 +24,7 @@ export default class Where {
     private validateFilter() {
         this.filter = this.recursiveFilter(this.clause);
     }
-
+    // TODO: https://github.com/Jabalo/insight-ubc/blob/master/src/controller/InsightFacade.ts
     private recursiveFilter(body: any): string {
         let operator: string = Object.keys(body)[0];
         switch (operator) {

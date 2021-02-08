@@ -7,6 +7,7 @@ import {
     NotFoundError
 } from "./IInsightFacade";
 import * as JSZip from "jszip";
+import {fail} from "assert";
 
 /**
  * This is the main programmatic entry point for the project.
@@ -31,7 +32,10 @@ export default class InsightFacade implements IInsightFacade {
                  const courses: JSZip = root.folder("courses");
                  courses.forEach((relativePath, course) => {
                      course.async("string").then((parsedCourse) => {
-                         const hi = 1;
+                         const sections = JSON.parse(parsedCourse);
+                         // use for each here to get each field, need the class first
+                         const idTest: string = sections.result[0].id;
+                         const test: number = 1;
                      });
                  });
                  // Object.keys(zip.files).forEach((fileName) => {

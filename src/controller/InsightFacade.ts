@@ -4,13 +4,14 @@ import {
     InsightDataset,
     InsightDatasetKind,
     InsightError,
-    NotFoundError,
+    NotFoundError
 } from "./IInsightFacade";
+import * as JSZip from "jszip";
+import {fail} from "assert";
+
 import {
     Course,
 } from "./Course";
-
-import * as JSZip from "jszip";
 
 /**
  * This is the main programmatic entry point for the project.
@@ -27,41 +28,23 @@ export default class InsightFacade implements IInsightFacade {
         content: string,
         kind: InsightDatasetKind,
     ): Promise<string[]> {
+          
         return new Promise<string[]>((resolve, reject) => {
-            let zip = new JSZip();
-            return zip.loadAsync(content, {base64: true}).then((root) => {
-                const courses: JSZip = root.folder("courses");
-                courses.forEach((relativePath, course) => {
-                    course.async("string").then((parsedCourse) => {
-                        // const hi = 1;
-                        let c = new Course();
-                        const sections = JSON.parse(parsedCourse);
-                        if (sections.result.length > 0) {
-                            let test = typeof sections;
-                            let test2 = typeof sections.result;
-                            const keys = sections.result.keys();
-                            sections.result.forEach(() => {
-                                for (const key of keys) {
-                                    let test3 = key;
-                                    const a = 1;
-                                }
-                            });
-                            let relevantKeySectionsArray: string;
-                            // sections.result.forEach(() => {
-                            //     sections.result.keys();
-                            //     });
-                            // for (const field in sections.result) {
-                            //     if (sections.result.hasOwnProperty(field)) {
-                            //         const sectionObj = {};
-                            //         sectionObj[field] = sections.result[field];
-                            //         relevantKeySectionsArray.push(sectionObj);
-                            //     }
-                            // }
-                        }
-                    });
-                });
-                resolve(["hello"]);
-            });
+             let zip = new JSZip();
+             return zip.loadAsync(content, {base64: true}).then((root) => {
+                 const courses: JSZip = root.folder("courses");
+                 courses.forEach((relativePath, course) => {
+                     course.async("string").then((parsedCourse) => {
+                         let c = new Course();
+                         const sections = JSON.parse(parsedCourse);
+                         // use for each here to get each field, need the class first
+                         const idTest: string = sections.result[0].id;
+                         const test: number = 1;
+                     });
+                 });
+                
+                 resolve(["hello"]);
+             });
         });
     }
 

@@ -10,6 +10,22 @@ export class Course {
     private coursesUuid: string;
     private coursesYear: number;
 
+
+    public constructor(avg: number, pass: number, fail: number, audit: number, year: number, dept: string,
+                       id: string, instructor: string, title: string, uuid: string) {
+        this.coursesAvg = avg;
+        this.coursesPass = pass;
+        this.coursesFail = fail;
+        this.coursesAudit = audit;
+        this.coursesYear = year;
+        this.coursesDept = dept;
+        this.coursesId = id;
+        this.coursesInstructor = instructor;
+        this.coursesTitle = title;
+        this.coursesUuid = uuid;
+    }
+
+
     public get getDept(): string {
         return this.coursesDept;
     }

@@ -18,31 +18,40 @@ import {
  * Method documentation is in IInsightFacade
  *
  */
+
+let coursesArray: Course[] = [];
+let cCount: number = 0;
+
+
 export default class InsightFacade implements IInsightFacade {
     constructor() {
         Log.trace("InsightFacadeImpl::init()");
     }
-
     public addDataset(
         id: string,
         content: string,
         kind: InsightDatasetKind,
     ): Promise<string[]> {
-          
+
         return new Promise<string[]>((resolve, reject) => {
              let zip = new JSZip();
              return zip.loadAsync(content, {base64: true}).then((root) => {
                  const courses: JSZip = root.folder("courses");
                  courses.forEach((relativePath, course) => {
                      course.async("string").then((parsedCourse) => {
-                         let c = new Course();
                          const sections = JSON.parse(parsedCourse);
-                         // use for each here to get each field, need the class first
-                         const idTest: string = sections.result[0].id;
-                         const test: number = 1;
+                         sections.result.forEach((section: any) => {
+                             coursesArray[cCount] = new Course(section.Avg, section.Pass,
+                                 section.Fail, section.Audit,
+                                 section.Year, section.Subject,
+                                 section.Section, section.Professor,
+                                 section.Title, section.id);
+                             cCount++;
+                             });
+                         // for some reason it only works until here...
+                         const test = 1;
                      });
                  });
-                
                  resolve(["hello"]);
              });
         });

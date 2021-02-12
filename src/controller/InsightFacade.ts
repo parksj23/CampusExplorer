@@ -32,7 +32,7 @@ export default class InsightFacade implements IInsightFacade {
         content: string,
         kind: InsightDatasetKind,
     ): Promise<string[]> {
-
+        return Promise.reject("reject");
         return new Promise<string[]>((resolve, reject) => {
              let zip = new JSZip();
              return zip.loadAsync(content, {base64: true}).then((root) => {

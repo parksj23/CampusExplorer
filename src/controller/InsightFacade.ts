@@ -12,6 +12,7 @@ import {fail} from "assert";
 import {
     Course,
 } from "./Course";
+import Query from "./Query";
 
 /**
  * This is the main programmatic entry point for the project.
@@ -32,7 +33,7 @@ export default class InsightFacade implements IInsightFacade {
         content: string,
         kind: InsightDatasetKind,
     ): Promise<string[]> {
-        return Promise.reject("reject");
+        return Promise.reject("reject"); // Making addDataset a stub to test performQuery
         return new Promise<string[]>((resolve, reject) => {
              let zip = new JSZip();
              return zip.loadAsync(content, {base64: true}).then((root) => {
@@ -64,6 +65,9 @@ export default class InsightFacade implements IInsightFacade {
     public performQuery(query: any): Promise<any[]> {
         return new Promise((resolve, reject) => {
             try {
+                let validateQuery = new Query(query);
+                let a = typeof validateQuery;
+                validateQuery.validWhere(query);
                 let queryObj = JSON.parse(JSON.stringify(query));
                 let options = (Object.getOwnPropertyDescriptor(queryObj, "OPTIONS")).value;
                 let where = (Object.getOwnPropertyDescriptor(queryObj, "WHERE")).value;

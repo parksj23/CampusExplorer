@@ -11,20 +11,20 @@ export default class Query {
         let options = this.queryObj["OPTIONS"];
     }
 
-    public validWhere(where: any): boolean {
-        if (where === null || typeof where !== "object") {
+    public validWhere(body: any): boolean {
+        if (body === null || typeof body !== "object") {
             return false;
         }
         // Object.keys() returns an array of a given object's own enumerable property names,
         // iterated in the same order that a normal loop would
-        let keys: string[] = Object.keys(where);
+        let keys: string[] = Object.keys(body);
         if (keys.length === 0 || keys.length === 1) {
             return true;
         }
         if (keys.length > 1) {
             return false;
         }
-        return this.validFilter(where);
+        return this.validFilter(body);
     }
 
     private validFilter(filter: any): boolean {

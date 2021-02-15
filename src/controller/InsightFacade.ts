@@ -14,15 +14,17 @@ import {
 } from "./Course";
 import Query from "./Query";
 
+import {
+    Dataset,
+} from "./Dataset";
+
 /**
  * This is the main programmatic entry point for the project.
  * Method documentation is in IInsightFacade
  *
  */
 
-let coursesArray: Course[] = [];
-let cCount: number = 0;
-
+let datasetArray: Dataset[] = [];
 
 export default class InsightFacade implements IInsightFacade {
     constructor() {
@@ -33,14 +35,17 @@ export default class InsightFacade implements IInsightFacade {
         content: string,
         kind: InsightDatasetKind,
     ): Promise<string[]> {
-        return Promise.reject("reject"); // Making addDataset a stub to test performQuery
         return new Promise<string[]>((resolve, reject) => {
              let zip = new JSZip();
+             let dataset = new Dataset(id);
              return zip.loadAsync(content, {base64: true}).then((root) => {
                  const courses: JSZip = root.folder("courses");
                  courses.forEach((relativePath, course) => {
+                     // cCount works until here
                      course.async("string").then((parsedCourse) => {
                          const sections = JSON.parse(parsedCourse);
+                         let coursesArray: Course[] = [];
+                         let cCount: number = 0;
                          sections.result.forEach((section: any) => {
                              coursesArray[cCount] = new Course(section.Avg, section.Pass,
                                  section.Fail, section.Audit,
@@ -48,15 +53,23 @@ export default class InsightFacade implements IInsightFacade {
                                  section.Section, section.Professor,
                                  section.Title, section.id);
                              cCount++;
-                             });
+                         });
                          // for some reason it only works until here...
-                         const test = 1;
+                         const test1: number = 1;
+                         dataset.setCoursesArray(coursesArray);
+                         // this.updateDatasetArray();
                      });
+                     // const test2: number = 1;
                  });
-                 resolve(["hello"]);
+                 // const test3: number = 1;
+                 resolve(["courses"]);
              });
         });
     }
+
+    /*private updateDatasetArray() {
+
+    }*/
 
     public removeDataset(id: string): Promise<string> {
         return Promise.reject("Not implemented.");

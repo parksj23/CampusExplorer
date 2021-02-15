@@ -35,6 +35,7 @@ export default class InsightFacade implements IInsightFacade {
         content: string,
         kind: InsightDatasetKind,
     ): Promise<string[]> {
+        return Promise.reject("reject"); // Making addDataset a stub to test performQuery
         return new Promise<string[]>((resolve, reject) => {
              let zip = new JSZip();
              let dataset = new Dataset(id);
@@ -80,19 +81,23 @@ export default class InsightFacade implements IInsightFacade {
             try {
                 let validateQuery = new Query(query);
                 let a = typeof validateQuery;
-                validateQuery.validWhere(query);
+                validateQuery.validateBody(query);
+                validateQuery.buildAST(query);
                 let queryObj = JSON.parse(JSON.stringify(query));
-                let options = (Object.getOwnPropertyDescriptor(queryObj, "OPTIONS")).value;
                 let where = (Object.getOwnPropertyDescriptor(queryObj, "WHERE")).value;
+                let options = (Object.getOwnPropertyDescriptor(queryObj, "OPTIONS")).value;
+                let columns = (Object.getOwnPropertyDescriptor(options, "COLUMNS")).value;
+                let order = (Object.getOwnPropertyDescriptor(options, "ORDER")).value;
+                let filter = (Object.getOwnPropertyNames(where));
                 if (typeof options === "undefined") {
                     throw new InsightError("Invalid query. Missing OPTIONS block.");
                 }
                 if (typeof where === "undefined") {
                     throw new InsightError("Invalid query. Missing WHERE block.");
                 }
-                if (queryObj.result.length > 5000) {
-                    throw new ResultTooLargeError("Result too large.");
-                }
+                // if (queryObj.result.length > 5000) {
+                //     throw new ResultTooLargeError("Result too large.");
+                // }
                 resolve(["hello"]);
 
             } catch (e) {

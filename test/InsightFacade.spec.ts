@@ -107,11 +107,11 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
         return insightFacade
             .addDataset(id1, datasets[id1], InsightDatasetKind.Courses)
             .then((result1) => {
-                expect(result1).to.eventually.deep.equal(expected1);
+                expect(result1).to.deep.equal(expected1);
                 return insightFacade
                     .addDataset(id2, datasets[id2], InsightDatasetKind.Courses)
                     .then((result2) => {
-                        expect(result2).to.eventually.deep.equal(expected2);
+                        expect(result2).to.deep.equal(expected2);
                     });
             });
     });

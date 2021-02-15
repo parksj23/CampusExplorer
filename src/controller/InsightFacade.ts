@@ -4,7 +4,7 @@ import {
     InsightDataset,
     InsightDatasetKind,
     InsightError,
-    NotFoundError
+    NotFoundError, ResultTooLargeError
 } from "./IInsightFacade";
 import * as JSZip from "jszip";
 import {fail} from "assert";
@@ -12,6 +12,7 @@ import {fail} from "assert";
 import {
     Course,
 } from "./Course";
+import Query from "./Query";
 
 import {
     Dataset,
@@ -74,25 +75,32 @@ export default class InsightFacade implements IInsightFacade {
         return Promise.reject("Not implemented.");
     }
 
-    // public performQuery(query: any): Promise<any[]> {
-    //     return Promise.reject("Not implemented.");
-    // }
     public performQuery(query: any): Promise<any[]> {
-        // return new Promise(function (resolve, reject) {
-        // Ensures that the query is a JSON string, and then constructs the Javascript object described by the string
-        //     let QueryObj = JSON.parse(JSON.stringify(query));
-        //     let options = (Object.getOwnPropertyDescriptor(QueryObj, "OPTIONS")).value;
-        //     let where = (Object.getOwnPropertyDescriptor(QueryObj, "WHERE")).value;
-        //     if (typeof options == "undefined") {
-        //         throw "Invalid query. Missing OPTIONS block."
-        //     }
-        //     if (typeof where == "undefined") {
-        //         throw "Invalid query. Missing WHERE block."
-        //     }
-        //
-        // }
-        return Promise.reject("Not implemented.");
+        return new Promise((resolve, reject) => {
+            try {
+                let validateQuery = new Query(query);
+                let a = typeof validateQuery;
+                validateQuery.validWhere(query);
+                let queryObj = JSON.parse(JSON.stringify(query));
+                let options = (Object.getOwnPropertyDescriptor(queryObj, "OPTIONS")).value;
+                let where = (Object.getOwnPropertyDescriptor(queryObj, "WHERE")).value;
+                if (typeof options === "undefined") {
+                    throw new InsightError("Invalid query. Missing OPTIONS block.");
+                }
+                if (typeof where === "undefined") {
+                    throw new InsightError("Invalid query. Missing WHERE block.");
+                }
+                if (queryObj.result.length > 5000) {
+                    throw new ResultTooLargeError("Result too large.");
+                }
+                resolve(["hello"]);
+
+            } catch (e) {
+                reject(e);
+            }
+        });
     }
+
 
     public listDatasets():
         Promise<InsightDataset[]> {

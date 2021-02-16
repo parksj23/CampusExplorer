@@ -81,7 +81,7 @@ export default class InsightFacade implements IInsightFacade {
             try {
                 let validateQuery = new Query(query);
                 let a = typeof validateQuery;
-                validateQuery.validateBody(query);
+                validateQuery.validateQuery(query);
                 validateQuery.buildAST(query);
                 let queryObj = JSON.parse(JSON.stringify(query));
                 let where = (Object.getOwnPropertyDescriptor(queryObj, "WHERE")).value;

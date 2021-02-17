@@ -69,55 +69,65 @@ export default class Query {
         // if (filter.length !== 0 || filter.length !== 1) {
         //     return false;
         // }
-        let operatorString = (Object.getOwnPropertyNames(filter));
-        // TODO: push all filters in filter onto a list or array so we can go through them recursively later
-        // let listFilters: any[];
-        // while (typeof filter === "object") {
-        //     for (let i of filter) {
-        //         listFilters.push(i);
-        //     }
-        // }
-        let operator = operatorString[0];
+        let operator = Object.keys(filter)[0];
+        let next = filter[operator];
         switch (operator) {
             case "AND":
-                return this.validateLogic(operator);
+                return this.validateLogic(next, operator);
                 break;
             case "OR":
-                return this.validateLogic(operator);
+                return this.validateLogic(next, operator);
                 break;
             case "NOT":
-                return this.validateNegation(operator);
+                return this.validateNegation(next, operator);
                 break;
             case "IS":
-                return this.validateSCOMP(operator);
+                return this.validateSCOMP(next, operator);
                 break;
             case "EQ":
-                return this.validateMCOMP(operator);
+                return this.validateMCOMP(next, operator);
                 break;
             case "GT":
-                return this.validateMCOMP(operator);
+                return this.validateMCOMP(next, operator);
                 break;
             case "LT":
-                return this.validateMCOMP(operator);
+                return this.validateMCOMP(next, operator);
                 break;
             default:
-                return null;
+                return true;
                 break;
         }
     }
 
-    private validateSCOMP(operator: string) {
-        this.filterAndKeys(operator);
-        return false;
-
-    }
-
-    private validateNegation(operator: string) {
+    private validateSCOMP(next: any, operator: string): boolean {
+        // this.filterAndKeys(operator);
         return false;
     }
 
-    private validateLogic(operator: string) {
+    private validateMCOMP(next: any, operator: string): boolean {
         return false;
+    }
+
+    private validateNegation(next: any, operator: string): boolean {
+        return !this.validateFilter(next);
+    }
+
+    private validateLogic(next: any, operator: string) {
+        if (operator === "AND") {
+            for (let filter of next) {
+                if (this.validateFilter(filter) === false) {
+                    return false;
+                }
+            }
+            return true;
+        } else if (operator === "OR") {
+            for (let filter of next) {
+                if (this.validateFilter(filter) === true) {
+                    return true;
+                }
+                return false;
+            }
+        }
     }
 
     private validateKey(key: string): boolean {
@@ -135,10 +145,6 @@ export default class Query {
     }
 
     private validateOptions(bodyElement: any) {
-        return false;
-    }
-
-    private validateMCOMP(operator: string) {
         return false;
     }
 }

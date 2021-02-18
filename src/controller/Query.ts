@@ -93,8 +93,30 @@ export default class Query {
     }
 
     private validateSCOMP(next: any, operator: string): boolean {
-        // this.filterAndKeys(operator);
-        return false;
+        let keyString = (Object.getOwnPropertyNames(next));
+        let key = keyString[0];
+        let compValue = next[key];
+        let splitKey = key.split("_");
+        let id = splitKey[0];
+        let sfield = splitKey[1];
+        if (typeof key !== "string") {
+            return false;
+        } else if (!key.includes("_")) {
+            return false;
+        } else if (splitKey.length !== 2) {
+            return false;
+        } else if (typeof compValue !== "string") {
+            return false;
+        } else if (!this.sfields.includes(sfield)) {
+            return false;
+        }
+        if (compValue.includes("*")) {
+            let zerothChar: string = compValue.charAt(0);
+            let endChar: string = compValue.charAt(compValue.length - 1);
+            return false;
+        }
+
+        return true;
     }
 
     private validateMCOMP(next: any, operator: string): boolean {
@@ -102,18 +124,30 @@ export default class Query {
         let key = keyString[0];
         let compValue = next[key];
         let splitKey = key.split("_");
-        if (splitKey.length !== 2) {
+        let id = splitKey[0];
+        let mfield = splitKey[1];
+        if (typeof key !== "string") {
+            return false;
+        } else if (!key.includes("_")) {
+            return false;
+        } else if (splitKey.length !== 2) {
+            return false;
+        } else if (typeof compValue !== "number") {
+            return false;
+        } else if (!this.mfields.includes(mfield)) {
             return false;
         }
-        let mfield = splitKey[1];
-        if (operator === "EQ") {
-            return next[mfield] === compValue;
-        }
-        if (operator === "GT") {
-            return next[mfield] > compValue;
-        }
-        if (operator === "LT") {
-            return next[mfield] < compValue;
+        switch (operator) {
+            // TODO: implement once addDataset is done
+            case "EQ":
+                return true;
+                break;
+            case "GT":
+                return true;
+                break;
+            case "LT":
+                return true;
+                break;
         }
     }
 
@@ -139,21 +173,17 @@ export default class Query {
         }
     }
 
-    private validateKey(key: string): boolean {
-        let splitKey = key.split("_");
-        if (splitKey.length !== 2) {
-            return false;
-        }
-        let datasetId = splitKey[0];
-        let smField = splitKey[1];
-        // if smField is part of sfields or mfields...
-    }
-
     private filterAndKeys(operator: string): boolean {
         return null;
     }
 
-    private validateOptions(bodyElement: any) {
+    private validateOptions(options: any) {
+        if ("ORDER" in options) {
+            const order = options["ORDER"];
+            if (typeof order !== "object") {
+                return false;
+            }
+        }
         return false;
     }
 }

@@ -2,6 +2,7 @@ import {
     InsightError,
     ResultTooLargeError
 } from "./IInsightFacade";
+import {split} from "ts-node";
 
 export interface ITree {
     key: string;
@@ -60,16 +61,8 @@ export default class Query {
         if (filter === null || typeof filter !== "object") {
             return false;
         }
-        // let where = (Object.getOwnPropertyDescriptor(filter, "WHERE")).value;
-        // let filter = (Object.getOwnPropertyNames(where));
-        // if (filter.length > 1) {
-        //     return false;
-        // }
-        // let operator: string = filter[0];
-        // if (filter.length !== 0 || filter.length !== 1) {
-        //     return false;
-        // }
-        let operator = Object.keys(filter)[0];
+        let operatorString = (Object.getOwnPropertyNames(filter));
+        let operator = operatorString[0];
         let next = filter[operator];
         switch (operator) {
             case "AND":
@@ -105,7 +98,23 @@ export default class Query {
     }
 
     private validateMCOMP(next: any, operator: string): boolean {
-        return false;
+        let keyString = (Object.getOwnPropertyNames(next));
+        let key = keyString[0];
+        let compValue = next[key];
+        let splitKey = key.split("_");
+        if (splitKey.length !== 2) {
+            return false;
+        }
+        let mfield = splitKey[1];
+        if (operator === "EQ") {
+            return next[mfield] === compValue;
+        }
+        if (operator === "GT") {
+            return next[mfield] > compValue;
+        }
+        if (operator === "LT") {
+            return next[mfield] < compValue;
+        }
     }
 
     private validateNegation(next: any, operator: string): boolean {

@@ -3,6 +3,7 @@ import {
     ResultTooLargeError
 } from "./IInsightFacade";
 import {split} from "ts-node";
+import {types} from "util";
 
 export interface ITree {
     key: string;
@@ -42,8 +43,11 @@ export default class Query {
         let keys: string[] = Object.keys(query);
         if (keys.length === 0 || keys.length > 2) {
             return false;
+        } else if (keys.includes("WHERE")) {
+            return this.validateBody(query);
+        } else if (keys.includes("OPTIONS")) {
+            return this.validateBody(query);
         }
-        return this.validateBody(query);
     }
 
     public validateBody(body: any): boolean {
@@ -53,7 +57,11 @@ export default class Query {
         if (body["WHERE"] === undefined) {
             return this.validateOptions(body["OPTIONS"]);
         } else {
-            return this.validateFilter(body["WHERE"]);
+            if (this.validateOptions(body["OPTIONS"]) === true) {
+                return this.validateFilter(body["WHERE"]);
+            } else {
+                return this.validateFilter(body["WHERE"]);
+            }
         }
     }
 
@@ -111,11 +119,27 @@ export default class Query {
             return false;
         }
         if (compValue.includes("*")) {
-            let zerothChar: string = compValue.charAt(0);
-            let endChar: string = compValue.charAt(compValue.length - 1);
+            let firstChar: string = compValue.charAt(0);
+            let lastChar: string = compValue.charAt(compValue.length - 1);
+            let wildcardCount = (compValue.match(/[^*]/g));
+            if (wildcardCount.length === 1 && compValue.length === 1) {
+                return true;
+            } else if (wildcardCount.length === 1) {
+                if (firstChar === "*") {
+                    let wildcardEndsWithInput: string = compValue.substring(1);
+                } else if (lastChar === "*") {
+                    let wildcardStartsWithInput: string = compValue.substring(1);
+                }
+            } else if (wildcardCount.length === 2) {
+                if (compValue.length === 2) {
+                    return true;
+                } else if ((firstChar === "*") && (lastChar === "*")) {
+                    let wildcardContainsInput: string = compValue.substring(1, compValue.length - 1);
+                    // TODO: How to make this return the matching sections?
+                }
+            }
             return false;
         }
-
         return true;
     }
 
@@ -173,18 +197,29 @@ export default class Query {
         }
     }
 
-    private filterAndKeys(operator: string): boolean {
-        return null;
+    private validateOptions(options: any) {
+        let columns = options["COLUMNS"];
+        let order = options["ORDER"];
+        if (columns === undefined) {
+            return false;
+        } else if (order === undefined) {
+            return false;
+        }
+        if (typeof order !== "string") {
+            return false;
+        }
+        return this.validateColumns(columns);
     }
 
-    private validateOptions(options: any) {
-        if ("ORDER" in options) {
-            const order = options["ORDER"];
-            if (typeof order !== "object") {
+    private validateColumns(columns: string[]) {
+        for (let str of columns) {
+            if (typeof str !== "string") {
                 return false;
+            } else {
+                // TODO: What else do I need to do to validate columns?
+                return true;
             }
         }
-        return false;
     }
 }
 

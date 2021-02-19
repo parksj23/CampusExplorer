@@ -16,23 +16,23 @@ export default class Query {
     public datasetID: string;
     public sfields: string[] = ["dept", "id", "instructor", "title", "uuid"];
     public mfields: string[] = ["avg", "pass", "fail", "audit", "year"];
-    public ast: ITree;
+    // public ast: ITree;
 
     constructor(query: any) {
         this.queryObj = query;
         let options = this.queryObj["OPTIONS"];
     }
 
-    public buildAST(body: any): ITree {
-        if (Object.keys(body).length === 0) {
-            return this.ast;
-        } else {
-            let keys = Object.keys(body);
-            for (let key of keys) {
-                return null;
-            }
-        }
-    }
+    // public buildAST(body: any): ITree {
+    //     if (Object.keys(body).length === 0) {
+    //         return this.ast;
+    //     } else {
+    //         let keys = Object.keys(body);
+    //         for (let key of keys) {
+    //             return null;
+    //         }
+    //     }
+    // }
 
     public validateQuery(query: any): boolean {
         if (query === null || query === undefined || typeof query !== "object") {

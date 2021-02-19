@@ -79,10 +79,13 @@ export default class InsightFacade implements IInsightFacade {
     public performQuery(query: any): Promise<any[]> {
         return new Promise((resolve, reject) => {
             try {
+                // TODO: Figure out how you will push sections onto an array called "results"
+                // let results: Array<any> = [];
                 let validateQuery = new Query(query);
-                let a = typeof validateQuery;
-                validateQuery.validateQuery(query);
-                // validateQuery.buildAST(query);
+                // let a = typeof validateQuery;
+                // I had a break at validateQuery.validateQuery
+                // validateQuery.validateQuery(query);
+                // // validateQuery.buildAST(query);
                 let queryObj = JSON.parse(JSON.stringify(query));
                 let where = (Object.getOwnPropertyDescriptor(queryObj, "WHERE")).value;
                 let options = (Object.getOwnPropertyDescriptor(queryObj, "OPTIONS")).value;
@@ -95,11 +98,8 @@ export default class InsightFacade implements IInsightFacade {
                 if (typeof where === "undefined") {
                     throw new InsightError("Invalid query. Missing WHERE block.");
                 }
-                // if (queryObj.result.length > 5000) {
-                //     throw new ResultTooLargeError("Result too large.");
-                // }
-                resolve(["hello"]);
-
+                let results = validateQuery.validateQuery(query);
+                resolve([results]);
             } catch (e) {
                 reject(e);
             }

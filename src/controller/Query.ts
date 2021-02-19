@@ -5,41 +5,22 @@ import {
 import {split} from "ts-node";
 import {types} from "util";
 
-export interface ITree {
-    key: string;
-    value: any[];
-    node: any[];
-}
-
 export default class Query {
     public queryObj: any;
     public datasetID: string;
     public sfields: string[] = ["dept", "id", "instructor", "title", "uuid"];
     public mfields: string[] = ["avg", "pass", "fail", "audit", "year"];
-    // public ast: ITree;
 
     constructor(query: any) {
         this.queryObj = query;
         let options = this.queryObj["OPTIONS"];
     }
 
-    // public buildAST(body: any): ITree {
-    //     if (Object.keys(body).length === 0) {
-    //         return this.ast;
-    //     } else {
-    //         let keys = Object.keys(body);
-    //         for (let key of keys) {
-    //             return null;
-    //         }
-    //     }
-    // }
-
     public validateQuery(query: any): boolean {
         if (query === null || query === undefined || typeof query !== "object") {
             return false;
         }
-        // Object.keys() returns an array of a given object's own enumerable property names,
-        // iterated in the same order that a normal loop would
+        let queryObj = JSON.parse(JSON.stringify(query));
         let keys: string[] = Object.keys(query);
         if (keys.length === 0 || keys.length > 2) {
             return false;
@@ -200,7 +181,9 @@ export default class Query {
     private validateOptions(options: any) {
         let columns = options["COLUMNS"];
         let order = options["ORDER"];
-        if (columns === undefined) {
+        if (typeof options !== "object") {
+            return false;
+        } else if (columns === undefined) {
             return false;
         } else if (order === undefined) {
             return false;

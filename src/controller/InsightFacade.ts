@@ -79,8 +79,8 @@ export default class InsightFacade implements IInsightFacade {
     public performQuery(query: any): Promise<any[]> {
         return new Promise((resolve, reject) => {
             try {
-                // TODO: Figure out how you will push sections onto an array called "results"
-                // let results: Array<any> = [];
+                // TODO: Figure out how you will push sections onto resultsArray
+                let resultArray = [];
                 let validateQuery = new Query(query);
                 // let a = typeof validateQuery;
                 // I had a break at validateQuery.validateQuery
@@ -98,7 +98,7 @@ export default class InsightFacade implements IInsightFacade {
                 if (typeof where === "undefined") {
                     throw new InsightError("Invalid query. Missing WHERE block.");
                 }
-                let results = validateQuery.validateQuery(query);
+                let results: any = validateQuery.validateQuery(query);
                 resolve([results]);
             } catch (e) {
                 reject(e);

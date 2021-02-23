@@ -181,16 +181,23 @@ export default class Query {
     private validateOptions(options: any) {
         let columns = options["COLUMNS"];
         let order = options["ORDER"];
+
         if (typeof options !== "object") {
             return false;
-        } else if (columns === undefined) {
-            return false;
-        } else if (order === undefined) {
+        }
+
+        if (columns === undefined) {
             return false;
         }
+
+        if (order === undefined) {
+            return false;
+        }
+
         if (typeof order !== "string") {
             return false;
         }
+
         return this.validateColumns(columns);
     }
 

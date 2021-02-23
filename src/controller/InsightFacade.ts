@@ -27,8 +27,22 @@ import {
 let datasetArray: Dataset[] = [];
 
 export default class InsightFacade implements IInsightFacade {
+    private testDataset: Course[];
+    // private course1 = new Course(60, 50, 10, 2, 2019, "chem", "221", "smith",
+    //     "intro to chem", "40521");
+    // private course2 = new Course(70, 75, 8, 0, 2010, "engl", "121", "lee, tara",
+    //     "english", "12354");
+    // private course3 = new Course(40, 10, 22, 1, 2014, "chbe", "433", "smith",
+    //     "engineering", "85742");
+    // private course4 = new Course(88, 98, 15, 7, 2010, "engl", "330", "rochester, tina",
+    //     "english", "85100");
+
     constructor() {
         Log.trace("InsightFacadeImpl::init()");
+        // this.testDataset.push(this.course1);
+        // this.testDataset.push(this.course2);
+        // this.testDataset.push(this.course3);
+        // this.testDataset.push(this.course4);
     }
     public addDataset(
         id: string,
@@ -84,7 +98,7 @@ export default class InsightFacade implements IInsightFacade {
                 let validateQuery = new Query(query);
                 // let a = typeof validateQuery;
                 // I had a break at validateQuery.validateQuery
-                // validateQuery.validateQuery(query);
+                validateQuery.validateQuery(query);
                 // // validateQuery.buildAST(query);
                 let queryObj = JSON.parse(JSON.stringify(query));
                 let where = (Object.getOwnPropertyDescriptor(queryObj, "WHERE")).value;

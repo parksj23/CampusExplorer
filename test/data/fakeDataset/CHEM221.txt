@@ -1,0 +1,1 @@
+{"result":[{"avg":"70","pass":"75","fail":10,"audit":"1","year":"2019","dept":"chem","id":"221","instructor":"smith, ellen","title":"chemistry","uuid":"7074"}],"rank":0}

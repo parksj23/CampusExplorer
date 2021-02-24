@@ -5,22 +5,20 @@ import {
 import {split} from "ts-node";
 import {types} from "util";
 
-export default class Query {
+export default class ValidateQuery {
     public queryObj: any;
-    public datasetID: string;
     public sfields: string[] = ["dept", "id", "instructor", "title", "uuid"];
     public mfields: string[] = ["avg", "pass", "fail", "audit", "year"];
 
     constructor(query: any) {
         this.queryObj = query;
-        let options = this.queryObj["OPTIONS"];
     }
 
     public validateQuery(query: any): boolean {
         if (query === null || query === undefined || typeof query !== "object") {
             return false;
         }
-        let queryObj = JSON.parse(JSON.stringify(query));
+        // let queryObj = JSON.parse(JSON.stringify(query));
         let keys: string[] = Object.keys(query);
         if (keys.length === 0 || keys.length > 2) {
             return false;
@@ -75,9 +73,6 @@ export default class Query {
             case "LT":
                 return this.validateMCOMP(next, operator);
                 break;
-            default:
-                return true;
-                break;
         }
     }
 
@@ -88,40 +83,26 @@ export default class Query {
         let splitKey = key.split("_");
         let id = splitKey[0];
         let sfield = splitKey[1];
+
         if (typeof key !== "string") {
             return false;
-        } else if (!key.includes("_")) {
-            return false;
-        } else if (splitKey.length !== 2) {
-            return false;
-        } else if (typeof compValue !== "string") {
-            return false;
-        } else if (!this.sfields.includes(sfield)) {
+        }
+
+        if (!key.includes("_")) {
             return false;
         }
-        if (compValue.includes("*")) {
-            let firstChar: string = compValue.charAt(0);
-            let lastChar: string = compValue.charAt(compValue.length - 1);
-            let wildcardCount = (compValue.match(/[^*]/g));
-            if (wildcardCount.length === 1 && compValue.length === 1) {
-                return true;
-            } else if (wildcardCount.length === 1) {
-                if (firstChar === "*") {
-                    let wildcardEndsWithInput: string = compValue.substring(1);
-                } else if (lastChar === "*") {
-                    let wildcardStartsWithInput: string = compValue.substring(1);
-                }
-            } else if (wildcardCount.length === 2) {
-                if (compValue.length === 2) {
-                    return true;
-                } else if ((firstChar === "*") && (lastChar === "*")) {
-                    let wildcardContainsInput: string = compValue.substring(1, compValue.length - 1);
-                    // TODO: How to make this return the matching sections?
-                }
-            }
+
+        if (splitKey.length !== 2) {
             return false;
         }
-        return true;
+
+        if (typeof compValue !== "string") {
+            return false;
+        }
+
+        if (!this.sfields.includes(sfield)) {
+            return false;
+        }
     }
 
     private validateMCOMP(next: any, operator: string): boolean {
@@ -131,28 +112,25 @@ export default class Query {
         let splitKey = key.split("_");
         let id = splitKey[0];
         let mfield = splitKey[1];
+
         if (typeof key !== "string") {
             return false;
-        } else if (!key.includes("_")) {
-            return false;
-        } else if (splitKey.length !== 2) {
-            return false;
-        } else if (typeof compValue !== "number") {
-            return false;
-        } else if (!this.mfields.includes(mfield)) {
+        }
+
+        if (!key.includes("_")) {
             return false;
         }
-        switch (operator) {
-            // TODO: implement once addDataset is done
-            case "EQ":
-                return true;
-                break;
-            case "GT":
-                return true;
-                break;
-            case "LT":
-                return true;
-                break;
+
+        if (splitKey.length !== 2) {
+            return false;
+        }
+
+        if (typeof compValue !== "number") {
+            return false;
+        }
+
+        if (!this.mfields.includes(mfield)) {
+            return false;
         }
     }
 
@@ -161,18 +139,11 @@ export default class Query {
     }
 
     private validateLogic(next: any, operator: string) {
-        if (operator === "AND") {
-            for (let filter of next) {
-                if (this.validateFilter(filter) === false) {
-                    return false;
-                }
-            }
-            return true;
-        } else if (operator === "OR") {
-            for (let filter of next) {
-                if (this.validateFilter(filter) === true) {
-                    return true;
-                }
+        if (!Array.isArray(next)) {
+            return false;
+        }
+        for (let filter of next) {
+            if (this.validateFilter(filter) === false) {
                 return false;
             }
         }
@@ -202,12 +173,29 @@ export default class Query {
     }
 
     private validateColumns(columns: string[]) {
-        for (let str of columns) {
-            if (typeof str !== "string") {
+        if (columns.length < 1 ) {
+            return false;
+        }
+
+        for (let key of columns) {
+            let splitKey = key.split("_");
+            let id = splitKey[0];
+            let sfield = splitKey[1];
+
+            if (typeof key !== "string") {
                 return false;
-            } else {
-                // TODO: What else do I need to do to validate columns?
-                return true;
+            }
+
+            if (!key.includes(("_"))) {
+                return false;
+            }
+
+            if (splitKey.length !== 2) {
+                return false;
+            }
+
+            if (!this.sfields.includes(sfield)) {
+                return false;
             }
         }
     }

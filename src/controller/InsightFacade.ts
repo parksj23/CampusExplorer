@@ -12,11 +12,12 @@ import {fail} from "assert";
 import {
     Course,
 } from "./Course";
-import Query from "./Query";
+import ValidateQuery from "./ValidateQuery";
 
 import {
     Dataset,
 } from "./Dataset";
+import DoQuery from "./DoQuery";
 
 /**
  * This is the main programmatic entry point for the project.
@@ -27,22 +28,24 @@ import {
 let datasetArray: Dataset[] = [];
 
 export default class InsightFacade implements IInsightFacade {
-    private testDataset: Course[];
-    // private course1 = new Course(60, 50, 10, 2, 2019, "chem", "221", "smith",
-    //     "intro to chem", "40521");
-    // private course2 = new Course(70, 75, 8, 0, 2010, "engl", "121", "lee, tara",
-    //     "english", "12354");
-    // private course3 = new Course(40, 10, 22, 1, 2014, "chbe", "433", "smith",
-    //     "engineering", "85742");
-    // private course4 = new Course(88, 98, 15, 7, 2010, "engl", "330", "rochester, tina",
-    //     "english", "85100");
+    // TODO: Get rid of all this before merging
+    private testDataset: Course[] = [];
+    private course1 = new Course(60, 50, 10, 2, 2019, "chem", "221", "smith",
+        "intro to chem", "40521");
+    private course2 = new Course(70, 75, 8, 0, 2010, "engl", "121", "lee, tara",
+        "english", "12354");
+    private course3 = new Course(40, 10, 22, 1, 2014, "chbe", "433", "smith",
+        "engineering", "85742");
+    private course4 = new Course(88, 98, 15, 7, 2010, "engl", "330", "rochester, tina",
+        "english", "85100");
 
     constructor() {
         Log.trace("InsightFacadeImpl::init()");
-        // this.testDataset.push(this.course1);
-        // this.testDataset.push(this.course2);
-        // this.testDataset.push(this.course3);
-        // this.testDataset.push(this.course4);
+        // TODO: get rid of this before merging
+        this.testDataset.push(this.course1);
+        this.testDataset.push(this.course2);
+        this.testDataset.push(this.course3);
+        this.testDataset.push(this.course4);
     }
     public addDataset(
         id: string,
@@ -93,27 +96,29 @@ export default class InsightFacade implements IInsightFacade {
     public performQuery(query: any): Promise<any[]> {
         return new Promise((resolve, reject) => {
             try {
-                // TODO: Figure out how you will push sections onto resultsArray
-                let resultArray = [];
-                let validateQuery = new Query(query);
-                // let a = typeof validateQuery;
+                let validQuery = new ValidateQuery(query);
                 // I had a break at validateQuery.validateQuery
-                validateQuery.validateQuery(query);
-                // // validateQuery.buildAST(query);
-                let queryObj = JSON.parse(JSON.stringify(query));
-                let where = (Object.getOwnPropertyDescriptor(queryObj, "WHERE")).value;
-                let options = (Object.getOwnPropertyDescriptor(queryObj, "OPTIONS")).value;
-                let columns = (Object.getOwnPropertyDescriptor(options, "COLUMNS")).value;
-                let order = (Object.getOwnPropertyDescriptor(options, "ORDER")).value;
-                let filter = (Object.getOwnPropertyNames(where));
-                if (typeof options === "undefined") {
-                    throw new InsightError("Invalid query. Missing OPTIONS block.");
+                // let resultArray: Course[] = [];
+                let doQuery = new DoQuery(query);
+                if (validQuery.validateQuery(query)) {
+                    let resultArray = doQuery.doQuery(query);
+                    resolve([resultArray]);
+                } else {
+                    throw new InsightError("Invalid query.");
                 }
-                if (typeof where === "undefined") {
-                    throw new InsightError("Invalid query. Missing WHERE block.");
-                }
-                let results: any = validateQuery.validateQuery(query);
-                resolve([results]);
+                // let queryObj = JSON.parse(JSON.stringify(query));
+                // let where = (Object.getOwnPropertyDescriptor(queryObj, "WHERE")).value;
+                // let options = (Object.getOwnPropertyDescriptor(queryObj, "OPTIONS")).value;
+                // let columns = (Object.getOwnPropertyDescriptor(options, "COLUMNS")).value;
+                // let order = (Object.getOwnPropertyDescriptor(options, "ORDER")).value;
+                // let filter = (Object.getOwnPropertyNames(where));
+                // if (typeof options === "undefined") {
+                //     throw new InsightError("Invalid query. Missing OPTIONS block.");
+                // }
+                // if (typeof where === "undefined") {
+                //     throw new InsightError("Invalid query. Missing WHERE block.");
+                // }
+                // resolve([resultArray]);
             } catch (e) {
                 reject(e);
             }

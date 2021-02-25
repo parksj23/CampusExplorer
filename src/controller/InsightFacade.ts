@@ -8,7 +8,6 @@ import {
 } from "./IInsightFacade";
 import * as JSZip from "jszip";
 import {fail} from "assert";
-
 import {
     Course,
 } from "./Course";
@@ -18,58 +17,73 @@ import {
     Dataset,
 } from "./Dataset";
 
+let datasetArray: Dataset[] = [];
+let arrayOfPromises: any[] = [];
+
 /**
  * This is the main programmatic entry point for the project.
  * Method documentation is in IInsightFacade
  *
  */
 
-let datasetArray: Dataset[] = [];
 
 export default class InsightFacade implements IInsightFacade {
+
+    // let datasetArray: Dataset[] = [];
+    // let arrayOfPromises: any[] = [];
+
     constructor() {
         Log.trace("InsightFacadeImpl::init()");
     }
+
     public addDataset(
         id: string,
         content: string,
         kind: InsightDatasetKind,
     ): Promise<string[]> {
+
         return new Promise<string[]>((resolve, reject) => {
-             let zip = new JSZip();
-             let dataset = new Dataset(id);
-             return zip.loadAsync(content, {base64: true}).then((root) => {
-                 const courses: JSZip = root.folder("courses");
-                 courses.forEach((relativePath, course) => {
-                     // cCount works until here
-                     course.async("string").then((parsedCourse) => {
-                         const sections = JSON.parse(parsedCourse);
-                         let coursesArray: Course[] = [];
-                         let cCount: number = 0;
-                         sections.result.forEach((section: any) => {
-                             coursesArray[cCount] = new Course(section.Avg, section.Pass,
-                                 section.Fail, section.Audit,
-                                 section.Year, section.Subject,
-                                 section.Section, section.Professor,
-                                 section.Title, section.id);
-                             cCount++;
-                         });
-                         // for some reason it only works until here...
-                         const test1: number = 1;
-                         dataset.setCoursesArray(coursesArray);
-                         // this.updateDatasetArray();
-                     });
-                     // const test2: number = 1;
-                 });
-                 // const test3: number = 1;
-                 resolve(["courses"]);
-             });
+            let zip = new JSZip();
+            let dataset = new Dataset(id);
+            let cCount: number = 0;
+            return zip.loadAsync(content, {base64: true}).then((root) => {
+                const courses: JSZip = root.folder("courses");
+                courses.forEach((relativePath, course) => {
+                    course.async("string").then(async (parsedCourse) => {
+                        const sections = JSON.parse(parsedCourse);
+                        for (const section of sections.result) {
+                            arrayOfPromises[cCount] = this.getCourseSection(section);
+                            cCount++;
+                            // console.log(cCount);
+                            // promises not resolved
+                            const test = 1;
+                        }
+                        return arrayOfPromises;
+                    }).then(() => {
+                        return Promise.all(arrayOfPromises);
+                    });
+                });
+                // runs until 64612
+                const test11 = 2;
+            });
+            // runs until 64612
+            const test2 = 2;
+            resolve(["courses"]);
         });
     }
 
-    /*private updateDatasetArray() {
+    private getCourseSection(section: any): Promise<Course> {
+        const num = 1;
+        return Promise.resolve(new Course(section.Avg, section.Pass,
+                section.Fail, section.Audit,
+                section.Year, section.Subject,
+                section.Section, section.Professor,
+                section.Title, section.id));
+    }
 
+    /*private updateDatasetArray() {
     }*/
+
 
     public removeDataset(id: string): Promise<string> {
         return Promise.reject("Not implemented.");
@@ -107,3 +121,5 @@ export default class InsightFacade implements IInsightFacade {
         return Promise.reject("Not implemented.");
     }
 }
+
+

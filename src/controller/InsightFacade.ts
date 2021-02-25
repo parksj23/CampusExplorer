@@ -54,8 +54,7 @@ export default class InsightFacade implements IInsightFacade {
                         for (const section of sections.result) {
                             arrayOfPromises[cCount] = this.getCourseSection(section);
                             cCount++;
-                            // eslint-disable-next-line no-console
-                            console.log(cCount);
+                            // console.log(cCount);
                             // promises not resolved
                             const test = 1;
                         }

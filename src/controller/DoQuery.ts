@@ -52,7 +52,7 @@ export default class DoQuery {
         return result;
     }
 
-    private doMCOMP(next: string, operator: string, data: any[]): any[] {
+    private doMCOMP(next: any, operator: string, data: any[]): any[] {
         let keyString = (Object.getOwnPropertyNames(next));
         let key = keyString[0];
         let compValue = next[key];
@@ -73,7 +73,7 @@ export default class DoQuery {
         return [];
     }
 
-    private doSCOMP(next: string, operator: string, data: any[]): any[] {
+    private doSCOMP(next: any, operator: string, data: any[]): any[] {
         let keyString = (Object.getOwnPropertyNames(next));
         let key = keyString[0];
         let compValue = next[key];
@@ -109,11 +109,11 @@ export default class DoQuery {
         }
     }
 
-    private doNegation(next: string, operator: string, data: any[]): any[] {
+    private doNegation(next: any, operator: string, data: any[]): any[] {
         return this.doQuery(next);
     }
 
-    private doLogic(next: string, operator: string, data: any[]): any[] {
+    private doLogic(next: any, operator: string, data: any[]): any[] {
         return [];
     }
 }

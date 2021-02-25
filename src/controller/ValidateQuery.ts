@@ -85,21 +85,13 @@ export default class ValidateQuery {
 
         if (typeof key !== "string") {
             return false;
-        }
-
-        if (!key.includes("_")) {
+        } else if (!key.includes("_")) {
             return false;
-        }
-
-        if (splitKey.length !== 2) {
+        } else if (splitKey.length !== 2) {
             return false;
-        }
-
-        if (typeof compValue !== "string") {
+        } else if (typeof compValue !== "string") {
             return false;
-        }
-
-        if (!this.sfields.includes(sfield)) {
+        } else if (!this.sfields.includes(sfield)) {
             return false;
         }
 

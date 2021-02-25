@@ -29,7 +29,7 @@ export default class ValidateQuery {
         }
     }
 
-    public validateBody(body: any): boolean {
+    private validateBody(body: any): boolean {
         if (body === null || typeof body !== "object") {
             return false;
         }
@@ -81,7 +81,6 @@ export default class ValidateQuery {
         let key = keyString[0];
         let compValue = next[key];
         let splitKey = key.split("_");
-        let id = splitKey[0];
         let sfield = splitKey[1];
 
         if (typeof key !== "string") {
@@ -102,6 +101,35 @@ export default class ValidateQuery {
 
         if (!this.sfields.includes(sfield)) {
             return false;
+        }
+
+        if (compValue.includes("*")) {
+            let firstChar: string = compValue.charAt(0);
+            let lastChar: string = compValue.charAt(compValue.length - 1);
+            let wildcardCount = (compValue.match(/[^*]/g));
+            if (wildcardCount.length === 1 && compValue.length === 1) {
+                return true;
+            }
+            if (wildcardCount.length === 1) {
+                if (firstChar === "*") {
+                    let wildcardEndsWithInput: string = compValue.substring(1);
+                    return true;
+                } else if (lastChar === "*") {
+                    let wildcardStartsWithInput: string = compValue.substring(1);
+                    return true;
+                }
+            }
+            if (wildcardCount.length === 2) {
+                if (compValue.length === 2) {
+                    return true;
+                } else if ((firstChar === "*") && (lastChar === "*")) {
+                    let wildcardContainsInput: string = compValue.substring(1, compValue.length - 1);
+                    return true;
+                }
+            }
+            if ((compValue.substr(1, compValue.length - 2)).includes("*")) {
+                return false;
+            }
         }
     }
 
@@ -169,11 +197,23 @@ export default class ValidateQuery {
             return false;
         }
 
+        if (order.length < 1) {
+            return false;
+        }
+
+        if (Array.isArray(order)) {
+            for (let key of order) {
+                if (!columns.includes(key)) {
+                    return false;
+                }
+            }
+        }
         return this.validateColumns(columns);
     }
 
-    private validateColumns(columns: string[]) {
-        if (columns.length < 1 ) {
+    private validateColumns(columns: string[]
+    ) {
+        if (columns.length < 1) {
             return false;
         }
 

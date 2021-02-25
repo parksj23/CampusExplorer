@@ -101,8 +101,7 @@ export default class InsightFacade implements IInsightFacade {
                 // let resultArray: Course[] = [];
                 let doQuery = new DoQuery(query);
                 if (validQuery.validateQuery(query)) {
-                    let resultArray = doQuery.doQuery(query);
-                    resolve([resultArray]);
+                    let resultArray = doQuery.doInitialQuery(query);
                 } else {
                     throw new InsightError("Invalid query.");
                 }

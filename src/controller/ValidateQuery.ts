@@ -22,9 +22,15 @@ export default class ValidateQuery {
         let keys: string[] = Object.keys(query);
         if (keys.length === 0 || keys.length > 2) {
             return false;
-        } else if (keys.includes("WHERE")) {
+        }
+
+        if (keys.includes("WHERE")) {
             return this.validateBody(query);
-        } else if (keys.includes("OPTIONS")) {
+        } else {
+            return false;
+        }
+
+        if (keys.includes("OPTIONS")) {
             return this.validateBody(query);
         }
     }
@@ -34,10 +40,17 @@ export default class ValidateQuery {
             return false;
         }
         if (body["WHERE"] === undefined) {
-            return this.validateOptions(body["OPTIONS"]);
+            if (Object.keys(body).includes("OPTIONS")) {
+                return this.validateOptions(body["OPTIONS"]);
+            }
         } else {
-            if (this.validateOptions(body["OPTIONS"]) === true) {
-                return this.validateFilter(body["WHERE"]);
+            if (Object.keys(body["WHERE"]).length > 1) {
+                return false;
+            }
+            if (Object.keys(body).includes("OPTIONS")) {
+                if (this.validateOptions(body["OPTIONS"]) === true) {
+                    return this.validateFilter(body["WHERE"]);
+                }
             } else {
                 return this.validateFilter(body["WHERE"]);
             }
@@ -51,6 +64,10 @@ export default class ValidateQuery {
         let operatorString = (Object.getOwnPropertyNames(filter));
         let operator = operatorString[0];
         let next = filter[operator];
+        if (typeof next !== "object") {
+            return false;
+        }
+
         switch (operator) {
             case "AND":
                 return this.validateLogic(next, operator);
@@ -77,28 +94,37 @@ export default class ValidateQuery {
     }
 
     private validateSCOMP(next: any, operator: string): boolean {
+        if (Object.keys(next).length === 0) {
+            return false;
+        }
         let keyString = (Object.getOwnPropertyNames(next));
         let key = keyString[0];
         let compValue = next[key];
         let splitKey = key.split("_");
         let sfield = splitKey[1];
-
-        if (typeof key !== "string") {
+        if (keyString.length === undefined || keyString.length < 1) {
+            return false;
+        } else if ((typeof key !== "string") || (key === undefined) || (key === null)) {
             return false;
         } else if (!key.includes("_")) {
             return false;
         } else if (splitKey.length !== 2) {
             return false;
-        } else if (typeof compValue !== "string") {
+        } else if ((typeof compValue !== "string") || (compValue === undefined) || (compValue === null)) {
             return false;
         } else if (!this.sfields.includes(sfield)) {
             return false;
         }
-
         if (compValue.includes("*")) {
+            return this.validateWildcard(compValue);
+        }
+    }
+
+    private validateWildcard(compValue: string) {
             let firstChar: string = compValue.charAt(0);
             let lastChar: string = compValue.charAt(compValue.length - 1);
-            let wildcardCount = (compValue.match(/[^*]/g));
+            let wildcardCount = (compValue.match(/\[^*]/g) || []);
+            let count = compValue.split("*").length - 1;
             if (wildcardCount.length === 1 && compValue.length === 1) {
                 return true;
             }
@@ -111,21 +137,25 @@ export default class ValidateQuery {
                     return true;
                 }
             }
-            if (wildcardCount.length === 2) {
-                if (compValue.length === 2) {
-                    return true;
-                } else if ((firstChar === "*") && (lastChar === "*")) {
-                    let wildcardContainsInput: string = compValue.substring(1, compValue.length - 1);
-                    return true;
-                }
+            if ((wildcardCount.length === 2) && (compValue.length === 2)) {
+                return true;
+            }
+            if ((wildcardCount.length === 2) && (firstChar === "*") && (lastChar === "*")) {
+                let wildcardContainsInput: string = compValue.substring(1, compValue.length - 1);
+                return true;
+            }
+            if (wildcardCount.length > 2) {
+                return false;
             }
             if ((compValue.substr(1, compValue.length - 2)).includes("*")) {
                 return false;
             }
         }
-    }
 
     private validateMCOMP(next: any, operator: string): boolean {
+        if (Object.keys(next).length === 0) {
+            return false;
+        }
         let keyString = (Object.getOwnPropertyNames(next));
         let key = keyString[0];
         let compValue = next[key];
@@ -133,7 +163,11 @@ export default class ValidateQuery {
         let id = splitKey[0];
         let mfield = splitKey[1];
 
-        if (typeof key !== "string") {
+        if (keyString.length ===  undefined || keyString.length < 1) {
+            return false;
+        }
+
+        if ((typeof key !== "string") || (key === undefined) || (key === null)) {
             return false;
         }
 
@@ -145,7 +179,7 @@ export default class ValidateQuery {
             return false;
         }
 
-        if (typeof compValue !== "number") {
+        if ((typeof compValue !== "number") || (compValue === undefined) || (compValue === null)) {
             return false;
         }
 
@@ -155,6 +189,10 @@ export default class ValidateQuery {
     }
 
     private validateNegation(next: any, operator: string): boolean {
+        let nextKeys = (Object.getOwnPropertyNames(next));
+        if (nextKeys.length !== 1) {
+            return false;
+        }
         return !this.validateFilter(next);
     }
 
@@ -170,8 +208,17 @@ export default class ValidateQuery {
     }
 
     private validateOptions(options: any) {
+        let optionsKeys: string[] = Object.keys(options);
         let columns = options["COLUMNS"];
         let order = options["ORDER"];
+
+        if (!optionsKeys.includes("COLUMNS")) {
+            return false;
+        }
+
+        if (optionsKeys.includes("ORDER")) {
+            return true;
+        }
 
         if (typeof options !== "object") {
             return false;
@@ -205,6 +252,10 @@ export default class ValidateQuery {
 
     private validateColumns(columns: string[]
     ) {
+        if (columns === undefined) {
+            return false;
+        }
+
         if (columns.length < 1) {
             return false;
         }

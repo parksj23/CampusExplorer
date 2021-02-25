@@ -43,7 +43,7 @@ export default class InsightFacade implements IInsightFacade {
         kind: InsightDatasetKind,
     ): Promise<string[]> {
 
-        // return Promise.reject("reject"); // Making addDataset a stub to test performQuery
+        return Promise.reject("reject"); // Making addDataset a stub to test performQuery
 
         return new Promise<string[]>((resolve, reject) => {
             let zip = new JSZip();

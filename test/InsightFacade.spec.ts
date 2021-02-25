@@ -709,6 +709,7 @@ describe("InsightFacade PerformQuery", () => {
     } = {
         courses: {
             path: "./test/data/courses.zip",
+            // path: "./data/fakeDataset.zip",
             kind: InsightDatasetKind.Courses,
         },
     };

@@ -11,11 +11,12 @@ import {fail} from "assert";
 import {
     Course,
 } from "./Course";
-import Query from "./Query";
+import ValidateQuery from "./ValidateQuery";
 
 import {
     Dataset,
 } from "./Dataset";
+import DoQuery from "./DoQuery";
 
 let datasetArray: Dataset[] = [];
 let arrayOfPromises: any[] = [];
@@ -41,6 +42,8 @@ export default class InsightFacade implements IInsightFacade {
         content: string,
         kind: InsightDatasetKind,
     ): Promise<string[]> {
+
+        // return Promise.reject("reject"); // Making addDataset a stub to test performQuery
 
         return new Promise<string[]>((resolve, reject) => {
             let zip = new JSZip();
@@ -92,23 +95,32 @@ export default class InsightFacade implements IInsightFacade {
     public performQuery(query: any): Promise<any[]> {
         return new Promise((resolve, reject) => {
             try {
-                let validateQuery = new Query(query);
-                let a = typeof validateQuery;
-                validateQuery.validWhere(query);
-                let queryObj = JSON.parse(JSON.stringify(query));
-                let options = (Object.getOwnPropertyDescriptor(queryObj, "OPTIONS")).value;
-                let where = (Object.getOwnPropertyDescriptor(queryObj, "WHERE")).value;
-                if (typeof options === "undefined") {
-                    throw new InsightError("Invalid query. Missing OPTIONS block.");
+                let validQuery = new ValidateQuery(query);
+                // I had a break at validateQuery.validateQuery
+                // let resultArray: Course[] = [];
+                let doQuery = new DoQuery(query);
+                if (validQuery.validateQuery(query)) {
+                    let resultArray = doQuery.doInitialQuery(query);
+                    if (resultArray.length > 5000) {
+                        throw new ResultTooLargeError("Result too large.");
+                    }
+                    resolve([resultArray]);
+                } else {
+                    throw new InsightError("Invalid query.");
                 }
-                if (typeof where === "undefined") {
-                    throw new InsightError("Invalid query. Missing WHERE block.");
-                }
-                if (queryObj.result.length > 5000) {
-                    throw new ResultTooLargeError("Result too large.");
-                }
-                resolve(["hello"]);
-
+                // let queryObj = JSON.parse(JSON.stringify(query));
+                // let where = (Object.getOwnPropertyDescriptor(queryObj, "WHERE")).value;
+                // let options = (Object.getOwnPropertyDescriptor(queryObj, "OPTIONS")).value;
+                // let columns = (Object.getOwnPropertyDescriptor(options, "COLUMNS")).value;
+                // let order = (Object.getOwnPropertyDescriptor(options, "ORDER")).value;
+                // let filter = (Object.getOwnPropertyNames(where));
+                // if (typeof options === "undefined") {
+                //     throw new InsightError("Invalid query. Missing OPTIONS block.");
+                // }
+                // if (typeof where === "undefined") {
+                //     throw new InsightError("Invalid query. Missing WHERE block.");
+                // }
+                // resolve([resultArray]);
             } catch (e) {
                 reject(e);
             }

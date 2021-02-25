@@ -123,8 +123,10 @@ export default class ValidateQuery {
     private validateWildcard(compValue: string) {
             let firstChar: string = compValue.charAt(0);
             let lastChar: string = compValue.charAt(compValue.length - 1);
-            let wildcardCount = (compValue.match(/\[^*]/g) || []);
-            let count = compValue.split("*").length - 1;
+            let wildcardCount = compValue.match(/[^*]/g) ;
+            if (wildcardCount === null) {
+                return false;
+            }
             if (wildcardCount.length === 1 && compValue.length === 1) {
                 return true;
             }

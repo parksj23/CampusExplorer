@@ -34,7 +34,7 @@ export default class InsightFacade implements IInsightFacade {
 
     public datasetArray: Dataset[] = [];
     public datasets: InsightDataset[] = [];
-    public memory: any = {};
+    public memory: string[] = [];
     public cache: string;
 
     constructor() {
@@ -56,29 +56,34 @@ export default class InsightFacade implements IInsightFacade {
                 return reject(new InsightError("Invalid id."));
             }
             // check if already added
-            if (id in this.memory) {
+            if (this.memory.includes(id)) {
                 return Promise.reject(new InsightError("Dataset already added."));
             }
 
             let zip = new JSZip();
+            let fileCount: number = 0;
             zip.loadAsync(content, {base64: true}).then((root) => {
                 const courses: JSZip = root.folder("courses");
                 courses.forEach((relativePath, course) => {
-                    let promise1 = course.async("string").then((parsedCourse) => {
-                        return JSON.parse(parsedCourse);
-                    });
-                    promiseArray.push(promise1);
+                    fileCount++;
+                    // let promise1 = course.async("string").then((parsedCourse) => {
+                    //     return JSON.parse(parsedCourse);
+                    // }).catch((err: any) => {
+                    //     expect(err).to.be.rejectedWith(InsightError);
+                    // });
+                    let asyncPromise = course.async("string");
+                    promiseArray.push(asyncPromise);
                 });
 
-                if (promiseArray.length === 0) {
+                if (fileCount === 0) {
                     reject(new InsightError("Empty courses folder."));
                 }
 
                 Promise.all(promiseArray).then((courseJSONs: any) => {
                     let validSections: any = [];
                     for (let i of courseJSONs) {
-                        let section = JSON.parse(i);
-                        if (typeof i === "object") {
+                        let iType = typeof i;
+                        if (iType === "object") {
                             if (Object.keys(i).includes("result")) {
                                 validSections = this.getSectionFields(i["result"], validSections);
                             }
@@ -88,11 +93,9 @@ export default class InsightFacade implements IInsightFacade {
                         reject(new InsightError("No valid sections."));
                     } else {
                         this.saveData(id, InsightDatasetKind.Courses, validSections);
-                        resolve(Object.keys(this.memory));
+                        resolve(this.memory);
                     }
                     reject(new InsightError());
-                }).catch(() => {
-                    reject(new InsightError("Not a valid zip file."));
                 });
             });
         });
@@ -102,7 +105,7 @@ export default class InsightFacade implements IInsightFacade {
         let fs = require("fs");
         let data: InsightDataset = {id, kind, numRows: validSections.length};
         this.datasets.push(data);
-        this.memory[id] = validSections;
+        this.memory.push(id);
         if (!fs.existsSync(this.cache)) {
             fs.mkdirSync(this.cache);
         }
@@ -147,18 +150,48 @@ export default class InsightFacade implements IInsightFacade {
     public removeDataset(id: string):
         Promise<string> {
         return new Promise((resolve, reject) => {
-            // // check if id is valid
-            // if ((id === null) || (id === undefined)) {
-            //     return Promise.reject(new InsightError("Invalid id."));
-            // } else if ((id.includes(" ")) || (id.includes("_")) || (id.length < 1)) {
-            //     return Promise.reject(new InsightError("Invalid id."));
-            // }
-            if (!(id in this.memory)) {
-                return Promise.reject(new NotFoundError("Dataset does not exist."));
+            let fs = require("fs");
+            let result: string = "";
+            // check if id is valid
+            if ((id === null) || (id === undefined)) {
+                return reject(new InsightError("Invalid id."));
+            } else if ((id.includes(" ")) || (id.includes("_")) || (id.length < 1)) {
+                return reject(new InsightError("Invalid id."));
             }
-            return this.memory.remove(id).catch((err: any) => {
-                return Promise.reject(new InsightError(err));
-            });
+            try {
+                if (!(this.memory.includes(id))) {
+                    return reject(new NotFoundError("Failed to remove dataset."));
+                } else {
+                    for (let i = 0; i < this.memory.length; i++) {
+                        if (this.memory[i] === id) {
+                            result = this.memory[i];
+                            this.memory.splice(i, 1);
+                            this.datasets.splice(i, 1);
+                            let filepath: string = "data/" + id;
+                            fs.unlink(filepath, (e: any) => {
+                                if (e) {
+                                    return reject(new InsightError());
+                                }
+                            });
+                            return resolve(result);
+                        }
+                    }
+                    return reject(new NotFoundError());
+                    // try {
+                    //     let index: number = 0;
+                    //     for (let i of this.datasets) {
+                    //         if (i.id === id) {
+                    //             this.datasets.splice(index, 1);
+                    //         }
+                    //         index++;
+                    //     }
+                    // } catch (e) {
+                    //     return reject(new InsightError("Failed to remove dataset."));
+                    // }
+                }
+            } catch (e) {
+                return reject(e);
+            }
         });
     }
 
@@ -175,7 +208,7 @@ export default class InsightFacade implements IInsightFacade {
                     if (resultArray.length > 5000) {
                         throw new ResultTooLargeError("Result too large.");
                     }
-                    resolve([resultArray]);
+                    return resolve([resultArray]);
                 } else {
                     throw new InsightError("Invalid query.");
                 }
@@ -193,7 +226,7 @@ export default class InsightFacade implements IInsightFacade {
                 // }
                 // resolve([resultArray]);
             } catch (e) {
-                reject(e);
+                return reject(e);
             }
         });
     }

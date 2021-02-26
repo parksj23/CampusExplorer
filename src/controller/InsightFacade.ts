@@ -8,10 +8,14 @@ import {
     ResultTooLargeError
 } from "./IInsightFacade";
 import * as JSZip from "jszip";
-import {Course,} from "./Course";
+import {
+    Course,
+} from "./Course";
 import ValidateQuery from "./ValidateQuery";
 
-import {Dataset,} from "./Dataset";
+import {
+    Dataset,
+} from "./Dataset";
 import DoQuery from "./DoQuery";
 import {rejects} from "assert";
 import {expect} from "chai";

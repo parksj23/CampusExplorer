@@ -267,7 +267,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
         return expect(futureResult).to.be.rejectedWith(InsightError);
     });
 
-    it("Fail to add id that has no been loaded", function () {
+    it("Fail to add id that has not been loaded", function () {
         const id: string = "hello";
         const futureResult: Promise<string[]> = insightFacade.addDataset(
             id,
@@ -307,20 +307,6 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
                         expect(err).to.be.rejectedWith(InsightError);
                     });
             });
-        //     //
-        //     // TRYING A NEW THING I SAW ON PIAZZA BECAUSE I DIDN'T KNOW CATCH COULD BE REPLACED WITH RETURN ERROR
-        //     return insightFacade.addDataset(
-        //         id,
-        //         datasets[id],
-        //         InsightDatasetKind.Courses).then((result1) => {
-        //             expect(result1).to.eventually.deep.equal(expected);
-        //             return insightFacade.addDataset(
-        //                 id,
-        //                 datasets[id],
-        //                 InsightDatasetKind.Courses).then((futureResult) => {
-        //                     expect(futureResult).to.be.rejectedWith(InsightError);
-        //             });
-        //         });
     });
 
     it("Fail to add valid id but can not be found at the loaded databases", function () {
@@ -352,21 +338,6 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
                         expect.fail(err, expected, "Should not have rejected.");
                     });
             });
-        // //
-        // //
-        // // TRYING A NEW THING I SAW ON PIAZZA BECAUSE I DIDN'T KNOW CATCH COULD BE REPLACED WITH RETURN ERROR
-        // // BUT THEN DOES THIS HANDLE PROMISE REJECTION...?
-        // return insightFacade.addDataset(
-        //     id,
-        //     datasets[id],
-        //     InsightDatasetKind.Courses).then((result1) => {
-        //         expect(result1).to.eventually.deep.equal(expectedAdd);
-        //         return insightFacade.removeDataset(id).then((futureResult) => {
-        //             expect(futureResult).to.eventually.deep.equal(expectedRemove);
-        //         }).catch((err: any) => {
-        //             expect(err).to.be.instanceOf(InsightError);
-        //         });
-        // });
     });
 
     it("Should remove a dataset with id that starts with whitespaces", function () {
@@ -551,7 +522,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
             });
     });
 
-    it("fail to remove on empty dataset", function () {
+    it("fail to remove an empty dataset", function () {
         const id: string = "courses";
         const removeResult: Promise<string> = insightFacade.removeDataset(id);
         return expect(removeResult).to.be.rejectedWith(NotFoundError);
@@ -743,13 +714,14 @@ describe("InsightFacade PerformQuery", () => {
                 insightFacade.addDataset(id, data, ds.kind),
             );
         }
-        return Promise.all(loadDatasetPromises).catch((err) => {
-            /* *IMPORTANT NOTE: This catch is to let this run even without the implemented addDataset,
-             * for the purposes of seeing all your tests run.
-             * TODO For C1, remove this catch block (but keep the Promise.all)
-             */
-            return Promise.resolve("HACK TO LET QUERIES RUN");
-        });
+        // return Promise.all(loadDatasetPromises).catch((err) => {
+        //     /* *IMPORTANT NOTE: This catch is to let this run even without the implemented addDataset,
+        //      * for the purposes of seeing all your tests run.
+        //      * TODO For C1, remove this catch block (but keep the Promise.all)
+        //      */
+        //     return Promise.resolve("HACK TO LET QUERIES RUN");
+        // });
+        return Promise.all(loadDatasetPromises);
     });
 
     beforeEach(function () {

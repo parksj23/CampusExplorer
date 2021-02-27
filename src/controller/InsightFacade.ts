@@ -31,7 +31,6 @@ import {expect} from "chai";
 
 
 export default class InsightFacade implements IInsightFacade {
-
     // public datasetArray: Dataset[] = [];
     public datasets: InsightDataset[] = [];
     public memory: string[] = [];
@@ -54,11 +53,11 @@ export default class InsightFacade implements IInsightFacade {
             }
             // check if already added
             if (this.memory.includes(id)) {
-                return Promise.reject(new InsightError("Dataset already added."));
+                return reject(new InsightError("Dataset already added."));
             }
             let zip = new JSZip();
             let fileCount: number = 0;
-            zip.loadAsync(content, {base64: true}).then((root) => {
+            return zip.loadAsync(content, {base64: true}).then((root) => {
                 const courses: JSZip = root.folder("courses");
                 courses.forEach((relativePath, course) => {
                     let asyncPromise = course.async("string");
@@ -68,7 +67,7 @@ export default class InsightFacade implements IInsightFacade {
                 if (fileCount < 1) {
                     reject(new InsightError("Empty courses folder."));
                 }
-                Promise.all(promiseArray).then((courseJSONs: any) => {
+                return Promise.all(promiseArray).then((courseJSONs: any) => {
                     let validSections: any[] = [];
                     for (let i of courseJSONs) { // I had a breakpoint here to test the sectionFields methods
                         let section = JSON.parse(i);
@@ -162,9 +161,7 @@ export default class InsightFacade implements IInsightFacade {
             let fs = require("fs");
             let result: string = "";
             // check if id is valid
-            if ((id === null) || (id === undefined)) {
-                return reject(new InsightError("Invalid id."));
-            } else if ((id.includes(" ")) || (id.includes("_")) || (id.length < 1)) {
+            if ((id === null) || (id === undefined) || (id.includes(" ")) || (id.includes("_")) || (id.length < 1)) {
                 return reject(new InsightError("Invalid id."));
             }
             try {
@@ -176,7 +173,7 @@ export default class InsightFacade implements IInsightFacade {
                             result = this.memory[index];
                             this.memory.splice(index, 1);
                             this.datasets.splice(index, 1);
-                            let filepath: string = "data/" + id;
+                            let filepath: string = "./data" + id;
                             fs.unlink(filepath, (e: any) => {
                                 if (e) {
                                     return reject(new InsightError());

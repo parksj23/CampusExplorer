@@ -1,12 +1,15 @@
 import {
     Course,
 } from "./Course";
+import {InsightDataset} from "./IInsightFacade";
+import Log from "../Util";
 
 export class Dataset {
     private datasetId: string;
     private coursesArray: Course[] = [];
 
     public constructor(id: string) {
+        Log.trace("InsightFacadeImpl::init()");
         this.datasetId = id;
         this.coursesArray = [];
     }
@@ -23,5 +26,4 @@ export class Dataset {
     public setDatasetId(id: string) {
         this.datasetId = id;
     }
-
 }

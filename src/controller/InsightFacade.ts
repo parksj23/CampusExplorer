@@ -93,8 +93,12 @@ export default class InsightFacade implements IInsightFacade {
                     if (validSections.length < 1) {
                         return reject(new InsightError("No valid sections."));
                     } else {
-                        this.saveData(id, InsightDatasetKind.Courses, validSections);
-                        return resolve(this.memory);
+                        try {
+                            this.saveData(id, InsightDatasetKind.Courses, validSections);
+                            return resolve(this.memory);
+                        } catch (e) {
+                            return reject(new InsightError());
+                        }
                     }
                     return reject(new InsightError());
                 }).catch((err: any) => {
@@ -109,10 +113,17 @@ export default class InsightFacade implements IInsightFacade {
         let data: InsightDataset = {id, kind, numRows: validSections.length};
         this.datasets.push(data);
         this.memory.push(id);
-        if (!fs.existsSync(this.cache)) {
-            fs.mkdirSync(this.cache);
+        let diskData: any[] = [];
+        for (let i in validSections) {
+            diskData.push(validSections[i]);
         }
-        let fileName = this.cache + "/" + id + ".json";
+        let directory = "./data";
+        if (!fs.existsSync(directory)) {
+            fs.mkdirSync(directory);
+        }
+        let fileName = directory + id;
+        let updateData: any = {};
+        updateData.result = diskData;
         fs.writeFileSync(fileName, JSON.stringify(data));
     }
 
@@ -157,8 +168,8 @@ export default class InsightFacade implements IInsightFacade {
                     sections.push(section);
                 }
             }
-            return sections;
         }
+        return sections;
     }
 
     public removeDataset(id: string):

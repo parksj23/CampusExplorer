@@ -17,12 +17,15 @@ export class Dataset {
     public getCoursesArray(): Course[] {
         return this.coursesArray;
     }
+    
     public setCoursesArray(array: Course[]) {
         this.coursesArray = array;
     }
+    
     public getDatasetId(): string {
         return this.datasetId;
     }
+    
     public setDatasetId(id: string) {
         this.datasetId = id;
     }

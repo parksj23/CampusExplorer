@@ -29,7 +29,7 @@ export class Course {
     public get getDept(): string {
         return this.coursesDept;
     }
-    
+
     public set setDept(value: string) {
         this.coursesDept = value;
     }
@@ -37,7 +37,7 @@ export class Course {
     public get getID(): string {
         return this.coursesId;
     }
-    
+
     public set setID(value: string) {
         this.coursesId = value;
     }
@@ -45,7 +45,7 @@ export class Course {
     public get getAvg(): number {
         return this.coursesAvg;
     }
-    
+
     public set setAvg(value: number) {
         this.coursesAvg = value;
     }
@@ -53,7 +53,7 @@ export class Course {
     public get getInstructor(): string {
         return this.coursesInstructor;
     }
-    
+
     public set setInstructor(value: string) {
         this.coursesInstructor = value;
     }
@@ -61,7 +61,7 @@ export class Course {
     public get getTitle(): string {
         return this.coursesTitle;
     }
-    
+
     public set setTitle(value: string) {
         this.coursesTitle = value;
     }
@@ -69,7 +69,7 @@ export class Course {
     public get getPass(): number {
         return this.coursesPass;
     }
-    
+
     public set setPass(value: number) {
         this.coursesPass = value;
     }
@@ -77,7 +77,7 @@ export class Course {
     public get getFail(): number {
         return this.coursesFail;
     }
-    
+
     public set setFail(value: number) {
         this.coursesFail = value;
     }
@@ -85,7 +85,7 @@ export class Course {
     public get getAudit(): number {
         return this.coursesAudit;
     }
-    
+
     public set setAudit(value: number) {
         this.coursesAudit = value;
     }
@@ -93,7 +93,7 @@ export class Course {
     public get getUUID(): string {
         return this.coursesUuid;
     }
-    
+
     public set setUUID(value: string) {
         this.coursesUuid = value;
     }
@@ -101,7 +101,7 @@ export class Course {
     public get getYear(): number {
         return this.coursesYear;
     }
-    
+
     public set setYear(value: number) {
         this.coursesYear = value;
     }

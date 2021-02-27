@@ -13,9 +13,9 @@ import {
 } from "./Course";
 import ValidateQuery from "./ValidateQuery";
 
-import {
-    Dataset,
-} from "./Dataset";
+// import {
+//     Dataset,
+// } from "./Dataset";
 import DoQuery from "./DoQuery";
 import {rejects} from "assert";
 import {expect} from "chai";
@@ -32,7 +32,7 @@ import {expect} from "chai";
 
 export default class InsightFacade implements IInsightFacade {
 
-    public datasetArray: Dataset[] = [];
+    // public datasetArray: Dataset[] = [];
     public datasets: InsightDataset[] = [];
     public memory: string[] = [];
     public cache: string;

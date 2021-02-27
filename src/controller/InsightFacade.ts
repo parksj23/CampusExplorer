@@ -171,11 +171,11 @@ export default class InsightFacade implements IInsightFacade {
                 if (!(this.memory.includes(id))) {
                     return reject(new NotFoundError("Failed to remove dataset."));
                 } else {
-                    for (let i = 0; i < this.memory.length; i++) {
-                        if (this.memory[i] === id) {
-                            result = this.memory[i];
-                            this.memory.splice(i, 1);
-                            this.datasets.splice(i, 1);
+                    for (let index = 0; index < this.memory.length; index++) {
+                        if (this.memory[index] === id) {
+                            result = this.memory[index];
+                            this.memory.splice(index, 1);
+                            this.datasets.splice(index, 1);
                             let filepath: string = "data/" + id;
                             fs.unlink(filepath, (e: any) => {
                                 if (e) {
@@ -186,17 +186,6 @@ export default class InsightFacade implements IInsightFacade {
                         }
                     }
                     return reject(new NotFoundError());
-                    // try {
-                    //     let index: number = 0;
-                    //     for (let i of this.datasets) {
-                    //         if (i.id === id) {
-                    //             this.datasets.splice(index, 1);
-                    //         }
-                    //         index++;
-                    //     }
-                    // } catch (e) {
-                    //     return reject(new InsightError("Failed to remove dataset."));
-                    // }
                 }
             } catch (e) {
                 return reject(e);

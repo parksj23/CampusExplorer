@@ -65,7 +65,6 @@ export default class InsightFacade implements IInsightFacade {
             zip.loadAsync(content, {base64: true}).then((root) => {
                 const courses: JSZip = root.folder("courses");
                 courses.forEach((relativePath, course) => {
-                    fileCount++;
                     // let promise1 = course.async("string").then((parsedCourse) => {
                     //     return JSON.parse(parsedCourse);
                     // }).catch((err: any) => {
@@ -73,35 +72,39 @@ export default class InsightFacade implements IInsightFacade {
                     // });
                     let asyncPromise = course.async("string");
                     promiseArray.push(asyncPromise);
+                    fileCount++;
                 });
-
-                if (fileCount === 0) {
+                if (fileCount < 1) {
                     reject(new InsightError("Empty courses folder."));
                 }
 
                 Promise.all(promiseArray).then((courseJSONs: any) => {
-                    let validSections: any = [];
-                    for (let i of courseJSONs) {
-                        let iType = typeof i;
-                        if (iType === "object") {
-                            if (Object.keys(i).includes("result")) {
-                                validSections = this.getSectionFields(i["result"], validSections);
+                    let validSections: any[] = [];
+                    for (let i of courseJSONs) { // I had a breakpoint here to test the sectionFields methods
+                        let section = JSON.parse(i);
+                        let sectionType = typeof section;
+                        if (sectionType === "object") {
+                            let objKeys = (Object.getOwnPropertyNames(section));
+                            if (objKeys.includes("result")) {
+                                validSections = this.getSectionFields(section["result"], validSections);
                             }
                         }
                     }
                     if (validSections.length < 1) {
-                        reject(new InsightError("No valid sections."));
+                        return reject(new InsightError("No valid sections."));
                     } else {
                         this.saveData(id, InsightDatasetKind.Courses, validSections);
-                        resolve(this.memory);
+                        return resolve(this.memory);
                     }
-                    reject(new InsightError());
+                    return reject(new InsightError());
+                }).catch((err: any) => {
+                    return reject (new InsightError(err));
                 });
             });
         });
     }
 
-    private saveData(id: string, kind: InsightDatasetKind, validSections: any) {
+    private saveData(id: string, kind: InsightDatasetKind, validSections: any[]) {
         let fs = require("fs");
         let data: InsightDataset = {id, kind, numRows: validSections.length};
         this.datasets.push(data);
@@ -114,13 +117,21 @@ export default class InsightFacade implements IInsightFacade {
     }
 
     private getSectionFields(result: any, sections: any[]): any[] {
-        let smfields: string[] = ["dept", "id", "instructor", "title", "uuid", "avg", "pass", "fail", "audit", "year"];
-        for (let i of result) {
-            let section: any = {};
-            let sectionFields = Object.keys(i);
-            if (smfields.every((key) => {
-                return sectionFields.indexOf(key) >= 0;
-            })) {
+        let a = typeof result;
+        let resultLength = result.length;
+        let initialDesiredFields: string[] = ["Avg", "Pass", "Fail", "Audit", "Year", "Subject", "Course", "Professor",
+            "Title", "id", "Section"];
+        if (!(resultLength < 1)) {
+            for (let i of result) {
+                let section: any = {};
+                let validSectionFields: any[] = [];
+                let initialSectionFields = Object.keys(i);
+                for (let key of initialDesiredFields) {
+                    let iKey = typeof i[key];
+                    if (initialSectionFields.includes(key)) {
+                        validSectionFields.push(i[key]);
+                    }
+                }
                 section["avg"] = i["Avg"];
                 section["pass"] = i["Pass"];
                 section["fail"] = i["Fail"];
@@ -134,17 +145,20 @@ export default class InsightFacade implements IInsightFacade {
                 section["instructor"] = i["Professor"];
                 section["title"] = i["Title"];
                 section["uuid"] = i["id"].toString();
-            }
 
-            if (typeof section["avg"] === "number" && typeof section["pass"] === "number"
-                && typeof section["fail"] === "number" && typeof section["audit"] === "number"
-                && typeof section["year"] === "number" && typeof section["dept"] === "string"
-                && typeof section["id"] === "string" && typeof section["instructor"] === "string"
-                && typeof section["title"] === "string" && typeof section["uuid"] === "string") {
-                sections.push(section);
+                let b = typeof section;
+                let c = typeof sections;
+
+                if (typeof section["avg"] === "number" && typeof section["pass"] === "number"
+                    && typeof section["fail"] === "number" && typeof section["audit"] === "number"
+                    && typeof section["year"] === "number" && typeof section["dept"] === "string"
+                    && typeof section["id"] === "string" && typeof section["instructor"] === "string"
+                    && typeof section["title"] === "string" && typeof section["uuid"] === "string") {
+                    sections.push(section);
+                }
             }
+            return sections;
         }
-        return sections;
     }
 
     public removeDataset(id: string):

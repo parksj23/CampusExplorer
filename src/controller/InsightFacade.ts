@@ -112,8 +112,6 @@ export default class InsightFacade implements IInsightFacade {
             fs.mkdirSync(directory);
         }
         let fileName = directory + id;
-        let updateData: any = {};
-        updateData.result = diskData;
         fs.writeFileSync(fileName, JSON.stringify(data));
     }
 

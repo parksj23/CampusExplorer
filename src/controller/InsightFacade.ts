@@ -57,12 +57,12 @@ export default class InsightFacade implements IInsightFacade {
             }
             // check if already added
             if (this.memory.includes(id)) {
-                return Promise.reject(new InsightError("Dataset already added."));
+                return reject(new InsightError("Dataset already added."));
             }
 
             let zip = new JSZip();
             let fileCount: number = 0;
-            zip.loadAsync(content, {base64: true}).then((root) => {
+            return zip.loadAsync(content, {base64: true}).then((root) => {
                 const courses: JSZip = root.folder("courses");
                 courses.forEach((relativePath, course) => {
                     // let promise1 = course.async("string").then((parsedCourse) => {
@@ -78,14 +78,16 @@ export default class InsightFacade implements IInsightFacade {
                     reject(new InsightError("Empty courses folder."));
                 }
 
-                Promise.all(promiseArray).then((courseJSONs: any) => {
+                return Promise.all(promiseArray).then((courseJSONs: any) => {
                     let validSections: any[] = [];
+                    let c = typeof validSections;
                     for (let i of courseJSONs) { // I had a breakpoint here to test the sectionFields methods
                         let section = JSON.parse(i);
                         let sectionType = typeof section;
                         if (sectionType === "object") {
                             let objKeys = (Object.getOwnPropertyNames(section));
                             if (objKeys.includes("result")) {
+                                let t = typeof validSections;
                                 validSections = this.getSectionFields(section["result"], validSections);
                             }
                         }
@@ -128,6 +130,7 @@ export default class InsightFacade implements IInsightFacade {
     }
 
     private getSectionFields(result: any, sections: any[]): any[] {
+        let t = typeof sections;
         let a = typeof result;
         let resultLength = result.length;
         let initialDesiredFields: string[] = ["Avg", "Pass", "Fail", "Audit", "Year", "Subject", "Course", "Professor",

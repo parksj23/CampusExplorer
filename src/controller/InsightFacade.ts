@@ -103,10 +103,6 @@ export default class InsightFacade implements IInsightFacade {
         let data: InsightDataset = {id, kind, numRows: validSections.length};
         this.datasets.push(data);
         this.memory.push(id);
-        let diskData: any[] = [];
-        for (let i in validSections) {
-            diskData.push(validSections[i]);
-        }
         let directory = "./data";
         if (!fs.existsSync(directory)) {
             fs.mkdirSync(directory);

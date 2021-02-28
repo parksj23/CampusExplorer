@@ -12,6 +12,7 @@ export default class DoQuery {
     public sfields: string[] = ["dept", "id", "instructor", "title", "uuid"];
     public mfields: string[] = ["avg", "pass", "fail", "audit", "year"];
     public data: any[];
+    public id: string;
 
     constructor(query: any, data: any[]) {
         this.queryObj = query;
@@ -89,7 +90,6 @@ export default class DoQuery {
                 return result;
                 break;
         }
-        return [];
     }
 
     private doSCOMP(next: any, operator: string, data: any[]): any[] {

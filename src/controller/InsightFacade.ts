@@ -30,6 +30,7 @@ export default class InsightFacade implements IInsightFacade {
     public datasets: InsightDataset[] = [];
     public memory: string[] = [];
     public addedDatasetContent: Dataset[] = [];
+    public performQueryDatasetIds: string[] = [];
 
     constructor() {
         Log.trace("InsightFacadeImpl::init()");
@@ -190,15 +191,16 @@ export default class InsightFacade implements IInsightFacade {
     public performQuery(query: any):
         Promise<any[]> {
         return new Promise((resolve, reject) => {
+            this.performQueryDatasetIds = [];
             try {
                 let validQuery = new ValidateQuery(query);
                 // I had a break at validateQuery.validateQuery
-                let doQuery = new DoQuery(query, this.addedDatasetContent);
                 let fs = require("fs");
                 let directory = "./data";
                 // let diskData = fs.readFileSync(directory + )
                 if (validQuery.validateQuery(query)) {
                     if ((this.memory.length > 0)) {
+                        let doQuery = new DoQuery(query, this.addedDatasetContent);
                         let resultArray = doQuery.doInitialQuery(query, this.addedDatasetContent);
                         if (resultArray.length > 5000) {
                             throw new ResultTooLargeError("Result too large.");

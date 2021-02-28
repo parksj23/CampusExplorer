@@ -11,18 +11,19 @@ export default class DoQuery {
     public datasetID: string;
     public sfields: string[] = ["dept", "id", "instructor", "title", "uuid"];
     public mfields: string[] = ["avg", "pass", "fail", "audit", "year"];
-    public data: any;
+    public data: any[];
 
-    constructor(query: any) {
+    constructor(query: any, data: any[]) {
         this.queryObj = query;
+        this.data = data;
     }
 
-    public doInitialQuery(query: any): Course[] {
-        return this.doQuery(query["WHERE"]);
+    public doInitialQuery(query: any, data: any[]): any[] {
+        return this.doQuery(query["WHERE"], data);
     }
 
-    public doQuery(filter: any): Course[] {
-        let result: Course[] = [];
+    public doQuery(filter: any, data: any[]): any[] {
+        let result: any[] = [];
         let operatorString = (Object.getOwnPropertyNames(filter));
         let operator = operatorString[0];
         let next = filter[operator];
@@ -53,21 +54,39 @@ export default class DoQuery {
     }
 
     private doMCOMP(next: any, operator: string, data: any[]): any[] {
+        let result: any[] = [];
         let keyString = (Object.getOwnPropertyNames(next));
         let key = keyString[0];
         let compValue = next[key];
         let splitKey = key.split("_");
         let id = splitKey[0];
         let mfield = splitKey[1];
+        let queryingDataset = data.find((d) => d.id === id);
+        let datasetContent = queryingDataset.coursesArray;
         switch (operator) {
             case "EQ":
-                return [];
+                for (let section of datasetContent) {
+                    if (section.mfield === compValue) {
+                        result.push(section);
+                    }
+                }
+                return result;
                 break;
             case "GT":
-                return [];
+                for (let section of datasetContent) {
+                    if (section.mfield > compValue) {
+                        result.push(section);
+                    }
+                }
+                return result;
                 break;
             case "LT":
-                return [];
+                for (let section of datasetContent) {
+                    if (section.mfield < compValue) {
+                        result.push(section);
+                    }
+                }
+                return result;
                 break;
         }
         return [];
@@ -110,7 +129,7 @@ export default class DoQuery {
     }
 
     private doNegation(next: any, operator: string, data: any[]): any[] {
-        return this.doQuery(next);
+        return this.doQuery(next, data);
     }
 
     private doLogic(next: any, operator: string, data: any[]): any[] {

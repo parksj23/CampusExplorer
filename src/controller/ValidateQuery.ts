@@ -202,7 +202,7 @@ export default class ValidateQuery {
         }
     }
 
-    private validateOptions(options: any) {
+    private validateOptions(options: any): boolean {
         let optionsKeys: string[] = Object.keys(options);
         let columns = options["COLUMNS"];
         let order = options["ORDER"];
@@ -249,11 +249,10 @@ export default class ValidateQuery {
                 }
             }
         }
-        return this.validateColumns(columns);
+        // return this.validateColumns(columns);
     }
 
-    private validateColumns(columns: string[]
-    ) {
+    private validateColumns(columns: string[]): boolean {
         if (columns === undefined) {
             return false;
         }
@@ -261,14 +260,14 @@ export default class ValidateQuery {
             return false;
         }
 
-        for (let i = 0; i < columns.length - 1; i++) {
-            let key = columns[i];
+        // for (let i = 0; i < columns.length; i++) {
+        //     let key = columns[i];
+        for (let key of columns) {
             if (key === null || key === undefined) {
                 return false;
             } else if (typeof key !== "string") {
                 return false;
-            }
-            if (!key.includes(("_"))) {
+            } else if (!key.includes(("_"))) {
                 return false;
             }
 
@@ -290,7 +289,7 @@ export default class ValidateQuery {
             }
         }
         // return true;
-        // taking out this line made more than 30 tests pass
+        // why is the return value of this function undefined?
     }
 }
 

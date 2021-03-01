@@ -214,8 +214,10 @@ export default class ValidateQuery {
         if (optionsKeys.length === 2 && optionsKeys.includes("COLUMNS") && optionsKeys.includes("ORDER")) {
             let columns = options["COLUMNS"];
             let order = options["ORDER"];
-            if (this.validateColumns(columns) && this.validateOrder(order, columns)) {
-                return true;
+            if (this.validateColumns(columns) === true) {
+                if (this.validateOrder(order, columns) === true) {
+                    return true;
+                }
             }
         }
         return false;
@@ -263,6 +265,9 @@ export default class ValidateQuery {
         if (order === undefined) {
             return false;
         }
+        if (!columns.includes(order)) {
+            return false;
+        }
         if (typeof order !== "string") {
             if (Array.isArray(order)) {
                 if (order !== undefined || order !== null) {
@@ -276,8 +281,6 @@ export default class ValidateQuery {
                     }
                 }
             }
-        } else if (!columns.includes(order)) {
-            return false;
         }
         if (order !== undefined) {
             if (order !== null) {

@@ -194,39 +194,51 @@ export default class InsightFacade implements IInsightFacade {
             this.performQueryDatasetIds = [];
             try {
                 let validQuery = new ValidateQuery(query);
-                // I had a break at validateQuery.validateQuery
-                let fs = require("fs");
-                let directory = "./data";
-                // let diskData = fs.readFileSync(directory + )
                 if (validQuery.validateQuery(query)) {
-                    if ((this.memory.length > 0)) {
-                        let doQuery = new DoQuery(query, this.addedDatasetContent);
-                        let resultArray = doQuery.doInitialQuery(query, this.addedDatasetContent);
-                        if (resultArray.length > 5000) {
-                            throw new ResultTooLargeError("Result too large.");
-                        }
-                        return resolve(resultArray);
+                    this.performQueryDatasetIds = validQuery.performQueryDatasetIds;
+                    if (this.performQueryDatasetIds.length > 1) {
+                        throw new InsightError("References more than 1 dataset.");
                     }
+                    let queryingDatasetId = this.performQueryDatasetIds[0];
+                    let data = this.getData(queryingDatasetId);
+                    // if dataset has been added to memory field, do the query
+                    let doQuery = new DoQuery(query, data);
+                    let resultArray = doQuery.doInitialQuery(query, data);
+                    if (resultArray.length > 5000) {
+                        throw new ResultTooLargeError("Result too large.");
+                    }
+                    return resolve(resultArray);
                 } else {
                     throw new InsightError("Invalid query.");
                 }
-                // let queryObj = JSON.parse(JSON.stringify(query));
-                // let where = (Object.getOwnPropertyDescriptor(queryObj, "WHERE")).value;
-                // let options = (Object.getOwnPropertyDescriptor(queryObj, "OPTIONS")).value;
-                // let columns = (Object.getOwnPropertyDescriptor(options, "COLUMNS")).value;
-                // let order = (Object.getOwnPropertyDescriptor(options, "ORDER")).value;
-                // let filter = (Object.getOwnPropertyNames(where));
-                // if (typeof options === "undefined") {
-                //     throw new InsightError("Invalid query. Missing OPTIONS block.");
-                // }
-                // if (typeof where === "undefined") {
-                //     throw new InsightError("Invalid query. Missing WHERE block.");
-                // }
-                // resolve([resultArray]);
             } catch (e) {
                 return reject(e);
             }
         });
+    }
+
+    public getData(queryingDatasetId: string): any[] {
+        let data: any[] = [];
+        let fs = require("fs");
+        let directory = "./data";
+        let buffer = fs.readFileSync(directory + queryingDatasetId);
+        let diskData = JSON.parse(buffer);
+        if (this.memory.length === 0 && diskData === null) {
+            throw new InsightError("There are no datasets added.");
+        }
+        if (this.memory.length === 0) {
+            return data = diskData;
+        }
+        let a = this.memory.includes(queryingDatasetId);
+        if (this.memory.length > 0 && this.memory.includes(queryingDatasetId)) {
+            for (let d of this.addedDatasetContent) {
+                if (d.getDatasetId() === queryingDatasetId) {
+                    return data = d.getCoursesArray();
+                }
+            }
+        } else {
+            throw new InsightError("Cannot query a database that has not been added.");
+        }
     }
 
     public listDatasets(): Promise<InsightDataset[]> {

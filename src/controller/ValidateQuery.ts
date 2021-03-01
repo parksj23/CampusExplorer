@@ -252,13 +252,12 @@ export default class ValidateQuery {
                 return false;
             }
 
-            // add to list of global dataset ids IF it has not been seen yet
             if (!this.performQueryDatasetIds.includes(id)) {
                 this.performQueryDatasetIds.push(id);
             }
         }
         // return true;
-        // why is the return value of this function undefined?
+        // why does putting this here make a lot of my invalid query tests fail
     }
 
     private validateOrder(order: any, columns: any): boolean {
@@ -282,20 +281,13 @@ export default class ValidateQuery {
                 }
             }
         }
-        if (order !== undefined) {
-            if (order !== null) {
-                if (order.length < 1) {
-                    return false;
-                }
+        if (order !== undefined && order !== null) {
+            if (order.length > 1) {
+                return true;
+            } else {
+                return false;
             }
         }
-        if (order !== undefined) {
-            if (order !== null) {
-                if (order.length > 1) {
-                    return true;
-                }
-            }
-        }
-        // return false;
+        return false;
     }
 }

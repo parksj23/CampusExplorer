@@ -133,6 +133,13 @@ export default class DoQuery {
     }
 
     private doLogic(next: any, operator: string, data: any[]): any[] {
+        switch (operator) {
+            case "AND":
+                // for (let filter of next) {
+                //     if (this.doQuery(filter, ))
+                // }
+                break;
+        }
         return [];
     }
 }

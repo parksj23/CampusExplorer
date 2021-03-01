@@ -65,21 +65,15 @@ export default class ValidateQuery {
             return false;
         }
         if (operator === "AND" || operator === "OR") {
-            if (this.validateLogic(next, operator) !== false) {
-                return true;
-            }
+            return this.validateLogic(next, operator);
         } else if (operator === "NOT") {
-            if (this.validateNegation(next, operator) !== false) {
-                return true;
-            }
+            return this.validateNegation(next, operator);
         } else if (operator === "IS") {
-            if (this.validateSCOMP(next, operator) !== false) {
-                return true;
-            }
+            return this.validateSCOMP(next, operator);
         } else if (operator === "EQ" || operator === "GT" || operator === "LT") {
-            if (this.validateMCOMP(next, operator) !== false) {
-                return true;
-            }
+            return this.validateMCOMP(next, operator);
+        } else {
+            return false;
         }
     }
 
@@ -99,8 +93,9 @@ export default class ValidateQuery {
             if (this.validateFilter(filter) === false) {
                 return false;
             }
-            return true;
+            // return true;
         }
+        return true;
     }
 
     private validateSCOMP(next: any, operator: string): boolean {
@@ -134,6 +129,7 @@ export default class ValidateQuery {
         if (!this.performQueryDatasetIds.includes(id)) {
             this.performQueryDatasetIds.push(id);
         }
+        return true;
     }
 
     private validateWildcard(compValue: string) {
@@ -200,56 +196,29 @@ export default class ValidateQuery {
         if (!this.performQueryDatasetIds.includes(id)) {
             this.performQueryDatasetIds.push(id);
         }
+        return true;
     }
 
     private validateOptions(options: any): boolean {
-        let optionsKeys: string[] = Object.keys(options);
-        let columns = options["COLUMNS"];
-        let order = options["ORDER"];
-
-        if (!optionsKeys.includes("COLUMNS")) {
-            return false;
-        }
-
         if (typeof options !== "object") {
             return false;
         }
-
-        if (columns === undefined) {
+        let optionsKeys: string[] = Object.keys(options);
+        if (optionsKeys.length < 1 || optionsKeys.length > 2) {
             return false;
         }
-
-        if (optionsKeys.includes("ORDER")) {
-            if (order === undefined) {
-                return false;
+        if (optionsKeys.length === 1 && optionsKeys.includes("COLUMNS")) {
+            let columns = options["COLUMNS"];
+            return this.validateColumns(columns);
+        }
+        if (optionsKeys.length === 2 && optionsKeys.includes("COLUMNS") && optionsKeys.includes("ORDER")) {
+            let columns = options["COLUMNS"];
+            let order = options["ORDER"];
+            if (this.validateColumns(columns) && this.validateOrder(order, columns)) {
+                return true;
             }
         }
-
-        if (typeof order !== "string") {
-            if (Array.isArray(order)) {
-                if (order !== undefined || order !== null) {
-                    for (let key of order) {
-                        if (key === null) {
-                            return false;
-                        }
-                        if (!columns.includes(key)) {
-                            return false;
-                        }
-                    }
-                }
-            }
-        } else if (!columns.includes(order)) {
-            return false;
-        }
-
-        if (order !== undefined) {
-            if (order !== null) {
-                if (order.length < 1) {
-                    return false;
-                }
-            }
-        }
-        // return this.validateColumns(columns);
+        return false;
     }
 
     private validateColumns(columns: string[]): boolean {
@@ -260,8 +229,6 @@ export default class ValidateQuery {
             return false;
         }
 
-        // for (let i = 0; i < columns.length; i++) {
-        //     let key = columns[i];
         for (let key of columns) {
             if (key === null || key === undefined) {
                 return false;
@@ -291,5 +258,41 @@ export default class ValidateQuery {
         // return true;
         // why is the return value of this function undefined?
     }
-}
 
+    private validateOrder(order: any, columns: any): boolean {
+        if (order === undefined) {
+            return false;
+        }
+        if (typeof order !== "string") {
+            if (Array.isArray(order)) {
+                if (order !== undefined || order !== null) {
+                    for (let key of order) {
+                        if (key === null) {
+                            return false;
+                        }
+                        if (!columns.includes(key)) {
+                            return false;
+                        }
+                    }
+                }
+            }
+        } else if (!columns.includes(order)) {
+            return false;
+        }
+        if (order !== undefined) {
+            if (order !== null) {
+                if (order.length < 1) {
+                    return false;
+                }
+            }
+        }
+        if (order !== undefined) {
+            if (order !== null) {
+                if (order.length > 1) {
+                    return true;
+                }
+            }
+        }
+        // return false;
+    }
+}

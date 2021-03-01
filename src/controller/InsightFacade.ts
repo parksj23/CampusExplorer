@@ -229,7 +229,6 @@ export default class InsightFacade implements IInsightFacade {
         if (this.memory.length === 0) {
             return data = diskData;
         }
-        let a = this.memory.includes(queryingDatasetId);
         if (this.memory.length > 0 && this.memory.includes(queryingDatasetId)) {
             for (let d of this.addedDatasetContent) {
                 if (d.getDatasetId() === queryingDatasetId) {

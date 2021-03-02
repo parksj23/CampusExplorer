@@ -6,6 +6,8 @@ import {
 export default class ValidateQuery {
     private static WHERE: string = "WHERE";
     private static OPTIONS: string = "OPTIONS";
+    private static COLUMNS: string = "COLUMNS";
+    private static ORDER: string = "ORDER";
 
     public queryObj: any;
     public sfields: string[] = ["dept", "id", "instructor", "title", "uuid"];
@@ -33,7 +35,7 @@ export default class ValidateQuery {
             return false;
         }
 
-        return this.validateFilter(query["WHERE"]) && this.validateOptions(query["OPTIONS"]);
+        return this.validateFilter(query[ValidateQuery.WHERE]) && this.validateOptions(query[ValidateQuery.OPTIONS]);
     }
     // private validateBody(body: any): boolean {
     //     // if (body === null || typeof body !== "object") {
@@ -79,7 +81,6 @@ export default class ValidateQuery {
         if (operator === "EQ" || operator === "GT" || operator === "LT") {
             return this.validateMCOMP(next, operator);
         }
-
         return false;
     }
 
@@ -137,10 +138,10 @@ export default class ValidateQuery {
         return true;
     }
 
-    private validateWildcard(compValue: string) {
+    private validateWildcard(compValue: string): boolean {
         let firstChar: string = compValue.charAt(0);
         let lastChar: string = compValue.charAt(compValue.length - 1);
-        let wildcardCount = compValue.match(/[^*]/g);
+        let wildcardCount = compValue.match(/[*]/g);
         if (wildcardCount === null) {
             return false;
         }
@@ -212,13 +213,14 @@ export default class ValidateQuery {
         if (optionsKeys.length < 1 || optionsKeys.length > 2) {
             return false;
         }
-        if (optionsKeys.length === 1 && optionsKeys.includes("COLUMNS")) {
-            let columns = options["COLUMNS"];
+        if (optionsKeys.length === 1 && optionsKeys.includes(ValidateQuery.COLUMNS)) {
+            let columns = options[ValidateQuery.COLUMNS];
             return this.validateColumns(columns);
         }
-        if (optionsKeys.length === 2 && optionsKeys.includes("COLUMNS") && optionsKeys.includes("ORDER")) {
-            let columns = options["COLUMNS"];
-            let order = options["ORDER"];
+        if (optionsKeys.length === 2 && optionsKeys.includes(ValidateQuery.COLUMNS)
+            && optionsKeys.includes(ValidateQuery.ORDER)) {
+            let columns = options[ValidateQuery.COLUMNS];
+            let order = options[ValidateQuery.ORDER];
             if (this.validateColumns(columns) === true) {
                 if (this.validateOrder(order, columns) === true) {
                     return true;

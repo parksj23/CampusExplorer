@@ -101,7 +101,7 @@ export default class InsightFacade implements IInsightFacade {
         this.memory.push(id);
         let datasetContent = new Dataset(id, validSections);
         this.addedDatasetContent.push(datasetContent);
-        let directory = "./data";
+        let directory = "./data.";
         if (!fs.existsSync(directory)) {
             fs.mkdirSync(directory);
         }
@@ -221,13 +221,19 @@ export default class InsightFacade implements IInsightFacade {
         let data: any[] = [];
         let fs = require("fs");
         let directory = "./data";
-        let buffer = fs.readFileSync(directory + queryingDatasetId);
-        let diskData = JSON.parse(buffer);
-        if (this.memory.length === 0 && diskData === null) {
-            throw new InsightError("There are no datasets added.");
-        }
-        if (this.memory.length === 0) {
-            return data = diskData;
+        try {
+            if (fs.existsSync(directory)) {
+                let buffer = fs.readFileSync(directory + queryingDatasetId);
+                let diskData = JSON.parse(buffer);
+                if (this.memory.length === 0 && diskData === null) {
+                    throw new InsightError("There are no datasets added.");
+                }
+                if (this.memory.length === 0) {
+                    return data = diskData;
+                }
+            }
+        } catch (err) {
+            throw new InsightError();
         }
         if (this.memory.length > 0 && this.memory.includes(queryingDatasetId)) {
             for (let d of this.addedDatasetContent) {

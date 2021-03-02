@@ -4,6 +4,9 @@ import {
 } from "./IInsightFacade";
 
 export default class ValidateQuery {
+    private static WHERE: string = "WHERE";
+    private static OPTIONS: string = "OPTIONS";
+
     public queryObj: any;
     public sfields: string[] = ["dept", "id", "instructor", "title", "uuid"];
     public mfields: string[] = ["avg", "pass", "fail", "audit", "year"];
@@ -18,44 +21,46 @@ export default class ValidateQuery {
             return false;
         }
         let keys: string[] = Object.keys(query);
-        if (keys.length === 0 || keys.length > 2) {
+        if (keys.length !== 2) {
             return false;
         }
-        if (keys.includes("WHERE")) {
-            return this.validateBody(query);
-        } else {
+        // return this.validateBody(query);
+        if (!keys.includes(ValidateQuery.WHERE)) {
             return false;
         }
-        if (keys.includes("OPTIONS")) {
-            return this.validateBody(query);
+
+        if (!keys.includes(ValidateQuery.OPTIONS)) {
+            return false;
         }
+
+        return this.validateFilter(query["WHERE"]) && this.validateOptions(query["OPTIONS"]);
     }
 
-    private validateBody(body: any): boolean {
-        if (body === null || typeof body !== "object") {
-            return false;
-        }
-        if (body["WHERE"] === undefined) {
-            if (Object.keys(body).includes("OPTIONS")) {
-                return this.validateOptions(body["OPTIONS"]);
-            }
-        } else if (body["OPTIONS"] === undefined) {
-            return false;
-        }
-        if (Object.keys(body["WHERE"]).length > 1) {
-            return false;
-        }
-        if (Object.keys(body).includes("OPTIONS")) {
-            if (this.validateOptions(body["OPTIONS"]) === true) {
-                return this.validateFilter(body["WHERE"]);
-            }
-        } else {
-            return this.validateFilter(body["WHERE"]);
-        }
-    }
+    // private validateBody(body: any): boolean {
+    //     // if (body === null || typeof body !== "object") {
+    //     //     return false;
+    //     // }
+    //     if (body["WHERE"] === undefined) {
+    //         if (Object.keys(body).includes("OPTIONS")) {
+    //             return this.validateOptions(body["OPTIONS"]);
+    //         }
+    //     } else if (body["OPTIONS"] === undefined) {
+    //         return false;
+    //     }
+    //     if (Object.keys(body["WHERE"]).length > 1) {
+    //         return false;
+    //     }
+    //     if (Object.keys(body).includes("OPTIONS")) {
+    //         if (this.validateOptions(body["OPTIONS"]) === true) {
+    //             return this.validateFilter(body["WHERE"]);
+    //         }
+    //     } else {
+    //         return this.validateFilter(body["WHERE"]);
+    //     }
+    // }
 
     private validateFilter(filter: any): boolean {
-        if (filter === null || typeof filter !== "object") {
+        if (typeof filter !== "object") {
             return false;
         }
         let operatorString = (Object.getOwnPropertyNames(filter));
@@ -66,15 +71,18 @@ export default class ValidateQuery {
         }
         if (operator === "AND" || operator === "OR") {
             return this.validateLogic(next, operator);
-        } else if (operator === "NOT") {
-            return this.validateNegation(next, operator);
-        } else if (operator === "IS") {
-            return this.validateSCOMP(next, operator);
-        } else if (operator === "EQ" || operator === "GT" || operator === "LT") {
-            return this.validateMCOMP(next, operator);
-        } else {
-            return false;
         }
+        if (operator === "NOT") {
+            return this.validateNegation(next, operator);
+        }
+        if (operator === "IS") {
+            return this.validateSCOMP(next, operator);
+        }
+        if (operator === "EQ" || operator === "GT" || operator === "LT") {
+            return this.validateMCOMP(next, operator);
+        }
+
+        return false;
     }
 
     private validateNegation(next: any, operator: string): boolean {
@@ -86,7 +94,7 @@ export default class ValidateQuery {
     }
 
     private validateLogic(next: any, operator: string) {
-        if (!Array.isArray(next)) {
+        if (!Array.isArray(next) || next.length === 0) {
             return false;
         }
         for (let filter of next) {
@@ -164,7 +172,7 @@ export default class ValidateQuery {
     }
 
     private validateMCOMP(next: any, operator: string): boolean {
-        if (Object.keys(next).length === 0) {
+        if (Object.keys(next).length !== 1) {
             return false;
         }
         let keyString = (Object.getOwnPropertyNames(next));
@@ -256,8 +264,7 @@ export default class ValidateQuery {
                 this.performQueryDatasetIds.push(id);
             }
         }
-        // return true;
-        // why does putting this here make a lot of my invalid query tests fail
+        return true;
     }
 
     private validateOrder(order: any, columns: any): boolean {

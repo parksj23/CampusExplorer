@@ -24,7 +24,7 @@ export default class ValidateQuery {
         if (keys.length !== 2) {
             return false;
         }
-        // return this.validateBody(query);
+
         if (!keys.includes(ValidateQuery.WHERE)) {
             return false;
         }
@@ -35,7 +35,6 @@ export default class ValidateQuery {
 
         return this.validateFilter(query["WHERE"]) && this.validateOptions(query["OPTIONS"]);
     }
-
     // private validateBody(body: any): boolean {
     //     // if (body === null || typeof body !== "object") {
     //     //     return false;
@@ -58,7 +57,6 @@ export default class ValidateQuery {
     //         return this.validateFilter(body["WHERE"]);
     //     }
     // }
-
     private validateFilter(filter: any): boolean {
         if (typeof filter !== "object") {
             return false;
@@ -101,7 +99,6 @@ export default class ValidateQuery {
             if (this.validateFilter(filter) === false) {
                 return false;
             }
-            // return true;
         }
         return true;
     }

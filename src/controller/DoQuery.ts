@@ -189,6 +189,7 @@ export default class DoQuery {
     private doLogic(next: any, operator: string, relevantColumns: any[]): any[] {
         switch (operator) {
             case "AND":
+                // TODO: make sure that both conditions are met
                 for (let filter of next) {
                     return this.doQuery(filter, relevantColumns);
                 }

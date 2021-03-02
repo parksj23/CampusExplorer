@@ -8,7 +8,6 @@ export default class ValidateQuery {
     private static OPTIONS: string = "OPTIONS";
     private static COLUMNS: string = "COLUMNS";
     private static ORDER: string = "ORDER";
-
     public queryObj: any;
     public sfields: string[] = ["dept", "id", "instructor", "title", "uuid"];
     public mfields: string[] = ["avg", "pass", "fail", "audit", "year"];
@@ -37,28 +36,7 @@ export default class ValidateQuery {
 
         return this.validateFilter(query[ValidateQuery.WHERE]) && this.validateOptions(query[ValidateQuery.OPTIONS]);
     }
-    // private validateBody(body: any): boolean {
-    //     // if (body === null || typeof body !== "object") {
-    //     //     return false;
-    //     // }
-    //     if (body["WHERE"] === undefined) {
-    //         if (Object.keys(body).includes("OPTIONS")) {
-    //             return this.validateOptions(body["OPTIONS"]);
-    //         }
-    //     } else if (body["OPTIONS"] === undefined) {
-    //         return false;
-    //     }
-    //     if (Object.keys(body["WHERE"]).length > 1) {
-    //         return false;
-    //     }
-    //     if (Object.keys(body).includes("OPTIONS")) {
-    //         if (this.validateOptions(body["OPTIONS"]) === true) {
-    //             return this.validateFilter(body["WHERE"]);
-    //         }
-    //     } else {
-    //         return this.validateFilter(body["WHERE"]);
-    //     }
-    // }
+
     private validateFilter(filter: any): boolean {
         if (typeof filter !== "object") {
             return false;
@@ -131,7 +109,6 @@ export default class ValidateQuery {
         } else if (compValue.includes("*")) {
             return this.validateWildcard(compValue);
         }
-        // add to list of global dataset ids IF it has not been seen yet
         if (!this.performQueryDatasetIds.includes(id)) {
             this.performQueryDatasetIds.push(id);
         }

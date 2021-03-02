@@ -110,7 +110,6 @@ export default class InsightFacade implements IInsightFacade {
     }
 
     private getSectionFields(result: any, sections: any[]): any[] {
-        let a = typeof result;
         let resultLength = result.length;
         let initialDesiredFields: string[] = ["Avg", "Pass", "Fail", "Audit", "Year", "Subject", "Course", "Professor",
             "Title", "id", "Section"];
@@ -224,6 +223,7 @@ export default class InsightFacade implements IInsightFacade {
             if (fs.existsSync(directory)) {
                 let buffer = fs.readFileSync(directory + queryingDatasetId);
                 let diskData = JSON.parse(buffer);
+                let diskResult = diskData.result;
                 if (this.memory.length === 0 && diskData === null) {
                     throw new InsightError("There are no datasets added.");
                 }

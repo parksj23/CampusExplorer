@@ -24,41 +24,57 @@ export default class DoQuery {
     }
 
     public doInitialQuery(query: any): any[] {
-        return this.doQuery(query[DoQuery.WHERE]);
+        let sectionsWithRelevantColumns = this.doOptions(query[DoQuery.OPTIONS]);
+        return this.doQuery(query[DoQuery.WHERE], sectionsWithRelevantColumns);
     }
 
-    public doQuery(filter: any): any[] {
+    private doOptions(query: any): any[] {
+        let columns = query[DoQuery.COLUMNS];
+        let sectionsWithRelevantColumns: any[] = [];
+        for (let section of this.data) {
+            let columnedSection: any = {};
+            for (let key of columns) {
+                let splitKey = key.split("_");
+                let smfield = splitKey[1];
+                columnedSection[key] = section[smfield];
+            }
+            sectionsWithRelevantColumns.push(columnedSection);
+        }
+        return sectionsWithRelevantColumns;
+    }
+
+    public doQuery(filter: any, relevantColumns: any[]): any[] {
         let result: any[] = [];
         let operatorString = (Object.getOwnPropertyNames(filter));
         let operator = operatorString[0];
         let next = filter[operator];
         switch (operator) {
             case "AND":
-                return this.doLogic(next, operator, this.data);
+                return this.doLogic(next, operator, relevantColumns);
                 break;
             case "OR":
-                return this.doLogic(next, operator, this.data);
+                return this.doLogic(next, operator, relevantColumns);
                 break;
             case "NOT":
-                return this.doNegation(next, operator, this.data);
+                return this.doNegation(next, operator, relevantColumns);
                 break;
             case "IS":
-                return this.doSCOMP(next, operator, this.data);
+                return this.doSCOMP(next, operator, relevantColumns);
                 break;
             case "EQ":
-                return this.doMCOMP(next, operator, this.data);
+                return this.doMCOMP(next, operator, relevantColumns);
                 break;
             case "GT":
-                return this.doMCOMP(next, operator, this.data);
+                return this.doMCOMP(next, operator, relevantColumns);
                 break;
             case "LT":
-                return this.doMCOMP(next, operator, this.data);
+                return this.doMCOMP(next, operator, relevantColumns);
                 break;
         }
         return result;
     }
 
-    private doMCOMP(next: any, operator: string, data: any[]): any[] {
+    private doMCOMP(next: any, operator: string, relevantColumns: any[]): any[] {
         let result: any[] = [];
         let keyString = (Object.getOwnPropertyNames(next));
         let key = keyString[0];
@@ -66,28 +82,28 @@ export default class DoQuery {
         let splitKey = key.split("_");
         let id = splitKey[0];
         let mfield = splitKey[1];
-        let queryingDataset = data.find((d) => d.id === id);
-        let datasetContent = queryingDataset.coursesArray;
+        // let queryingDataset = data.find((d) => d.id === id);
+        // let datasetContent = queryingDataset.coursesArray;
         switch (operator) {
             case "EQ":
-                for (let section of datasetContent) {
-                    if (section.mfield === compValue) {
+                for (let section of relevantColumns) {
+                    if (section[key] === compValue) {
                         result.push(section);
                     }
                 }
                 return result;
                 break;
             case "GT":
-                for (let section of datasetContent) {
-                    if (section.mfield > compValue) {
+                for (let section of relevantColumns) {
+                    if (section[key] > compValue) {
                         result.push(section);
                     }
                 }
                 return result;
                 break;
             case "LT":
-                for (let section of datasetContent) {
-                    if (section.mfield < compValue) {
+                for (let section of relevantColumns) {
+                    if (section[key] < compValue) {
                         result.push(section);
                     }
                 }
@@ -97,7 +113,7 @@ export default class DoQuery {
         return result;
     }
 
-    private doSCOMP(next: any, operator: string, data: any[]): any[] {
+    private doSCOMP(next: any, operator: string, relevantColumns: any[]): any[] {
         let result: any[] = [];
         let keyString = (Object.getOwnPropertyNames(next));
         let key = keyString[0];
@@ -105,22 +121,19 @@ export default class DoQuery {
         let splitKey = key.split("_");
         let id = splitKey[0];
         let sfield = splitKey[1];
-        let queryingDataset = data.find((d) => d.id === id);
-        let datasetContent = queryingDataset.coursesArray;
-        for (let section of datasetContent) {
+        for (let section of relevantColumns) {
             if (compValue.includes("*")) {
-                return this.doWildcard(section, compValue, result);
+                result = this.doWildcard(section, compValue, key, result);
             } else if (!compValue.includes("*")) {
-                if (section.sfield === compValue) {
+                if (section[key] === compValue) {
                     result.push(section);
                 }
-                return result;
             }
         }
         return result;
     }
 
-    private doWildcard(section: any, compValue: string, result: any[]): any[] {
+    private doWildcard(section: any, compValue: string, key: string, result: any[]): any[] {
         let firstChar: string = compValue.charAt(0);
         let lastChar: string = compValue.charAt(compValue.length - 1);
         let wildcardCount = compValue.match(/[*]/g);
@@ -134,18 +147,19 @@ export default class DoQuery {
         if (wildcardCount.length === 1) {
             if (firstChar === "*") {
                 let wildcardEndsWithInput: string = compValue.substring(1);
-                if (section.sfield === wildcardEndsWithInput) {
+                if (section[key].endsWith(wildcardEndsWithInput)) {
                     result.push(section);
                     return result;
                 }
                 return result;
             } else if (lastChar === "*") {
-                let wildcardStartsWithInput: string = compValue.substring(1);
-                if (section.sfield === wildcardStartsWithInput) {
+                let wildcardStartsWithInput: string = compValue.substring(0, compValue.length - 1);
+                if (section[key].startsWith(wildcardStartsWithInput)) {
                     result.push(section);
                     return result;
                 }
-                return result;            }
+                return result;
+            }
         }
         if ((wildcardCount.length === 2) && (compValue.length === 2)) {
             result.push(section);
@@ -153,7 +167,7 @@ export default class DoQuery {
         }
         if ((wildcardCount.length === 2) && (firstChar === "*") && (lastChar === "*")) {
             let wildcardContainsInput: string = compValue.substring(1, compValue.length - 1);
-            if (section.sfield === wildcardContainsInput) {
+            if (section[key].includes(wildcardContainsInput)) {
                 result.push(section);
                 return result;
             }
@@ -168,20 +182,20 @@ export default class DoQuery {
         return result;
     }
 
-    private doNegation(next: any, operator: string, data: any[]): any[] {
-        return this.doQuery(next);
+    private doNegation(next: any, operator: string, relevantColumns: any[]): any[] {
+        return this.doQuery(next, relevantColumns);
     }
 
-    private doLogic(next: any, operator: string, data: any[]): any[] {
+    private doLogic(next: any, operator: string, relevantColumns: any[]): any[] {
         switch (operator) {
             case "AND":
                 for (let filter of next) {
-                    return this.doQuery(filter);
+                    return this.doQuery(filter, relevantColumns);
                 }
                 break;
             case "OR":
                 for (let filter of next) {
-                    return this.doQuery(filter);
+                    return this.doQuery(filter, relevantColumns);
                 }
                 break;
         }

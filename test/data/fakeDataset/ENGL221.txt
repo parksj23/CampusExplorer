@@ -1,1 +1,0 @@
-{"result":[{"avg":"76","pass":"300","fail":15,"audit":"6","year":"2010","dept":"engl","id":"221","instructor":"lee, tara","title":"english","uuid":"8975"}, {"avg":"81","pass":"30","fail":4,"audit":"2","year":"2009","dept":"engl","id":"221","instructor":"fox, lorcan","title":"english","uuid":"18010"}],"rank":0}

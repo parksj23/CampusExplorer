@@ -6,11 +6,11 @@ import {
     InsightDataset,
     InsightDatasetKind,
     InsightError,
+    NotFoundError,
 } from "../src/controller/IInsightFacade";
 import InsightFacade from "../src/controller/InsightFacade";
 import Log from "../src/Util";
 import TestUtil from "./TestUtil";
-import { NotFoundError } from "restify";
 
 // This extends chai with assertions that natively support Promises
 chai.use(chaiAsPromised);
@@ -37,7 +37,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
         noFolder: "./test/data/noFolder.zip",
         nonZipCourses: "./test/data/nonZipCourses.txt",
         noSections: "./test/data/noSections.zip",
-        oneSection: "./test/data/oneSection.zip",
+        oneSection: "./test/data/oneValidSection.zip",
     };
     let datasets: { [id: string]: string } = {};
     let insightFacade: InsightFacade;
@@ -653,7 +653,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
                     });
             });
     });
-
+    // TODO: uncomment out all the tests above this line
     // it("Fail to remove a dataset -- whitespace ID -- returned array is the same", function () {
     //     const validID: string = "courses";
     //     const invalidID: string = "   ";
@@ -680,7 +680,6 @@ describe("InsightFacade PerformQuery", () => {
     } = {
         courses: {
             path: "./test/data/courses.zip",
-            // path: "./data/fakeDataset.zip",
             kind: InsightDatasetKind.Courses,
         },
     };

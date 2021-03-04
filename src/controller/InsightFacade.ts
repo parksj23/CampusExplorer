@@ -26,7 +26,6 @@ import {Dataset} from "./Dataset";
 
 
 export default class InsightFacade implements IInsightFacade {
-
     public datasets: InsightDataset[] = [];
     public memory: string[] = [];
     public addedDatasetContent: Dataset[] = [];
@@ -156,9 +155,7 @@ export default class InsightFacade implements IInsightFacade {
             let fs = require("fs");
             let result: string = "";
             // check if id is valid
-            if ((id === null) || (id === undefined)) {
-                return reject(new InsightError("Invalid id."));
-            } else if ((id.includes(" ")) || (id.includes("_")) || (id.length < 1)) {
+            if ((id === null) || (id === undefined) || (id.includes(" ")) || (id.includes("_")) || (id.length < 1)) {
                 return reject(new InsightError("Invalid id."));
             }
             try {
@@ -170,7 +167,7 @@ export default class InsightFacade implements IInsightFacade {
                             result = this.memory[index];
                             this.memory.splice(index, 1);
                             this.datasets.splice(index, 1);
-                            let filepath: string = "data/" + id;
+                            let filepath: string = "./data" + id;
                             fs.unlink(filepath, (e: any) => {
                                 if (e) {
                                     return reject(new InsightError());

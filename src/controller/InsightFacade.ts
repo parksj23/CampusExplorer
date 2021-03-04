@@ -43,7 +43,7 @@ export default class InsightFacade implements IInsightFacade {
         return new Promise<string[]>((resolve, reject) => {
             let promiseArray: Array<Promise<string>> = [];
             // check if id is valid
-            if ((id === null) || (id === undefined) || (id.includes(" ")) || (id.includes("_")) || (id.length < 1)) {
+            if ((id === null) || (id === undefined) || (!id.trim().length) || (id.includes("_")) || (id.length < 1)) {
                 return reject(new InsightError("Invalid id."));
             }
             // check if already added
@@ -155,9 +155,13 @@ export default class InsightFacade implements IInsightFacade {
             let fs = require("fs");
             let result: string = "";
             // check if id is valid
-            if ((id === null) || (id === undefined) || (id.includes(" ")) || (id.includes("_")) || (id.length < 1)) {
+            if ((id === null) || (id === undefined)) {
+                return reject(new InsightError("Invalid id."));
+            } else if ((!(id.trim().length)) || (id.includes("_")) || (id.length < 1)) {
                 return reject(new InsightError("Invalid id."));
             }
+            // let memoryBEFORE = this.datasets;
+            // let datasetsBEFORE = this.datasets;
             try {
                 if (!(this.memory.includes(id))) {
                     return reject(new NotFoundError("Dataset not found."));
@@ -167,7 +171,10 @@ export default class InsightFacade implements IInsightFacade {
                             result = this.memory[index];
                             this.memory.splice(index, 1);
                             this.datasets.splice(index, 1);
-                            let filepath: string = "./data" + id;
+                            // let memoryAFTER = this.datasets;
+                            // let datasetsAFTER = this.datasets;
+                            // const test = 1;
+                            let filepath: string = "data/" + id;
                             fs.unlink(filepath, (e: any) => {
                                 if (e) {
                                     return reject(new InsightError());

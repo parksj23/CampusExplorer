@@ -75,7 +75,6 @@ export default class InsightFacade implements IInsightFacade {
                             }
                         }
                     }
-                    // const test2 = 1;
                     if (validSections.length < 1) {
                         return reject(new InsightError("No valid sections."));
                     } else {
@@ -162,8 +161,6 @@ export default class InsightFacade implements IInsightFacade {
             } else if ((!(id.trim().length)) || (id.includes("_")) || (id.length < 1)) {
                 return reject(new InsightError("Invalid id."));
             }
-            // let memoryBEFORE = this.datasets;
-            // let datasetsBEFORE = this.datasets;
             try {
                 if (!(this.memory.includes(id))) {
                     return reject(new NotFoundError("Dataset not found."));
@@ -173,9 +170,6 @@ export default class InsightFacade implements IInsightFacade {
                             result = this.memory[index];
                             this.memory.splice(index, 1);
                             this.datasets.splice(index, 1);
-                            // let memoryAFTER = this.datasets;
-                            // let datasetsAFTER = this.datasets;
-                            // const test = 1;
                             let filepath: string = "data/" + id;
                             fs.unlink(filepath, (e: any) => {
                                 if (e) {
@@ -193,63 +187,66 @@ export default class InsightFacade implements IInsightFacade {
         });
     }
 
-    public performQuery(query: any):
-        Promise<any[]> {
+    public performQuery(query: any): Promise<any[]> {
         return new Promise((resolve, reject) => {
-            this.performQueryDatasetIds = [];
-            try {
-                let validQuery = new ValidateQuery(query);
-                if (validQuery.validateQuery(query)) {
-                    this.performQueryDatasetIds = validQuery.performQueryDatasetIds;
-                    if (this.performQueryDatasetIds.length > 1) {
-                        throw new InsightError("References more than 1 dataset.");
-                    }
-                    let queryingDatasetId = this.performQueryDatasetIds[0];
-                    let data = this.getData(queryingDatasetId);
-                    let doQuery = new DoQuery(query, data);
-                    let resultArray = doQuery.doInitialQuery(query);
-                    if (resultArray.length > 5000) {
-                        throw new ResultTooLargeError("Result has >5000 sections.");
-                    }
-                    return resolve(resultArray);
-                } else {
-                    throw new InsightError("Invalid query.");
-                }
-            } catch (e) {
-                return reject(e);
-            }
+            return resolve([]);
         });
     }
 
-    public getData(queryingDatasetId: string): any[] {
-        let data: any[] = [];
-        let fs = require("fs");
-        let directory = "./data";
-        try {
-            if (fs.existsSync(directory)) {
-                let buffer = fs.readFileSync(directory + queryingDatasetId);
-                let diskData = JSON.parse(buffer);
-                let diskResult = diskData.result;
-                if (this.memory.length === 0 && diskData === null) {
-                    throw new InsightError("There are no datasets added.");
-                }
-                if (this.memory.length === 0 && diskData !== null) {
-                    return data = diskData;
-                }
-            }
-        } catch (err) {
-            throw new InsightError("Cannot query a database that is not on disk.");
-        }
-        if (this.memory.length > 0 && this.memory.includes(queryingDatasetId)) {
-            for (let d of this.addedDatasetContent) {
-                if (d.getDatasetId() === queryingDatasetId) {
-                    return data = d.getCoursesArray();
-                }
-            }
-        } else {
-            throw new InsightError("Cannot query a database that is not in memory.");
-        }
-    }
+    //         this.performQueryDatasetIds = [];
+    //         try {
+    //             let validQuery = new ValidateQuery(query);
+    //             if (validQuery.validateQuery(query)) {
+    //                 this.performQueryDatasetIds = validQuery.performQueryDatasetIds;
+    //                 if (this.performQueryDatasetIds.length > 1) {
+    //                     throw new InsightError("References more than 1 dataset.");
+    //                 }
+    //                 let queryingDatasetId = this.performQueryDatasetIds[0];
+    //                 let data = this.getData(queryingDatasetId);
+    //                 let doQuery = new DoQuery(query, data);
+    //                 let resultArray = doQuery.doInitialQuery(query);
+    //                 if (resultArray.length > 5000) {
+    //                     throw new ResultTooLargeError("Result has >5000 sections.");
+    //                 }
+    //                 return resolve(resultArray);
+    //             } else {
+    //                 throw new InsightError("Invalid query.");
+    //             }
+    //         } catch (e) {
+    //             return reject(e);
+    //         }
+    //     });
+    // }
+    //
+    // public getData(queryingDatasetId: string): any[] {
+    //     let data: any[] = [];
+    //     let fs = require("fs");
+    //     let directory = "./data";
+    //     try {
+    //         if (fs.existsSync(directory)) {
+    //             let buffer = fs.readFileSync(directory + queryingDatasetId);
+    //             let diskData = JSON.parse(buffer);
+    //             let diskResult = diskData.result;
+    //             if (this.memory.length === 0 && diskData === null) {
+    //                 throw new InsightError("There are no datasets added.");
+    //             }
+    //             if (this.memory.length === 0 && diskData !== null) {
+    //                 return data = diskData;
+    //             }
+    //         }
+    //     } catch (err) {
+    //         throw new InsightError("Cannot query a database that is not on disk.");
+    //     }
+    //     if (this.memory.length > 0 && this.memory.includes(queryingDatasetId)) {
+    //         for (let d of this.addedDatasetContent) {
+    //             if (d.getDatasetId() === queryingDatasetId) {
+    //                 return data = d.getCoursesArray();
+    //             }
+    //         }
+    //     } else {
+    //         throw new InsightError("Cannot query a database that is not in memory.");
+    //     }
+    // }
 
     public listDatasets(): Promise<InsightDataset[]> {
         return Promise.resolve(this.datasets);

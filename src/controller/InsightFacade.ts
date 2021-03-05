@@ -62,6 +62,7 @@ export default class InsightFacade implements IInsightFacade {
                 if (fileCount < 1) {
                     reject(new InsightError("Empty courses folder."));
                 }
+                // const test1 = 1;
                 return Promise.all(promiseArray).then((courseJSONs: any) => {
                     let validSections: any[] = [];
                     for (let i of courseJSONs) { // I had a breakpoint here to test the sectionFields methods
@@ -74,6 +75,7 @@ export default class InsightFacade implements IInsightFacade {
                             }
                         }
                     }
+                    // const test2 = 1;
                     if (validSections.length < 1) {
                         return reject(new InsightError("No valid sections."));
                     } else {

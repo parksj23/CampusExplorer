@@ -37,7 +37,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
         noFolder: "./test/data/noFolder.zip",
         nonZipCourses: "./test/data/nonZipCourses.txt",
         noSections: "./test/data/noSections.zip",
-        oneSection: "./test/data/oneValidSection.zip",
+        oneValidSection: "./test/data/oneValidSection.zip",
     };
     let datasets: { [id: string]: string } = {};
     let insightFacade: InsightFacade;
@@ -117,7 +117,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     });
 
     it("Should add a valid dataset with one section", function () {
-        const id: string = "oneSection";
+        const id: string = "oneValidSection";
         const expected: string[] = [id];
         const futureResult: Promise<string[]> = insightFacade.addDataset(
             id,

@@ -211,12 +211,10 @@ export default class DoQuery {
 
     private doNegation(next: any, operator: string, sections: any[]): any[] {
         let notResult: any[] = [];
-        for (let filter of next) {
-            let notTemp: any[] = [];
-            notTemp.push(this.doQuery(filter, sections));
-            notResult.push(notTemp);
-        }
-        let not = notResult[0].filter((section: any) => !sections.includes(section));
+        let notTemp: any[] = [];
+        notTemp.push(this.doQuery(next, sections));
+        notResult.push(notTemp);
+        let not = notResult[0].filter((section: any) => !section.includes(section));
         return not;
     }
 

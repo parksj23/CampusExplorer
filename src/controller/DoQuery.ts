@@ -254,7 +254,11 @@ export default class DoQuery {
                     orTemp.push(this.doQuery(filter, sections));
                     orResult.push(orTemp);
                 }
-                let union = orResult[0].concat(orResult[1]);
+                let union: any[] = [];
+                for (let i = 0; i < orResult.length - 1; i++) {
+                    union = orResult[i].concat(orResult[i + 1]);
+                    // union = [].concat(orResult[i], orResult[i + 1]);
+                }
                 return union;
                 break;
         }

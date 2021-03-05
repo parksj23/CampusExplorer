@@ -149,12 +149,9 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
         return expect(futureResult)
             .to.eventually.deep.equal(expected)
             .then(() => {
-                const removeResult: Promise<
-                    string
-                > = insightFacade.removeDataset(id);
+                const removeResult: Promise<string> = insightFacade.removeDataset(id);
                 const removeExpected: string = id;
-                return expect(removeResult)
-                    .to.eventually.deep.equal(removeExpected)
+                return expect(removeResult).to.eventually.deep.equal(removeExpected)
                     .then(() => {
                         futureResult = insightFacade.addDataset(
                             id,
@@ -289,25 +286,44 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     });
 
     it("Fail to add duplicate dataset", function () {
-        let id: string = "courses";
+        const id: string = "courses";
         const expected: string[] = [id];
-        return insightFacade
-            .addDataset(id, datasets[id], InsightDatasetKind.Courses)
-            .then((result1) => {
-                return insightFacade
-                    .addDataset(id, datasets[id], InsightDatasetKind.Courses)
-                    .then((futureResult) => {
-                        expect.fail(
-                            futureResult,
-                            expected,
-                            "Should be rejected.",
-                        );
-                    })
-                    .catch((err: any) => {
-                        expect(err).to.be.rejectedWith(InsightError);
-                    });
+        const futureResult: Promise<string[]> = insightFacade.addDataset(
+            id,
+            datasets[id],
+            InsightDatasetKind.Courses,
+        );
+        return expect(futureResult).to.eventually.deep.equal(expected)
+            .then(() => {
+                const futureResult2: Promise<string[]> = insightFacade.addDataset(
+                    id,
+                    datasets[id],
+                    InsightDatasetKind.Courses,
+                );
+                return expect(futureResult2).to.be.rejectedWith(InsightError);
             });
     });
+
+    // it("Fail to add duplicate dataset", function () {
+    //     let id: string = "courses";
+    //     const expected: string[] = [id];
+    //     return insightFacade
+    //         .addDataset(id, datasets[id], InsightDatasetKind.Courses)
+    //         .then((result1) => {
+    //             return insightFacade
+    //                 .addDataset(id, datasets[id], InsightDatasetKind.Courses)
+    //                 .then((futureResult) => {
+    //                     expect.fail(
+    //                         futureResult,
+    //                         expected,
+    //                         "Should be rejected.",
+    //                     );
+    //                 })
+    //                 .catch((err: any) => {
+    //                     expect(err).to.be.rejectedWith(InsightError);
+    //                 });
+    //         });
+    // });
 
     it("Fail to add valid id but can not be found at the loaded databases", function () {
         const id: string = "courses";

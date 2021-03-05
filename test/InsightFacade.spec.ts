@@ -127,8 +127,6 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
             const futureResult2: Promise<string[]> = insightFacade.addDataset(id2, datasets[id2],
                 InsightDatasetKind.Courses);
             return expect(futureResult2).to.eventually.deep.equal(expected2);
-        }).then((result) => {
-            return expect(result).to.eventually.deep.equal(expected2);
         });
     });
 

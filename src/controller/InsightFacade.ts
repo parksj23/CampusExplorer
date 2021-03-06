@@ -102,7 +102,7 @@ export default class InsightFacade implements IInsightFacade {
                 this.memory.push(id);
                 let datasetContent = new Dataset(id, validSections);
                 this.addedDatasetContent.push(datasetContent);
-                const directory = "./data/";
+                const directory = "./src/data/";
                 const filePath: string = directory + id;
                 // TODO is the content okay for loading? we can also do more separate files
                 const content = JSON.stringify(datasetContent);

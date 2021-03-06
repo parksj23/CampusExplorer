@@ -230,7 +230,7 @@ export default class DoQuery {
         let notTemp: any[] = [];
         notTemp.push(this.doQuery(next, sections));
         notResult.push(notTemp);
-        let not = notResult[0].filter((section: any) => !section.includes(section));
+        let not = notResult[0].filter((section: any) => !sections.includes(section));
         return not;
     }
 

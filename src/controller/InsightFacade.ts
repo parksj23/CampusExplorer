@@ -62,10 +62,9 @@ export default class InsightFacade implements IInsightFacade {
                 if (fileCount < 1) {
                     reject(new InsightError("Empty courses folder."));
                 }
-                // const test1 = 1;
                 return Promise.all(promiseArray).then((courseJSONs: any) => {
                     let validSections: any[] = [];
-                    for (let i of courseJSONs) { // I had a breakpoint here to test the sectionFields methods
+                    for (let i of courseJSONs) {
                         let section = JSON.parse(i);
                         let sectionType = typeof section;
                         if (sectionType === "object") {
@@ -79,10 +78,12 @@ export default class InsightFacade implements IInsightFacade {
                         return reject(new InsightError("No valid sections."));
                     } else {
                         try {
+                            // both files saved before timeout? big
+                            // small files, only one saves but passes
                             this.saveData(id, InsightDatasetKind.Courses, validSections);
                             return resolve(this.memory);
                         } catch (e) {
-                            return reject(new InsightError());
+                            return reject(new InsightError("Data was parsed correctly but not saved"));
                         }
                     }
                     return reject(new InsightError());
@@ -93,20 +94,24 @@ export default class InsightFacade implements IInsightFacade {
         });
     }
 
-    private saveData(id: string, kind: InsightDatasetKind, validSections: any[]) {
-        let fs = require("fs");
-        let insightDataset: InsightDataset = {id, kind, numRows: validSections.length};
-        this.datasets.push(insightDataset);
-        this.memory.push(id);
-        let datasetContent = new Dataset(id, validSections);
-        this.addedDatasetContent.push(datasetContent);
-        const directory = "./data/";
-        const filePath: string = directory + id;
-        // TODO is the content okay for loading? we can also do more separate files
-        const content = JSON.stringify(datasetContent);
-        fs.promises.mkdir(directory, {recursive: true}).then(() => {
-            fs.promises.writeFile(filePath, content);
-        });
+    private saveData(id: string, kind: InsightDatasetKind, validSections: any[]): Promise<boolean> {
+            return new Promise<boolean>((resolve, reject) => {
+                let fs = require("fs");
+                let insightDataset: InsightDataset = {id, kind, numRows: validSections.length};
+                this.datasets.push(insightDataset);
+                this.memory.push(id);
+                let datasetContent = new Dataset(id, validSections);
+                this.addedDatasetContent.push(datasetContent);
+                const directory = "./data/";
+                const filePath: string = directory + id;
+                // TODO is the content okay for loading? we can also do more separate files
+                const content = JSON.stringify(datasetContent);
+                fs.promises.mkdir(directory, {recursive: true}).then(() => {
+                        fs.promises.writeFile(filePath, content).then(() => {
+                            resolve();
+                        });
+                    });
+            });
     }
 
     private getSectionFields(result: any, sections: any[]): any[] {

@@ -84,8 +84,6 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     });
 
     // This is a unit test. You should create more like this!
-    //
-    //
 
     // addDataset tests
     it("Should add a valid dataset", function () {
@@ -99,24 +97,8 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
         return expect(futureResult).to.eventually.deep.equal(expected);
     });
 
-    // it("Should add another valid dataset", function () {
-    //     const id1: string = "courses";
-    //     const id2: string = "coursesCopy";
-    //     const expected1: string[] = [id1];
-    //     const expected2: string[] = [id1, id2];
-    //     return insightFacade
-    //         .addDataset(id1, datasets[id1], InsightDatasetKind.Courses)
-    //         .then((result1) => {
-    //             expect(result1).to.deep.equal(expected1);
-    //             return insightFacade
-    //                 .addDataset(id2, datasets[id2], InsightDatasetKind.Courses)
-    //                 .then((result2) => {
-    //                     expect(result2).to.deep.equal(expected2);
-    //                 });
-    //         });
-    // });
-
-    it("Should add another valid dataset", function () {
+    it("Should add two valid datasets in a row", function () {
+        this.timeout( 10000);
         const id1: string = "courses";
         const id2: string = "coursesCopy";
         const expected1: string[] = [id1];
@@ -128,6 +110,21 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
                 InsightDatasetKind.Courses);
             return expect(futureResult2).to.eventually.deep.equal(expected2);
         });
+    });
+
+    it("SMALL Should add two valid datasets in a row", function () {
+        const id1: string = "oneValidSection";
+        const id2: string = "courses2";
+        const expected1: string[] = [id1];
+        const expected2: string[] = [id1, id2];
+        const futureResult1: Promise<string[]> = insightFacade.addDataset(id1, datasets[id1],
+            InsightDatasetKind.Courses);
+        // arrays do equal but not enough time to write file into data ?
+        return expect(futureResult1).to.eventually.deep.equal(expected1).then(() => {
+             const futureResult2: Promise<string[]> = insightFacade.addDataset(id2, datasets[id2],
+                 InsightDatasetKind.Courses);
+             return expect(futureResult2).to.eventually.deep.equal(expected2);
+         });
     });
 
     it("Should add a valid dataset with one section", function () {

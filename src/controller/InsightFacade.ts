@@ -17,7 +17,6 @@ import DoQuery from "./DoQuery";
 import {rejects} from "assert";
 import {expect} from "chai";
 import {Dataset} from "./Dataset";
-import * as path from "path";
 
 /**
  * This is the main programmatic entry point for the project.
@@ -102,13 +101,20 @@ export default class InsightFacade implements IInsightFacade {
         this.memory.push(id);
         let datasetContent = new Dataset(id, validSections);
         this.addedDatasetContent.push(datasetContent);
-        let directory = "./data/";
-        if (!fs.existsSync(directory)) {
-            fs.mkdirSync(directory);
-        }
-        let filePath: string = directory + id;
-        // fs.writeFileSync("./src/test", JSON.stringify(insightDataset));
-        fs.writeFileSync(filePath, JSON.stringify(insightDataset));
+        const directory = "./data/";
+        const filePath: string = directory + id;
+        const content = JSON.stringify(insightDataset);
+        // if (!fs.existsSync(directory)) {
+        //     fs.mkdirSync(directory).then(() => {
+        //         fs.writeFileSync(filePath, JSON.stringify(insightDataset));
+        //     });
+        // } else {
+        //     // fs.writeFileSync("./data/test", "hello this is a test");
+        //     fs.writeFileSync(filePath, JSON.stringify(insightDataset));
+        // }
+        fs.promises.mkdir(directory, {recursive: true}).then(() => {
+            fs.promises.writeFile(filePath, content);
+        });
     }
 
     private getSectionFields(result: any, sections: any[]): any[] {

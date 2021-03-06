@@ -226,15 +226,17 @@ export default class DoQuery {
     }
 
     private doNegation(next: any, operator: string, sections: any[]): any[] {
-        let notResult: any[] = [];
-        let notTemp: any[] = [];
-        notTemp.push(this.doQuery(next, sections));
-        notResult.push(notTemp);
-        let not = notResult[0].filter((section: any) => !sections.includes(section));
-        return not;
+        // let notResult: any[] = [];
+        // let notTemp: any[] = [];
+        // notTemp.push(this.doQuery(next, sections));
+        // notResult.push(notTemp);
+        // let not = notResult[0].filter((section: any) => !sections.includes(section));
+        // return not;
+        return this.doQuery(next, sections);
     }
 
     private doLogic(next: any, operator: string, sections: any[]): any[] {
+        return [];
         switch (operator) {
             case "AND":
                 let andResult: any[] = [];

@@ -195,64 +195,64 @@ export default class InsightFacade implements IInsightFacade {
 
     public performQuery(query: any): Promise<any[]> {
         return new Promise((resolve, reject) => {
-            return resolve([]);
+    //         return resolve([]);
+    //     });
+    // }
+
+            this.performQueryDatasetIds = [];
+            try {
+                let validQuery = new ValidateQuery(query);
+                if (validQuery.validateQuery(query)) {
+                    this.performQueryDatasetIds = validQuery.performQueryDatasetIds;
+                    if (this.performQueryDatasetIds.length > 1) {
+                        throw new InsightError("References more than 1 dataset.");
+                    }
+                    let queryingDatasetId = this.performQueryDatasetIds[0];
+                    let data = this.getData(queryingDatasetId);
+                    let doQuery = new DoQuery(query, data);
+                    let resultArray = doQuery.doInitialQuery(query);
+                    if (resultArray.length > 5000) {
+                        throw new ResultTooLargeError("Result has >5000 sections.");
+                    }
+                    return resolve(resultArray);
+                } else {
+                    throw new InsightError("Invalid query.");
+                }
+            } catch (e) {
+                return reject(e);
+            }
         });
     }
 
-    //         this.performQueryDatasetIds = [];
-    //         try {
-    //             let validQuery = new ValidateQuery(query);
-    //             if (validQuery.validateQuery(query)) {
-    //                 this.performQueryDatasetIds = validQuery.performQueryDatasetIds;
-    //                 if (this.performQueryDatasetIds.length > 1) {
-    //                     throw new InsightError("References more than 1 dataset.");
-    //                 }
-    //                 let queryingDatasetId = this.performQueryDatasetIds[0];
-    //                 let data = this.getData(queryingDatasetId);
-    //                 let doQuery = new DoQuery(query, data);
-    //                 let resultArray = doQuery.doInitialQuery(query);
-    //                 if (resultArray.length > 5000) {
-    //                     throw new ResultTooLargeError("Result has >5000 sections.");
-    //                 }
-    //                 return resolve(resultArray);
-    //             } else {
-    //                 throw new InsightError("Invalid query.");
-    //             }
-    //         } catch (e) {
-    //             return reject(e);
-    //         }
-    //     });
-    // }
-    //
-    // public getData(queryingDatasetId: string): any[] {
-    //     let data: any[] = [];
-    //     let fs = require("fs");
-    //     let directory = "./data";
-    //     try {
-    //         if (fs.existsSync(directory)) {
-    //             let buffer = fs.readFileSync(directory + queryingDatasetId);
-    //             let diskData = JSON.parse(buffer);
-    //             let diskResult = diskData.result;
-    //             if (this.memory.length === 0 && diskData === null) {
-    //                 throw new InsightError("There are no datasets added.");
-    //             }
-    //             if (this.memory.length === 0 && diskData !== null) {
-    //                 return data = diskData;
-    //             }
-    //         }
-    //     } catch (err) {
-    //         throw new InsightError("Cannot query a database that is not on disk.");
-    //     }
-    //     if (this.memory.length > 0 && this.memory.includes(queryingDatasetId)) {
-    //         for (let d of this.addedDatasetContent) {
-    //             if (d.getDatasetId() === queryingDatasetId) {
-    //                 return data = d.getCoursesArray();
-    //             }
-    //         }
-    //     } else {
-    //         throw new InsightError("Cannot query a database that is not in memory.");
-    //     }
-    // }
+    public getData(queryingDatasetId: string): any[] {
+        let data: any[] = [];
+        let fs = require("fs");
+        let directory = "./src/data/";
+        try {
+            if (fs.existsSync(directory)) {
+                let buffer = fs.readFileSync(directory + queryingDatasetId);
+                let diskData = JSON.parse(buffer);
+                let diskResult = diskData.result;
+                if (this.memory.length === 0 && diskData === null) {
+                    throw new InsightError("There are no datasets added.");
+                }
+                if (this.memory.length === 0 && diskData !== null) {
+                    return data = diskData;
+                }
+            }
+        } catch (err) {
+            throw new InsightError("Cannot query a database that is not on disk.");
+        }
+        if (this.memory.length > 0 && this.memory.includes(queryingDatasetId)) {
+            for (let d of this.addedDatasetContent) {
+                if (d.getDatasetId() === queryingDatasetId) {
+                    return data = d.getCoursesArray();
+                }
+            }
+        } else {
+            throw new InsightError("Cannot query a database that is not in memory.");
+        }
+    }
 
     public listDatasets(): Promise<InsightDataset[]> {
         return Promise.resolve(this.datasets);

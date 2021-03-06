@@ -67,7 +67,7 @@ export default class ValidateQuery {
         if (nextKeys.length !== 1) {
             return false;
         }
-        return !this.validateFilter(next);
+        return this.validateFilter(next);
     }
 
     private validateLogic(next: any, operator: string) {

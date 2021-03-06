@@ -104,7 +104,8 @@ export default class InsightFacade implements IInsightFacade {
                 this.addedDatasetContent.push(datasetContent);
                 const directory = "./src/data/";
                 const filePath: string = directory + id;
-                // TODO is the content okay for loading? we can also do more separate files
+                // TODO is the content okay for loading? we can also do more separate files. Do we also load memory ->
+                //  helper functions need access to class variables?
                 const content = JSON.stringify(datasetContent);
                 fs.promises.mkdir(directory, {recursive: true}).then(() => {
                         fs.promises.writeFile(filePath, content).then(() => {

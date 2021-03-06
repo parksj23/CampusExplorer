@@ -247,19 +247,6 @@ export default class DoQuery {
                 //     let intersection = andResult[i].filter((section: any) => andResult[i + 1].includes(section));
                 // }
                 let intersection: any[] = [];
-                // for (let i = 0; i < andResult.length; i++) {
-                //     for (let arr1 of andResult[i]) {
-                //         for (let section of arr1) {
-                //             for (let arr2 of andResult[i + 1]) {
-                //                 for (let section2 of arr2) {
-                //                     if (section === section2) {
-                //                         intersection.push(section);
-                //                     }
-                //                 }
-                //             }
-                //         }
-                //     }
-                // }
                 if (andResult.length === 2) {
                     for (let a of andResult[0]) {
                         for (let section of a) {

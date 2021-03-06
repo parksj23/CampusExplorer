@@ -243,7 +243,21 @@ export default class DoQuery {
                     andTemp.push(this.doQuery(filter, sections));
                     andResult.push(andTemp);
                 }
-                let intersection = andResult[0].filter((section: any) => andResult[1].includes(section));
+                // for (let i = 0; i < andResult.length; i++) {
+                //     let intersection = andResult[i].filter((section: any) => andResult[i + 1].includes(section));
+                // }
+                let intersection: any[] = [];
+                for (let a of andResult[0]) {
+                    for (let section of a) {
+                        for (let b of andResult[1]) {
+                            for (let section2 of b) {
+                                if (section === section2) {
+                                    intersection.push(section);
+                                }
+                            }
+                        }
+                    }
+                }
                 // TODO: Why is the intersection an array of length 0
                 return intersection;
                 break;
@@ -259,6 +273,8 @@ export default class DoQuery {
                     union = orResult[i].concat(orResult[i + 1]);
                     // union = [].concat(orResult[i], orResult[i + 1]);
                 }
+                let flat = union.reduce((acc, val) => acc.concat(val), []);
+                union = flat;
                 return union;
                 break;
         }

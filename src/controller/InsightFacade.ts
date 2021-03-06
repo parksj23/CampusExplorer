@@ -64,7 +64,7 @@ export default class InsightFacade implements IInsightFacade {
                 }
                 return Promise.all(promiseArray).then((courseJSONs: any) => {
                     let validSections: any[] = [];
-                    for (let i of courseJSONs) { // I had a breakpoint here to test the sectionFields methods
+                    for (let i of courseJSONs) {
                         let section = JSON.parse(i);
                         let sectionType = typeof section;
                         if (sectionType === "object") {
@@ -78,10 +78,12 @@ export default class InsightFacade implements IInsightFacade {
                         return reject(new InsightError("No valid sections."));
                     } else {
                         try {
+                            // both files saved before timeout? big
+                            // small files, only one saves but passes
                             this.saveData(id, InsightDatasetKind.Courses, validSections);
                             return resolve(this.memory);
                         } catch (e) {
-                            return reject(new InsightError());
+                            return reject(new InsightError("Data was parsed correctly but not saved"));
                         }
                     }
                     return reject(new InsightError());
@@ -92,20 +94,25 @@ export default class InsightFacade implements IInsightFacade {
         });
     }
 
-    private saveData(id: string, kind: InsightDatasetKind, validSections: any[]) {
-        let fs = require("fs");
-        let insightDataset: InsightDataset = {id, kind, numRows: validSections.length};
-        this.datasets.push(insightDataset);
-        // TODO: do we have to wipe memory? There's smth about not using global variables as memory...
-        this.memory.push(id);
-        let datasetContent = new Dataset(id, validSections);
-        this.addedDatasetContent.push(datasetContent);
-        let directory = "./data.";
-        if (!fs.existsSync(directory)) {
-            fs.mkdirSync(directory);
-        }
-        let fileName = directory + id;
-        fs.writeFileSync(fileName, JSON.stringify(insightDataset));
+    private saveData(id: string, kind: InsightDatasetKind, validSections: any[]): Promise<boolean> {
+            return new Promise<boolean>((resolve, reject) => {
+                let fs = require("fs");
+                let insightDataset: InsightDataset = {id, kind, numRows: validSections.length};
+                this.datasets.push(insightDataset);
+                this.memory.push(id);
+                let datasetContent = new Dataset(id, validSections);
+                this.addedDatasetContent.push(datasetContent);
+                const directory = "./src/data/";
+                const filePath: string = directory + id;
+                // TODO is the content okay for loading? we can also do more separate files. Do we also load memory ->
+                //  helper functions need access to class variables?
+                const content = JSON.stringify(datasetContent);
+                fs.promises.mkdir(directory, {recursive: true}).then(() => {
+                        fs.promises.writeFile(filePath, content).then(() => {
+                            resolve();
+                        });
+                    });
+            });
     }
 
     private getSectionFields(result: any, sections: any[]): any[] {
@@ -160,8 +167,6 @@ export default class InsightFacade implements IInsightFacade {
             } else if ((!(id.trim().length)) || (id.includes("_")) || (id.length < 1)) {
                 return reject(new InsightError("Invalid id."));
             }
-            // let memoryBEFORE = this.datasets;
-            // let datasetsBEFORE = this.datasets;
             try {
                 if (!(this.memory.includes(id))) {
                     return reject(new NotFoundError("Dataset not found."));
@@ -171,9 +176,6 @@ export default class InsightFacade implements IInsightFacade {
                             result = this.memory[index];
                             this.memory.splice(index, 1);
                             this.datasets.splice(index, 1);
-                            // let memoryAFTER = this.datasets;
-                            // let datasetsAFTER = this.datasets;
-                            // const test = 1;
                             let filepath: string = "data/" + id;
                             fs.unlink(filepath, (e: any) => {
                                 if (e) {
@@ -191,9 +193,12 @@ export default class InsightFacade implements IInsightFacade {
         });
     }
 
-    public performQuery(query: any):
-        Promise<any[]> {
+    public performQuery(query: any): Promise<any[]> {
         return new Promise((resolve, reject) => {
+    //         return resolve([]);
+    //     });
+    // }
+
             this.performQueryDatasetIds = [];
             try {
                 let validQuery = new ValidateQuery(query);
@@ -222,7 +227,7 @@ export default class InsightFacade implements IInsightFacade {
     public getData(queryingDatasetId: string): any[] {
         let data: any[] = [];
         let fs = require("fs");
-        let directory = "./data";
+        let directory = "./src/data/";
         try {
             if (fs.existsSync(directory)) {
                 let buffer = fs.readFileSync(directory + queryingDatasetId);

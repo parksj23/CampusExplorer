@@ -247,18 +247,34 @@ export default class DoQuery {
                 //     let intersection = andResult[i].filter((section: any) => andResult[i + 1].includes(section));
                 // }
                 let intersection: any[] = [];
-                for (let a of andResult[0]) {
-                    for (let section of a) {
-                        for (let b of andResult[1]) {
-                            for (let section2 of b) {
-                                if (section === section2) {
-                                    intersection.push(section);
+                // for (let i = 0; i < andResult.length; i++) {
+                //     for (let arr1 of andResult[i]) {
+                //         for (let section of arr1) {
+                //             for (let arr2 of andResult[i + 1]) {
+                //                 for (let section2 of arr2) {
+                //                     if (section === section2) {
+                //                         intersection.push(section);
+                //                     }
+                //                 }
+                //             }
+                //         }
+                //     }
+                // }
+                if (andResult.length === 2) {
+                    for (let a of andResult[0]) {
+                        for (let section of a) {
+                            for (let b of andResult[1]) {
+                                for (let section2 of b) {
+                                    if (section === section2) {
+                                        intersection.push(section);
+                                    }
                                 }
                             }
                         }
                     }
+                } else if (andResult.length > 2) {
+                    return null;
                 }
-                // TODO: Why is the intersection an array of length 0
                 return intersection;
                 break;
             case "OR":
@@ -273,6 +289,7 @@ export default class DoQuery {
                     union = orResult[i].concat(orResult[i + 1]);
                     // union = [].concat(orResult[i], orResult[i + 1]);
                 }
+                // https://stackoverflow.com/questions/56544572/flatten-array-of-arrays-in-typescript
                 let flat = union.reduce((acc, val) => acc.concat(val), []);
                 union = flat;
                 return union;

@@ -97,21 +97,13 @@ export default class InsightFacade implements IInsightFacade {
         let fs = require("fs");
         let insightDataset: InsightDataset = {id, kind, numRows: validSections.length};
         this.datasets.push(insightDataset);
-        // TODO: do we have to wipe memory? There's smth about not using global variables as memory...
         this.memory.push(id);
         let datasetContent = new Dataset(id, validSections);
         this.addedDatasetContent.push(datasetContent);
         const directory = "./data/";
         const filePath: string = directory + id;
-        const content = JSON.stringify(insightDataset);
-        // if (!fs.existsSync(directory)) {
-        //     fs.mkdirSync(directory).then(() => {
-        //         fs.writeFileSync(filePath, JSON.stringify(insightDataset));
-        //     });
-        // } else {
-        //     // fs.writeFileSync("./data/test", "hello this is a test");
-        //     fs.writeFileSync(filePath, JSON.stringify(insightDataset));
-        // }
+        // TODO is the content okay for loading? we can also do more separate files
+        const content = JSON.stringify(datasetContent);
         fs.promises.mkdir(directory, {recursive: true}).then(() => {
             fs.promises.writeFile(filePath, content);
         });

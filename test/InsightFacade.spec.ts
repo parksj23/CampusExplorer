@@ -153,7 +153,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     });
 
     it("Should add a valid dataset after previously adding it and then removing it", function () {
-        const id: string = "courses";
+        const id: string = "courses2";
         const expected: string[] = [id];
         let futureResult: Promise<string[]> = insightFacade.addDataset(
             id,

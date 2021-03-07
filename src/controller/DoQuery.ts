@@ -287,4 +287,5 @@ export default class DoQuery {
     // TODO: are we not supposed to save anything to the data directory
     // TODO: finish doLogic and doNegation because that's where the issues are
     // TODO: read c2 specs
+    // TODO: refactor Dataset helper functions
 }

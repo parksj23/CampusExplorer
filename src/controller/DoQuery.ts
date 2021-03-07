@@ -54,8 +54,7 @@ export default class DoQuery {
         let optionsKeys = Object.getOwnPropertyNames(query);
         if (optionsKeys.includes(DoQuery.ORDER)) {
             let order = query[DoQuery.ORDER];
-            if (typeof order === "string") {
-                // sections.sort((a, b) => (a[order] < b[order] ? -1 : 1));
+            if (typeof order === "string") { // if there is only 1 key in order, then we sort by that
                 let ascending = sections.sort((a: any, b: any) => {
                     if (a[order] < b[order]) {
                         return -1;
@@ -230,13 +229,12 @@ export default class DoQuery {
         let notTemp: any[] = [];
         notTemp.push(this.doQuery(next, sections));
         notResult.push(notTemp);
-        let not = notResult[0].filter((section: any) => !sections.includes(section));
+        let notArr = notResult[0];
+        let not = sections.filter((section: any) => !notArr[0].includes(section));
         return not;
-        // return this.doQuery(next, sections);
     }
 
     private doLogic(next: any, operator: string, sections: any[]): any[] {
-        // return [];
         switch (operator) {
             case "AND":
                 let andResult: any[] = [];
@@ -245,10 +243,11 @@ export default class DoQuery {
                     andTemp.push(this.doQuery(filter, sections));
                     andResult.push(andTemp);
                 }
-                // for (let i = 0; i < andResult.length; i++) {
-                //     let intersection = andResult[i].filter((section: any) => andResult[i + 1].includes(section));
-                // }
                 let intersection: any[] = [];
+                // for (let i = 0; i < andResult.length; i++) {
+                //     intersection = andResult[i].filter((section: any) => andResult[i + 1].includes(section));
+                // }
+                // let intersection: any[] = [];
                 if (andResult.length === 2) {
                     for (let a of andResult[0]) {
                         for (let section of a) {
@@ -285,7 +284,7 @@ export default class DoQuery {
                 break;
         }
     }
-    // TODO: do i check memory or disk first for data?
+    // TODO: are we not supposed to save anything to the data directory
     // TODO: finish doLogic and doNegation because that's where the issues are
     // TODO: read c2 specs
 }

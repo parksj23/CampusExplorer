@@ -228,6 +228,16 @@ export default class InsightFacade implements IInsightFacade {
         let data: any[] = [];
         let fs = require("fs");
         let directory = "./src/data/";
+        if (this.memory.length > 0 && this.memory.includes(queryingDatasetId)) {
+            for (let d of this.addedDatasetContent) {
+                if (d.getDatasetId() === queryingDatasetId) {
+                    return data = d.getCoursesArray();
+                }
+            }
+        } else {
+            throw new InsightError("Cannot query a database that is not in memory.");
+        }
+
         try {
             if (fs.existsSync(directory)) {
                 let buffer = fs.readFileSync(directory + queryingDatasetId);
@@ -242,15 +252,6 @@ export default class InsightFacade implements IInsightFacade {
             }
         } catch (err) {
             throw new InsightError("Cannot query a database that is not on disk.");
-        }
-        if (this.memory.length > 0 && this.memory.includes(queryingDatasetId)) {
-            for (let d of this.addedDatasetContent) {
-                if (d.getDatasetId() === queryingDatasetId) {
-                    return data = d.getCoursesArray();
-                }
-            }
-        } else {
-            throw new InsightError("Cannot query a database that is not in memory.");
         }
     }
 

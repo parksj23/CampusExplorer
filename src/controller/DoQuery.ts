@@ -226,17 +226,17 @@ export default class DoQuery {
     }
 
     private doNegation(next: any, operator: string, sections: any[]): any[] {
-        // let notResult: any[] = [];
-        // let notTemp: any[] = [];
-        // notTemp.push(this.doQuery(next, sections));
-        // notResult.push(notTemp);
-        // let not = notResult[0].filter((section: any) => !sections.includes(section));
-        // return not;
-        return this.doQuery(next, sections);
+        let notResult: any[] = [];
+        let notTemp: any[] = [];
+        notTemp.push(this.doQuery(next, sections));
+        notResult.push(notTemp);
+        let not = notResult[0].filter((section: any) => !sections.includes(section));
+        return not;
+        // return this.doQuery(next, sections);
     }
 
     private doLogic(next: any, operator: string, sections: any[]): any[] {
-        return [];
+        // return [];
         switch (operator) {
             case "AND":
                 let andResult: any[] = [];
@@ -285,4 +285,7 @@ export default class DoQuery {
                 break;
         }
     }
+    // TODO: do i check memory or disk first for data?
+    // TODO: finish doLogic and doNegation because that's where the issues are
+    // TODO: read c2 specs
 }

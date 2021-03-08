@@ -110,7 +110,8 @@ export default class InsightFacade implements IInsightFacade {
                             result = this.d.memory[index];
                             this.d.memory.splice(index, 1);
                             this.d.datasets.splice(index, 1);
-                            let filepath: string = "data/" + id;
+                            const directory = "./src/data/";
+                            let filepath: string = directory + id;
                             fs.unlink(filepath, (e: any) => {
                                 if (e) {
                                     return reject(new InsightError());

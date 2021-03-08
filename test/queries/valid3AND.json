@@ -18,18 +18,83 @@
                         "courses_fail": 5
                     }
                 }
-
             ]
         },
         "OPTIONS": {
             "COLUMNS": [
                 "courses_dept",
                 "courses_id",
-                "courses_avg"
+                "courses_avg",
+                "courses_year",
+                "courses_fail"
             ],
-            "ORDER": "courses_avg"
+            "ORDER": "courses_dept"
         }
     },
     "isQueryValid": true,
-    "result":[{"courses_dept":"stat","courses_id":"560","courses_avg":92},{"courses_dept":"spph","courses_id":"540","courses_avg":92},{"courses_dept":"math","courses_id":"525","courses_avg":92},{"courses_dept":"hgse","courses_id":"357","courses_avg":92},{"courses_dept":"educ","courses_id":"500","courses_avg":92},{"courses_dept":"crwr","courses_id":"599","courses_avg":92},{"courses_dept":"crwr","courses_id":"599","courses_avg":92},{"courses_dept":"atsc","courses_id":"500","courses_avg":92},{"courses_dept":"anth","courses_id":"519","courses_avg":92}]
+    "result": [
+        {
+            "courses_dept": "anth",
+            "courses_id": "519",
+            "courses_avg": 92,
+            "courses_year": 2013,
+            "courses_fail": 0
+        },
+        {
+            "courses_dept": "atsc",
+            "courses_id": "500",
+            "courses_avg": 92,
+            "courses_year": 2013,
+            "courses_fail": 0
+        },
+        {
+            "courses_dept": "crwr",
+            "courses_id": "599",
+            "courses_avg": 92,
+            "courses_year": 2013,
+            "courses_fail": 0
+        },
+        {
+            "courses_dept": "crwr",
+            "courses_id": "599",
+            "courses_avg": 92,
+            "courses_year": 2013,
+            "courses_fail": 0
+        },
+        {
+            "courses_dept": "educ",
+            "courses_id": "500",
+            "courses_avg": 92,
+            "courses_year": 2013,
+            "courses_fail": 0
+        },
+        {
+            "courses_dept": "hgse",
+            "courses_id": "357",
+            "courses_avg": 92,
+            "courses_year": 2013,
+            "courses_fail": 0
+        },
+        {
+            "courses_dept": "math",
+            "courses_id": "525",
+            "courses_avg": 92,
+            "courses_year": 2013,
+            "courses_fail": 0
+        },
+        {
+            "courses_dept": "spph",
+            "courses_id": "540",
+            "courses_avg": 92,
+            "courses_year": 2013,
+            "courses_fail": 0
+        },
+        {
+            "courses_dept": "stat",
+            "courses_id": "560",
+            "courses_avg": 92,
+            "courses_year": 2013,
+            "courses_fail": 0
+        }
+    ]
 }

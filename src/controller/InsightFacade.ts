@@ -16,7 +16,8 @@ import ValidateQuery from "./ValidateQuery";
 import DoQuery from "./DoQuery";
 import {rejects} from "assert";
 import {expect} from "chai";
-import {Dataset} from "./Dataset";
+import Dataset from "./Dataset";
+import DatasetHelper from "./DatasetHelper";
 
 /**
  * This is the main programmatic entry point for the project.
@@ -26,10 +27,9 @@ import {Dataset} from "./Dataset";
 
 
 export default class InsightFacade implements IInsightFacade {
-    public datasets: InsightDataset[] = [];
-    public memory: string[] = [];
-    public addedDatasetContent: Dataset[] = [];
     public performQueryDatasetIds: string[] = [];
+
+    public d = new DatasetHelper();
 
     constructor() {
         Log.trace("InsightFacadeImpl::init()");
@@ -47,7 +47,7 @@ export default class InsightFacade implements IInsightFacade {
                 return reject(new InsightError("Invalid id."));
             }
             // check if already added
-            if (this.memory.includes(id)) {
+            if (this.d.memory.includes(id)) {
                 return reject(new InsightError("Dataset already added."));
             }
             let zip = new JSZip();
@@ -70,17 +70,15 @@ export default class InsightFacade implements IInsightFacade {
                         if (sectionType === "object") {
                             let objKeys = (Object.getOwnPropertyNames(section));
                             if (objKeys.includes("result")) {
-                                try {
-                                    validSections = this.getSectionFields(section["result"], validSections);
-                                } catch { continue; }
+                                validSections = this.d.getSectionFields(section["result"], validSections);
                             }
                         }
                     }
                     if (validSections.length < 1) {
                         return reject(new InsightError("No valid sections."));
                     } else {
-                        this.saveData(id, InsightDatasetKind.Courses, validSections);
-                        return resolve(this.memory);
+                        this.d.saveData(id, InsightDatasetKind.Courses, validSections);
+                        return resolve(this.d.memory);
                     }
                     return reject(new InsightError());
                 }).catch((err: any) => {
@@ -91,67 +89,6 @@ export default class InsightFacade implements IInsightFacade {
             });
         });
     }
-
-    private saveData(id: string, kind: InsightDatasetKind, validSections: any[]): Promise<boolean> {
-            return new Promise<boolean>((resolve, reject) => {
-                let fs = require("fs");
-                let insightDataset: InsightDataset = {id, kind, numRows: validSections.length};
-                this.datasets.push(insightDataset);
-                this.memory.push(id);
-                let datasetContent = new Dataset(id, validSections);
-                this.addedDatasetContent.push(datasetContent);
-                const directory = "./src/data/";
-                const filePath: string = directory + id;
-                const content = JSON.stringify(datasetContent);
-                fs.promises.mkdir(directory, {recursive: true}).then(() => {
-                        fs.promises.writeFile(filePath, content).then(() => {
-                            resolve();
-                        });
-                    });
-            });
-    }
-
-    private getSectionFields(result: any, sections: any[]): any[] {
-        let resultLength = result.length;
-        let initialDesiredFields: string[] = ["Avg", "Pass", "Fail", "Audit", "Year", "Subject", "Course", "Professor",
-            "Title", "id", "Section"];
-        if (!(resultLength < 1)) {
-            for (let i of result) {
-                let section: any = {};
-                let validSectionFields: any[] = [];
-                let initialSectionFields = Object.keys(i);
-                for (let key of initialDesiredFields) {
-                    let iKey = typeof i[key];
-                    if (initialSectionFields.includes(key)) {
-                        validSectionFields.push(i[key]);
-                    }
-                }
-                section["avg"] = i["Avg"];
-                section["pass"] = i["Pass"];
-                section["fail"] = i["Fail"];
-                section["audit"] = i["Audit"];
-                section["year"] = Number(i["Year"]);
-                if (i["Section"].toLowerCase() === "overall") {
-                    section["year"] = 1900;
-                }
-                section["dept"] = i["Subject"];
-                section["id"] = i["Course"];
-                section["instructor"] = i["Professor"];
-                section["title"] = i["Title"];
-                section["uuid"] = i["id"].toString();
-
-                if (typeof section["avg"] === "number" && typeof section["pass"] === "number"
-                    && typeof section["fail"] === "number" && typeof section["audit"] === "number"
-                    && typeof section["year"] === "number" && typeof section["dept"] === "string"
-                    && typeof section["id"] === "string" && typeof section["instructor"] === "string"
-                    && typeof section["title"] === "string" && typeof section["uuid"] === "string") {
-                    sections.push(section);
-                }
-            }
-        }
-        return sections;
-    }
-
     public removeDataset(id: string):
         Promise<string> {
         return new Promise((resolve, reject) => {
@@ -164,15 +101,16 @@ export default class InsightFacade implements IInsightFacade {
                 return reject(new InsightError("Invalid id."));
             }
             try {
-                if (!(this.memory.includes(id))) {
+                if (!(this.d.memory.includes(id))) {
                     return reject(new NotFoundError("Dataset not found."));
                 } else {
-                    for (let index = 0; index < this.memory.length; index++) {
-                        if (this.memory[index] === id) {
-                            result = this.memory[index];
-                            this.memory.splice(index, 1);
-                            this.datasets.splice(index, 1);
-                            let filepath: string = "data/" + id;
+                    for (let index = 0; index < this.d.memory.length; index++) {
+                        if (this.d.memory[index] === id) {
+                            result = this.d.memory[index];
+                            this.d.memory.splice(index, 1);
+                            this.d.datasets.splice(index, 1);
+                            const directory = "./src/data/";
+                            let filepath: string = directory + id;
                             fs.unlink(filepath, (e: any) => {
                                 if (e) {
                                     return reject(new InsightError());
@@ -200,11 +138,13 @@ export default class InsightFacade implements IInsightFacade {
                         throw new InsightError("References more than 1 dataset.");
                     }
                     let queryingDatasetId = this.performQueryDatasetIds[0];
-                    let data = this.getData(queryingDatasetId);
+                    let data = this.d.getData(queryingDatasetId);
+
                     let doQuery = new DoQuery(query, data);
                     let resultArray = doQuery.doInitialQuery(query);
                     if (resultArray.length > 5000) {
-                        throw new ResultTooLargeError("Result has >5000 sections.");
+                        // throw new ResultTooLargeError("Result has >5000 sections.");
+                        throw new InsightError("Result has >5000 sections.");
                     }
                     return resolve(resultArray);
                 } else {
@@ -216,37 +156,7 @@ export default class InsightFacade implements IInsightFacade {
         });
     }
 
-    public getData(queryingDatasetId: string): any[] {
-        let data: any[] = [];
-        let fs = require("fs");
-        let directory = "./data";
-        try {
-            if (fs.existsSync(directory)) {
-                let buffer = fs.readFileSync(directory + queryingDatasetId);
-                let diskData = JSON.parse(buffer);
-                let diskResult = diskData.result;
-                if (this.memory.length === 0 && diskData === null) {
-                    throw new InsightError("There are no datasets added.");
-                }
-                if (this.memory.length === 0 && diskData !== null) {
-                    return data = diskData;
-                }
-            }
-        } catch (err) {
-            throw new InsightError("Cannot query a database that is not on disk.");
-        }
-        if (this.memory.length > 0 && this.memory.includes(queryingDatasetId)) {
-            for (let d of this.addedDatasetContent) {
-                if (d.getDatasetId() === queryingDatasetId) {
-                    return data = d.getCoursesArray();
-                }
-            }
-        } else {
-            throw new InsightError("Cannot query a database that is not in memory.");
-        }
-    }
-
     public listDatasets(): Promise<InsightDataset[]> {
-        return Promise.resolve(this.datasets);
+        return Promise.resolve(this.d.datasets);
     }
 }

@@ -60,7 +60,7 @@ export default class InsightFacade implements IInsightFacade {
                     fileCount++;
                 });
                 if (fileCount < 1) {
-                    reject(new InsightError("Empty courses folder."));
+                    reject(new InsightError("Invalid dataset: Empty or non-existent courses root directory."));
                 }
                 return Promise.all(promiseArray).then((courseJSONs: any) => {
                     let validSections: any[] = [];
@@ -70,23 +70,21 @@ export default class InsightFacade implements IInsightFacade {
                         if (sectionType === "object") {
                             let objKeys = (Object.getOwnPropertyNames(section));
                             if (objKeys.includes("result")) {
-                                validSections = this.getSectionFields(section["result"], validSections);
+                                try {
+                                    validSections = this.getSectionFields(section["result"], validSections);
+                                } catch { continue; }
                             }
                         }
                     }
                     if (validSections.length < 1) {
                         return reject(new InsightError("No valid sections."));
                     } else {
-                        try {
-                            // both files saved before timeout? big
-                            // small files, only one saves but passes
-                            this.saveData(id, InsightDatasetKind.Courses, validSections);
-                            return resolve(this.memory);
-                        } catch (e) {
-                            return reject(new InsightError("Data was parsed correctly but not saved"));
-                        }
+                        this.saveData(id, InsightDatasetKind.Courses, validSections);
+                        return resolve(this.memory);
                     }
                     return reject(new InsightError());
+                }).catch((err: any) => {
+                    return reject(new InsightError("data invalid, not in JSON format."));
                 });
             }).catch((err: any) => {
                 return reject(new InsightError("Non-zip folder."));
@@ -104,8 +102,6 @@ export default class InsightFacade implements IInsightFacade {
                 this.addedDatasetContent.push(datasetContent);
                 const directory = "./src/data/";
                 const filePath: string = directory + id;
-                // TODO is the content okay for loading? we can also do more separate files. Do we also load memory ->
-                //  helper functions need access to class variables?
                 const content = JSON.stringify(datasetContent);
                 fs.promises.mkdir(directory, {recursive: true}).then(() => {
                         fs.promises.writeFile(filePath, content).then(() => {
@@ -195,64 +191,60 @@ export default class InsightFacade implements IInsightFacade {
 
     public performQuery(query: any): Promise<any[]> {
         return new Promise((resolve, reject) => {
-            return resolve([]);
+            this.performQueryDatasetIds = [];
+            try {
+                let validQuery = new ValidateQuery(query);
+                if (validQuery.validateQuery(query)) {
+                    this.performQueryDatasetIds = validQuery.performQueryDatasetIds;
+                    if (this.performQueryDatasetIds.length > 1) {
+                        throw new InsightError("References more than 1 dataset.");
+                    }
+                    let queryingDatasetId = this.performQueryDatasetIds[0];
+                    let data = this.getData(queryingDatasetId);
+                    let doQuery = new DoQuery(query, data);
+                    let resultArray = doQuery.doInitialQuery(query);
+                    if (resultArray.length > 5000) {
+                        throw new ResultTooLargeError("Result has >5000 sections.");
+                    }
+                    return resolve(resultArray);
+                } else {
+                    throw new InsightError("Invalid query.");
+                }
+            } catch (e) {
+                return reject(e);
+            }
         });
     }
 
-    //         this.performQueryDatasetIds = [];
-    //         try {
-    //             let validQuery = new ValidateQuery(query);
-    //             if (validQuery.validateQuery(query)) {
-    //                 this.performQueryDatasetIds = validQuery.performQueryDatasetIds;
-    //                 if (this.performQueryDatasetIds.length > 1) {
-    //                     throw new InsightError("References more than 1 dataset.");
-    //                 }
-    //                 let queryingDatasetId = this.performQueryDatasetIds[0];
-    //                 let data = this.getData(queryingDatasetId);
-    //                 let doQuery = new DoQuery(query, data);
-    //                 let resultArray = doQuery.doInitialQuery(query);
-    //                 if (resultArray.length > 5000) {
-    //                     throw new ResultTooLargeError("Result has >5000 sections.");
-    //                 }
-    //                 return resolve(resultArray);
-    //             } else {
-    //                 throw new InsightError("Invalid query.");
-    //             }
-    //         } catch (e) {
-    //             return reject(e);
-    //         }
-    //     });
-    // }
-    //
-    // public getData(queryingDatasetId: string): any[] {
-    //     let data: any[] = [];
-    //     let fs = require("fs");
-    //     let directory = "./data";
-    //     try {
-    //         if (fs.existsSync(directory)) {
-    //             let buffer = fs.readFileSync(directory + queryingDatasetId);
-    //             let diskData = JSON.parse(buffer);
-    //             let diskResult = diskData.result;
-    //             if (this.memory.length === 0 && diskData === null) {
-    //                 throw new InsightError("There are no datasets added.");
-    //             }
-    //             if (this.memory.length === 0 && diskData !== null) {
-    //                 return data = diskData;
-    //             }
-    //         }
-    //     } catch (err) {
-    //         throw new InsightError("Cannot query a database that is not on disk.");
-    //     }
-    //     if (this.memory.length > 0 && this.memory.includes(queryingDatasetId)) {
-    //         for (let d of this.addedDatasetContent) {
-    //             if (d.getDatasetId() === queryingDatasetId) {
-    //                 return data = d.getCoursesArray();
-    //             }
-    //         }
-    //     } else {
-    //         throw new InsightError("Cannot query a database that is not in memory.");
-    //     }
-    // }
+    public getData(queryingDatasetId: string): any[] {
+        let data: any[] = [];
+        let fs = require("fs");
+        let directory = "./data";
+        try {
+            if (fs.existsSync(directory)) {
+                let buffer = fs.readFileSync(directory + queryingDatasetId);
+                let diskData = JSON.parse(buffer);
+                let diskResult = diskData.result;
+                if (this.memory.length === 0 && diskData === null) {
+                    throw new InsightError("There are no datasets added.");
+                }
+                if (this.memory.length === 0 && diskData !== null) {
+                    return data = diskData;
+                }
+            }
+        } catch (err) {
+            throw new InsightError("Cannot query a database that is not on disk.");
+        }
+        if (this.memory.length > 0 && this.memory.includes(queryingDatasetId)) {
+            for (let d of this.addedDatasetContent) {
+                if (d.getDatasetId() === queryingDatasetId) {
+                    return data = d.getCoursesArray();
+                }
+            }
+        } else {
+            throw new InsightError("Cannot query a database that is not in memory.");
+        }
+    }
 
     public listDatasets(): Promise<InsightDataset[]> {
         return Promise.resolve(this.datasets);

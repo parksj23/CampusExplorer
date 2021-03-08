@@ -87,6 +87,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
 
     // addDataset tests
     it("Should add a valid dataset", function () {
+        this.timeout( 2000);
         const id: string = "courses";
         const expected: string[] = [id];
         const futureResult: Promise<string[]> = insightFacade.addDataset(
@@ -231,7 +232,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
         return expect(futureResult).to.be.rejectedWith(InsightError);
     });
 
-    it("Fail to add dataset -- zipped but no folder", function () {
+    it("Fail to add dataset -- zipped but no courses root directory", function () {
         const id: string = "noFolder";
         const expected: string[] = [id];
         const futureResult: Promise<string[]> = insightFacade.addDataset(

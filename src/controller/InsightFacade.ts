@@ -77,14 +77,10 @@ export default class InsightFacade implements IInsightFacade {
                     if (validSections.length < 1) {
                         return reject(new InsightError("No valid sections."));
                     } else {
-                        try {
-                            // both files saved before timeout? big
-                            // small files, only one saves but passes
-                            this.d.saveData(id, InsightDatasetKind.Courses, validSections);
-                            return resolve(this.d.memory);
-                        } catch (e) {
-                            return reject(new InsightError("Data was parsed correctly but not saved"));
-                        }
+                        // both files saved before timeout? big
+                        // small files, only one saves but passes
+                        this.d.saveData(id, InsightDatasetKind.Courses, validSections);
+                        return resolve(this.d.memory);
                     }
                     return reject(new InsightError());
                 });

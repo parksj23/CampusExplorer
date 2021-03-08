@@ -43,11 +43,15 @@ export default class DatasetHelper {
         let datasetContent = new Dataset(id, validSections);
         this.addedDatasetContent.push(datasetContent);
         const directory = "./src/data/";
-        if (!fs.existsSync(directory)) {
-            fs.mkdirSync(directory);
+        try {
+            if (!fs.existsSync(directory)) {
+                fs.mkdirSync(directory);
+            }
+            const filePath: string = directory + id;
+            fs.writeFileSync(filePath, JSON.stringify(datasetContent));
+        } catch (e) {
+            throw new InsightError("Data was parsed correctly but not saved");
         }
-        const filePath: string = directory + id;
-        fs.writeFileSync(filePath, JSON.stringify(datasetContent));
     }
 
     public getData(queryingDatasetId: string): any[] {

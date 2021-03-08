@@ -1,0 +1,19 @@
+{
+    "title": "invalid type query with boolean --courses_fail",
+    "query": {
+        "WHERE": {
+            "GT": {
+                "courses_fail": false
+            }
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "courses_dept",
+                "courses_avg"
+            ],
+            "ORDER": "courses_avg"
+        }
+    },
+    "isQueryValid": false,
+    "result": "InsightError"
+}

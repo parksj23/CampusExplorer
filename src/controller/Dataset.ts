@@ -1,10 +1,10 @@
 import {
     Course,
 } from "./Course";
-import {InsightDataset} from "./IInsightFacade";
+import {InsightDataset, InsightDatasetKind, InsightError} from "./IInsightFacade";
 import Log from "../Util";
 
-export class Dataset {
+export default class Dataset {
     public datasetId: string;
     public coursesArray: any[] = [];
 

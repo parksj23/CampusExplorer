@@ -60,7 +60,7 @@ export default class InsightFacade implements IInsightFacade {
                     fileCount++;
                 });
                 if (fileCount < 1) {
-                    reject(new InsightError("Empty courses folder."));
+                    reject(new InsightError("Invalid dataset: Empty or non-existent courses root directory."));
                 }
                 return Promise.all(promiseArray).then((courseJSONs: any) => {
                     let validSections: any[] = [];
@@ -77,19 +77,18 @@ export default class InsightFacade implements IInsightFacade {
                     if (validSections.length < 1) {
                         return reject(new InsightError("No valid sections."));
                     } else {
-                        // both files saved before timeout? big
-                        // small files, only one saves but passes
                         this.d.saveData(id, InsightDatasetKind.Courses, validSections);
                         return resolve(this.d.memory);
                     }
                     return reject(new InsightError());
+                }).catch((err: any) => {
+                    return reject(new InsightError("data invalid, not in JSON format."));
                 });
             }).catch((err: any) => {
                 return reject(new InsightError("Non-zip folder."));
             });
         });
     }
-
     public removeDataset(id: string):
         Promise<string> {
         return new Promise((resolve, reject) => {
@@ -138,7 +137,6 @@ export default class InsightFacade implements IInsightFacade {
                     if (this.performQueryDatasetIds.length > 1) {
                         throw new InsightError("References more than 1 dataset.");
                     }
-
                     let queryingDatasetId = this.performQueryDatasetIds[0];
                     let data = this.d.getData(queryingDatasetId);
 

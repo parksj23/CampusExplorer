@@ -3,9 +3,10 @@ import {
     InsightError,
     ResultTooLargeError
 } from "./IInsightFacade";
-import {Course} from "./Course";
 import InsightFacade from "./InsightFacade";
 import {split} from "ts-node";
+import Column from "./Column";
+import Order from "./Order";
 
 export default class DoQuery {
     private static WHERE: string = "WHERE";
@@ -14,8 +15,6 @@ export default class DoQuery {
     private static ORDER: string = "ORDER";
 
     public queryObj: any;
-    public sfields: string[] = ["dept", "id", "instructor", "title", "uuid"];
-    public mfields: string[] = ["avg", "pass", "fail", "audit", "year"];
     public data: any[];
     public id: string;
 
@@ -25,66 +24,15 @@ export default class DoQuery {
     }
 
     public doInitialQuery(query: any): any[] {
-        let orderedSectionsWithRelevantColumns = this.doOptions(query[DoQuery.OPTIONS]);
-        return this.doQuery(query[DoQuery.WHERE], orderedSectionsWithRelevantColumns);
-    }
+        let queriedSections = this.doQuery(query[DoQuery.WHERE], this.data);
 
-    private doOptions(query: any): any[] {
-        let sectionsWithRelevantColumns = this.doColumns(query);
-        let orderedSectionsWithRelevantColumns = this.doOrder(query, sectionsWithRelevantColumns);
-        return orderedSectionsWithRelevantColumns;
-    }
+        let column = new Column(query[DoQuery.OPTIONS], queriedSections);
+        let columnedSections = column.doColumns(query[DoQuery.OPTIONS], queriedSections);
 
-    private doColumns(query: any): any[] {
-        let columns = query[DoQuery.COLUMNS];
-        let sectionsWithRelevantColumns: any[] = [];
-        for (let section of this.data) {
-            let columnedSection: any = {};
-            for (let key of columns) {
-                let splitKey = key.split("_");
-                let smfield = splitKey[1];
-                columnedSection[key] = section[smfield];
-            }
-            sectionsWithRelevantColumns.push(columnedSection);
-        }
-        return sectionsWithRelevantColumns;
-    }
+        let order = new Order(query[DoQuery.OPTIONS], columnedSections);
+        let orderedSections = order.doOrder(query[DoQuery.OPTIONS], columnedSections);
 
-    private doOrder(query: any, sections: any[]): any[] {
-        let optionsKeys = Object.getOwnPropertyNames(query);
-        if (optionsKeys.includes(DoQuery.ORDER)) {
-            let order = query[DoQuery.ORDER];
-            if (typeof order === "string") { // if there is only 1 key in order, then we sort by that
-                let ascending = sections.sort((a: any, b: any) => {
-                    if (a[order] < b[order]) {
-                        return -1;
-                    }
-                    if (a[order] > b[order]) {
-                        return 1;
-                    } else {
-                        return 0;
-                    }
-                });
-                sections = ascending;
-            }
-
-            if (Array.isArray(order)) { // if there is >1 key in order, then we sort by the last one
-                let lastOrderKey = order[order.length - 1];
-                order = lastOrderKey;
-                let ascending = sections.sort((a: any, b: any) => {
-                    if (a[order] < b[order]) {
-                        return -1;
-                    }
-                    if (a[order] > b[order]) {
-                        return 1;
-                    } else {
-                        return 0;
-                    }
-                });
-                sections = ascending;
-            }
-        }
-        return sections;
+        return orderedSections;
     }
 
     public doQuery(filter: any, sections: any[]): any[] {
@@ -94,8 +42,6 @@ export default class DoQuery {
         let next = filter[operator];
         switch (operator) {
             case "AND":
-                return this.doLogic(next, operator, sections);
-                break;
             case "OR":
                 return this.doLogic(next, operator, sections);
                 break;
@@ -106,11 +52,7 @@ export default class DoQuery {
                 return this.doSCOMP(next, operator, sections);
                 break;
             case "EQ":
-                return this.doMCOMP(next, operator, sections);
-                break;
             case "GT":
-                return this.doMCOMP(next, operator, sections);
-                break;
             case "LT":
                 return this.doMCOMP(next, operator, sections);
                 break;
@@ -124,12 +66,11 @@ export default class DoQuery {
         let key = keyString[0];
         let compValue = next[key];
         let splitKey = key.split("_");
-        let id = splitKey[0];
-        let mfield = splitKey[1];
+        let smfield = splitKey[1];
         switch (operator) {
             case "EQ":
                 for (let section of sections) {
-                    if (section[key] === compValue) {
+                    if (section[smfield] === compValue) {
                         result.push(section);
                     }
                 }
@@ -137,7 +78,7 @@ export default class DoQuery {
                 break;
             case "GT":
                 for (let section of sections) {
-                    if (section[key] > compValue) {
+                    if (section[smfield] > compValue) {
                         result.push(section);
                     }
                 }
@@ -145,7 +86,7 @@ export default class DoQuery {
                 break;
             case "LT":
                 for (let section of sections) {
-                    if (section[key] < compValue) {
+                    if (section[smfield] < compValue) {
                         result.push(section);
                     }
                 }
@@ -161,13 +102,12 @@ export default class DoQuery {
         let key = keyString[0];
         let compValue = next[key];
         let splitKey = key.split("_");
-        let id = splitKey[0];
-        let sfield = splitKey[1];
+        let smfield = splitKey[1];
         for (let section of sections) {
             if (compValue.includes("*")) {
-                result = this.doWildcard(section, compValue, key, result);
+                result = this.doWildcard(section, compValue, smfield, result);
             } else if (!compValue.includes("*")) {
-                if (section[key] === compValue) {
+                if (section[smfield] === compValue) {
                     result.push(section);
                 }
             }
@@ -175,7 +115,7 @@ export default class DoQuery {
         return result;
     }
 
-    private doWildcard(section: any, compValue: string, key: string, result: any[]): any[] {
+    private doWildcard(section: any, compValue: string, smfield: string, result: any[]): any[] {
         let firstChar: string = compValue.charAt(0);
         let lastChar: string = compValue.charAt(compValue.length - 1);
         let wildcardCount = compValue.match(/[*]/g);
@@ -189,14 +129,14 @@ export default class DoQuery {
         if (wildcardCount.length === 1) {
             if (firstChar === "*") {
                 let wildcardEndsWithInput: string = compValue.substring(1);
-                if (section[key].endsWith(wildcardEndsWithInput)) {
+                if (section[smfield].endsWith(wildcardEndsWithInput)) {
                     result.push(section);
                     return result;
                 }
                 return result;
             } else if (lastChar === "*") {
                 let wildcardStartsWithInput: string = compValue.substring(0, compValue.length - 1);
-                if (section[key].startsWith(wildcardStartsWithInput)) {
+                if (section[smfield].startsWith(wildcardStartsWithInput)) {
                     result.push(section);
                     return result;
                 }
@@ -209,7 +149,7 @@ export default class DoQuery {
         }
         if ((wildcardCount.length === 2) && (firstChar === "*") && (lastChar === "*")) {
             let wildcardContainsInput: string = compValue.substring(1, compValue.length - 1);
-            if (section[key].includes(wildcardContainsInput)) {
+            if (section[smfield].includes(wildcardContainsInput)) {
                 result.push(section);
                 return result;
             }
@@ -230,6 +170,7 @@ export default class DoQuery {
         notTemp.push(this.doQuery(next, sections));
         notResult.push(notTemp);
         let notArr = notResult[0];
+        // Filter goes through the array and if the callback function is true, then it adds the element to a new array
         let not = sections.filter((section: any) => !notArr[0].includes(section));
         return not;
     }
@@ -243,26 +184,11 @@ export default class DoQuery {
                     andTemp.push(this.doQuery(filter, sections));
                     andResult.push(andTemp);
                 }
+                let flattenedAndResult = this.flattenANDResult(andResult);
+                andResult = flattenedAndResult;
                 let intersection: any[] = [];
-                // for (let i = 0; i < andResult.length; i++) {
-                //     intersection = andResult[i].filter((section: any) => andResult[i + 1].includes(section));
-                // }
-                // let intersection: any[] = [];
-                if (andResult.length === 2) {
-                    for (let a of andResult[0]) {
-                        for (let section of a) {
-                            for (let b of andResult[1]) {
-                                for (let section2 of b) {
-                                    if (section === section2) {
-                                        intersection.push(section);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                } else if (andResult.length > 2) {
-                    return null;
-                }
+                let intersectionHelper = this.intersectionHelper(andResult);
+                intersection = intersectionHelper;
                 return intersection;
                 break;
             case "OR":
@@ -273,19 +199,64 @@ export default class DoQuery {
                     orResult.push(orTemp);
                 }
                 let union: any[] = [];
-                for (let i = 0; i < orResult.length - 1; i++) {
-                    union = orResult[i].concat(orResult[i + 1]);
-                    // union = [].concat(orResult[i], orResult[i + 1]);
+                if (orResult.length === 2) {
+                    for (let i = 0; i < orResult.length - 1; i++) {
+                        union = orResult[i].concat(orResult[i + 1]);
+                    }
+                    // https://stackoverflow.com/questions/56544572/flatten-array-of-arrays-in-typescript
+                    let flat = union.reduce((acc, val) => acc.concat(val), []);
+                    union = flat;
+                } else if (orResult.length > 2) {
+                    union = orResult;
+                    let flat = union.reduce((acc, val) => acc.concat(val), []);
+                    let flatAgain = flat.reduce((acc: any, val: any) => acc.concat(val), []);
+                    union = flatAgain;
                 }
-                // https://stackoverflow.com/questions/56544572/flatten-array-of-arrays-in-typescript
-                let flat = union.reduce((acc, val) => acc.concat(val), []);
-                union = flat;
                 return union;
                 break;
         }
     }
-    // TODO: are we not supposed to save anything to the data directory
-    // TODO: finish doLogic and doNegation because that's where the issues are
-    // TODO: read c2 specs
-    // TODO: refactor Dataset helper functions
+
+    private flattenANDResult(andResult: any[]): any[] {
+        let flattenedAndResult: any[] = [];
+        for (let result of andResult) {
+            let flatten = result.reduce((acc: any, val: any) => acc.concat(val), []);
+            flattenedAndResult.push(flatten);
+        }
+        return flattenedAndResult;
+    }
+
+    private intersectionHelper(andResult: any[]): any[] {
+        let intersection: any[] = [];
+        if (andResult.length === 2) { // if there are 2 AND keys
+            for (let section of andResult[0]) {
+                for (let section2 of andResult[1]) {
+                    if (section === section2) {
+                        intersection.push(section);
+                    }
+                }
+            }
+        } else if (andResult.length > 2) { // TODO: if there are more than 2 AND keys...this should be recursive
+            let temp: any[] = [];
+            for (let section of andResult[0]) {
+                for (let section2 of andResult[1]) {
+                    if (section === section2) {
+                        temp.push(section); // temp = AND of first two arrays
+                    }
+                }
+            }
+            for (let section of temp) {
+                for (let section2 of andResult[2]) {
+                    if (section === section2) {
+                        intersection.push(section);
+                    }
+                }
+            }
+        }
+        return intersection;
+    }
 }
+
+// TODO: are we not supposed to save anything to the data directory
+// TODO: read c2 specs
+// TODO: refactor Dataset helper functions

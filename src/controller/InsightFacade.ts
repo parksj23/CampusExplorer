@@ -27,9 +27,6 @@ import DatasetHelper from "./DatasetHelper";
 
 
 export default class InsightFacade implements IInsightFacade {
-    public datasets: InsightDataset[] = [];
-    public memory: string[] = [];
-    public addedDatasetContent: Dataset[] = [];
     public performQueryDatasetIds: string[] = [];
 
     public d = new DatasetHelper();

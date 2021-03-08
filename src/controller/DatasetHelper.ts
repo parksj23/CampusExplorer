@@ -14,31 +14,64 @@ export default class DatasetHelper {
         Log.trace("InsightFacadeImpl::init()");
     }
 
-    public saveData(id: string, kind: InsightDatasetKind, validSections: any[]): Promise<boolean> {
-        return new Promise<boolean>((resolve, reject) => {
-            let fs = require("fs");
-            let insightDataset: InsightDataset = {id, kind, numRows: validSections.length};
-            this.datasets.push(insightDataset); // for listDatasets()
-            this.memory.push(id);
-            let datasetContent = new Dataset(id, validSections);
-            this.addedDatasetContent.push(datasetContent);
-            const directory = "./src/data/";
-            const filePath: string = directory + id;
-            // TODO is the content okay for loading? we can also do more separate files. Do we also load memory ->
-            //  helper functions need access to class variables?
-            const content = JSON.stringify(datasetContent);
-            fs.promises.mkdir(directory, {recursive: true}).then(() => {
-                fs.promises.writeFile(filePath, content).then(() => {
-                    resolve();
-                });
-            });
-        });
+    // public saveData(id: string, kind: InsightDatasetKind, validSections: any[]): Promise<boolean> {
+    //     return new Promise<boolean>((resolve, reject) => {
+    //         let fs = require("fs");
+    //         let insightDataset: InsightDataset = {id, kind, numRows: validSections.length};
+    //         this.datasets.push(insightDataset); // for listDatasets()
+    //         this.memory.push(id);
+    //         let datasetContent = new Dataset(id, validSections);
+    //         this.addedDatasetContent.push(datasetContent);
+    //         const directory = "./src/data/";
+    //         const filePath: string = directory + id;
+    //         // TODO is the content okay for loading? we can also do more separate files. Do we also load memory ->
+    //         //  helper functions need access to class variables?
+    //         const content = JSON.stringify(datasetContent);
+    //         fs.promises.mkdir(directory, {recursive: true}).then(() => {
+    //             fs.promises.writeFile(filePath, content).then(() => {
+    //                 resolve();
+    //             });
+    //         });
+    //     });
+    // }
+
+    public saveData(id: string, kind: InsightDatasetKind, validSections: any[]) {
+        let fs = require("fs");
+        let insightDataset: InsightDataset = {id, kind, numRows: validSections.length};
+        this.datasets.push(insightDataset);
+        this.memory.push(id);
+        let datasetContent = new Dataset(id, validSections);
+        this.addedDatasetContent.push(datasetContent);
+        const directory = "./src/data/";
+        if (!fs.existsSync(directory)) {
+            fs.mkdirSync(directory);
+        }
+        const filePath: string = directory + id;
+        fs.writeFileSync(filePath, JSON.stringify(datasetContent));
     }
 
     public getData(queryingDatasetId: string): any[] {
         let data: any[] = [];
         let fs = require("fs");
         let directory = "./src/data/";
+
+        if (fs.existsSync(directory)) {
+            const filePath: string = directory + queryingDatasetId;
+            let buffer = fs.readFileSync(filePath);
+            let diskData = JSON.parse(buffer);
+            if (diskData !== null || diskData !== undefined) {
+                if (this.memory.length === 0) {
+                    return data = diskData.coursesArray;
+                }
+            }
+
+            if (diskData === null || diskData === undefined) {
+                if (this.memory.length === 0) {
+                    throw new InsightError("There are no datasets added.");
+                }
+            }
+        }
+
         if (this.memory.length > 0 && this.memory.includes(queryingDatasetId)) {
             for (let d of this.addedDatasetContent) {
                 if (d.getDatasetId() === queryingDatasetId) {
@@ -47,22 +80,6 @@ export default class DatasetHelper {
             }
         } else {
             throw new InsightError("Cannot query a database that is not in memory.");
-        }
-
-        try {
-            if (fs.existsSync(directory)) {
-                let buffer = fs.readFileSync(directory + queryingDatasetId);
-                let diskData = JSON.parse(buffer);
-                let diskResult = diskData.result;
-                if (this.memory.length === 0 && diskData === null) {
-                    throw new InsightError("There are no datasets added.");
-                }
-                if (this.memory.length === 0 && diskData !== null) {
-                    return data = diskData;
-                }
-            }
-        } catch (err) {
-            throw new InsightError("Cannot query a database that is not on disk.");
         }
     }
 

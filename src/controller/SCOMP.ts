@@ -92,4 +92,72 @@ export default class SCOMP {
             return false;
         }
     }
+
+    public doSCOMP(next: any, operator: string, sections: any[]): any[] {
+        let result: any[] = [];
+        let keyString = (Object.getOwnPropertyNames(next));
+        let key = keyString[0];
+        let compValue = next[key];
+        let splitKey = key.split("_");
+        let smfield = splitKey[1];
+        for (let section of sections) {
+            if (compValue.includes("*")) {
+                result = this.doWildcard(section, compValue, smfield, result);
+            } else if (!compValue.includes("*")) {
+                if (section[smfield] === compValue) {
+                    result.push(section);
+                }
+            }
+        }
+        return result;
+    }
+
+    private doWildcard(section: any, compValue: string, smfield: string, result: any[]): any[] {
+        let firstChar: string = compValue.charAt(0);
+        let lastChar: string = compValue.charAt(compValue.length - 1);
+        let wildcardCount = compValue.match(/[*]/g);
+        if (wildcardCount === null) {
+            return result;
+        }
+        if (wildcardCount.length === 1 && compValue.length === 1) {
+            result.push(section);
+            return result;
+        }
+        if (wildcardCount.length === 1) {
+            if (firstChar === "*") {
+                let wildcardEndsWithInput: string = compValue.substring(1);
+                if (section[smfield].endsWith(wildcardEndsWithInput)) {
+                    result.push(section);
+                    return result;
+                }
+                return result;
+            } else if (lastChar === "*") {
+                let wildcardStartsWithInput: string = compValue.substring(0, compValue.length - 1);
+                if (section[smfield].startsWith(wildcardStartsWithInput)) {
+                    result.push(section);
+                    return result;
+                }
+                return result;
+            }
+        }
+        if ((wildcardCount.length === 2) && (compValue.length === 2)) {
+            result.push(section);
+            return result;
+        }
+        if ((wildcardCount.length === 2) && (firstChar === "*") && (lastChar === "*")) {
+            let wildcardContainsInput: string = compValue.substring(1, compValue.length - 1);
+            if (section[smfield].includes(wildcardContainsInput)) {
+                result.push(section);
+                return result;
+            }
+            return result;
+        }
+        if (wildcardCount.length > 2) {
+            return result;
+        }
+        if ((compValue.substr(1, compValue.length - 2)).includes("*")) {
+            return result;
+        }
+        return result;
+    }
 }

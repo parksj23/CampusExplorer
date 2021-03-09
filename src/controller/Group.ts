@@ -25,4 +25,8 @@ export default class Group {
         this.transformations = transformations;
         this.data = data;
     }
+
+    public doGroup(query: any, data: any[]): any[] {
+        return [];
+    }
 }

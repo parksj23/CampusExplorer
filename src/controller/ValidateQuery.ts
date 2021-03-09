@@ -2,17 +2,25 @@ import {
     InsightError,
     ResultTooLargeError
 } from "./IInsightFacade";
+import SCOMP from "./SCOMP";
 
 export default class ValidateQuery {
     private static WHERE: string = "WHERE";
     private static OPTIONS: string = "OPTIONS";
     private static COLUMNS: string = "COLUMNS";
     private static ORDER: string = "ORDER";
+    private static SORT: string = "SORT";
+    private static TRANSFORMATIONS: string = "TRANSFORMATIONS";
+    private static GROUP: string = "GROUP";
+    private static APPLY: string = "APPLY";
+
     public queryObj: any;
-    public sfields: string[] = ["dept", "id", "instructor", "title", "uuid"];
-    public mfields: string[] = ["avg", "pass", "fail", "audit", "year"];
-    public roomsSFields: string[] = ["fullname, shortname, number, name, address, type, furniture, href"];
-    public roomsMFields: string[] = ["lat, lon, seats"];
+
+    public sfields: string[] = ["dept", "id", "instructor", "title", "uuid",
+        "fullname", "shortname", "number", "name", "address", "type", "furniture", "href"];
+
+    public mfields: string[] = ["avg", "pass", "fail", "audit", "year", "lat", "lon", "seats"];
+
     public performQueryDatasetIds: string[] = [];
 
     constructor(query: any) {
@@ -24,8 +32,18 @@ export default class ValidateQuery {
             return false;
         }
         let keys: string[] = Object.keys(query);
-        if (keys.length !== 2) {
-            return false;
+        if (!keys.includes(ValidateQuery.TRANSFORMATIONS)) {
+            if (keys.length !== 2) {
+                return false;
+            }
+        } else {
+            if (keys.length !== 3) {
+                return false;
+            }
+
+            if (!keys.includes(ValidateQuery.TRANSFORMATIONS)) {
+                return false;
+            }
         }
 
         if (!keys.includes(ValidateQuery.WHERE)) {
@@ -60,7 +78,8 @@ export default class ValidateQuery {
             return this.validateNegation(next, operator);
         }
         if (operator === "IS") {
-            return this.validateSCOMP(next, operator);
+            let scomp = new SCOMP(this.queryObj);
+            return scomp.validateSCOMP(next, operator);
         }
         if (operator === "EQ" || operator === "GT" || operator === "LT") {
             return this.validateMCOMP(next, operator);
@@ -86,70 +105,6 @@ export default class ValidateQuery {
             }
         }
         return true;
-    }
-
-    private validateSCOMP(next: any, operator: string): boolean {
-        if (Object.keys(next).length === 0) {
-            return false;
-        }
-        let keyString = (Object.getOwnPropertyNames(next));
-        if (keyString.length !== 1) {
-            return false;
-        }
-        let key = keyString[0];
-        if ((typeof key !== "string") || (key === undefined) || (key === null)) {
-            return false;
-        } else if (!key.includes("_")) {
-            return false;
-        }
-        let compValue = next[key];
-        let splitKey = key.split("_");
-        let id = splitKey[0];
-        let sfield = splitKey[1];
-        if (splitKey.length !== 2) {
-            return false;
-        } else if ((typeof compValue !== "string") || (compValue === undefined) || (compValue === null)) {
-            return false;
-        } else if (!this.sfields.includes(sfield)) {
-            return false;
-        } else if (compValue.includes("*")) {
-            return this.validateWildcard(compValue);
-        }
-        if (!this.performQueryDatasetIds.includes(id)) {
-            this.performQueryDatasetIds.push(id);
-        }
-        return true;
-    }
-
-    private validateWildcard(compValue: string): boolean {
-        let firstChar: string = compValue.charAt(0);
-        let lastChar: string = compValue.charAt(compValue.length - 1);
-        let wildcardCount = compValue.match(/[*]/g);
-        if (wildcardCount === null) {
-            return false;
-        }
-        if (wildcardCount.length === 1 && compValue.length === 1) {
-            return true;
-        }
-        if (wildcardCount.length === 1) {
-            if (firstChar === "*") {
-                return true;
-            } else if (lastChar === "*") {
-                return true;
-            }
-        }
-        if ((wildcardCount.length === 2) && (compValue.length === 2)) {
-            return true;
-        }
-        if ((wildcardCount.length === 2) && (firstChar === "*") && (lastChar === "*")) {
-            return true;
-        }
-        if (wildcardCount.length > 2) {
-            return false;
-        }
-        if ((compValue.substr(1, compValue.length - 2)).includes("*")) {
-            return false;
-        }
     }
 
     private validateMCOMP(next: any, operator: string): boolean {
@@ -210,6 +165,17 @@ export default class ValidateQuery {
                 }
             }
         }
+        if (optionsKeys.length === 3 && optionsKeys.includes(ValidateQuery.COLUMNS)
+            && optionsKeys.includes(ValidateQuery.ORDER) && optionsKeys.includes(ValidateQuery.TRANSFORMATIONS)) {
+            let columns = options[ValidateQuery.COLUMNS];
+            let order = options[ValidateQuery.ORDER];
+            let transformations = options[ValidateQuery.TRANSFORMATIONS];
+            if (this.validateColumns(columns) === true) {
+                if (this.validateOrder(order, columns) === true) {
+                    return true;
+                }
+            }
+        }
         return false;
     }
 
@@ -226,24 +192,34 @@ export default class ValidateQuery {
                 return false;
             } else if (typeof key !== "string") {
                 return false;
-            } else if (!key.includes(("_"))) {
-                return false;
+                // we can't do this if maxavg is in columns
+                // } else if (!key.includes(("_"))) {
+                //     return false;
             }
 
-            let splitKey = key.split("_");
-            let id = splitKey[0];
-            let smfield = splitKey[1];
+            switch (key.includes("_")) {
+                case true:
+                    let splitKey = key.split("_");
+                    let id = splitKey[0];
+                    let smfield = splitKey[1];
 
-            if (splitKey.length !== 2) {
-                return false;
-            }
+                    if (splitKey.length !== 2) {
+                        return false;
+                    }
 
-            if (!this.sfields.includes(smfield) && (!this.mfields.includes(smfield))) {
-                return false;
-            }
+                    if (!this.sfields.includes(smfield) && (!this.mfields.includes(smfield))) {
+                        return false;
+                    }
 
-            if (!this.performQueryDatasetIds.includes(id)) {
-                this.performQueryDatasetIds.push(id);
+                    if (!this.performQueryDatasetIds.includes(id)) {
+                        this.performQueryDatasetIds.push(id);
+                    }
+                    break;
+                case false:
+                    if (!this.performQueryDatasetIds.includes(id)) {
+                        this.performQueryDatasetIds.push(id);
+                    }
+                    break;
             }
         }
         return true;

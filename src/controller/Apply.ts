@@ -25,4 +25,8 @@ export default class Apply {
         this.transformations = transformations;
         this.data = data;
     }
+
+    public doApply(query: any, data: any[]): any[] {
+        return [];
+    }
 }

@@ -7,6 +7,8 @@ import InsightFacade from "./InsightFacade";
 import {split} from "ts-node";
 import Column from "./Column";
 import Order from "./Order";
+import Group from "./Group";
+import Apply from "./Apply";
 
 export default class DoQuery {
     private static WHERE: string = "WHERE";
@@ -37,11 +39,11 @@ export default class DoQuery {
         let orderedSections = order.doOrder(query[DoQuery.OPTIONS], columnedSections);
 
         // C2 stuff
-        // let group = new Group(query[DoQuery.TRANSFORMATIONS], orderedSections);
-        // let groupedSections = group.doGroup(query[DoQuery.TRANSFORMATIONS], orderedSections);
-        //
-        // let apply = new Apply(query[DoQuery.TRANSFORMATIONS], groupedSections);
-        // let applySections = apply.doApply(query[DoQuery.TRANSFORMATIONS], groupedSections);
+        let group = new Group(query[DoQuery.TRANSFORMATIONS], orderedSections);
+        let groupedSections = group.doGroup(query[DoQuery.TRANSFORMATIONS], orderedSections);
+
+        let apply = new Apply(query[DoQuery.TRANSFORMATIONS], groupedSections);
+        let applySections = apply.doApply(query[DoQuery.TRANSFORMATIONS], groupedSections);
 
         return orderedSections;
     }

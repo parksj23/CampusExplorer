@@ -13,6 +13,10 @@ export default class DoQuery {
     private static OPTIONS: string = "OPTIONS";
     private static COLUMNS: string = "COLUMNS";
     private static ORDER: string = "ORDER";
+    private static SORT: string = "SORT";
+    private static TRANSFORMATIONS: string = "TRANSFORMATIONS";
+    private static GROUP: string = "GROUP";
+    private static APPLY: string = "APPLY";
 
     public queryObj: any;
     public data: any[];
@@ -31,6 +35,13 @@ export default class DoQuery {
 
         let order = new Order(query[DoQuery.OPTIONS], columnedSections);
         let orderedSections = order.doOrder(query[DoQuery.OPTIONS], columnedSections);
+
+        // C2 stuff
+        // let group = new Group(query[DoQuery.TRANSFORMATIONS], orderedSections);
+        // let groupedSections = group.doGroup(query[DoQuery.TRANSFORMATIONS], orderedSections);
+        //
+        // let apply = new Apply(query[DoQuery.TRANSFORMATIONS], groupedSections);
+        // let applySections = apply.doApply(query[DoQuery.TRANSFORMATIONS], groupedSections);
 
         return orderedSections;
     }

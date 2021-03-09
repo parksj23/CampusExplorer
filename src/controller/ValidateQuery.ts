@@ -11,6 +11,8 @@ export default class ValidateQuery {
     public queryObj: any;
     public sfields: string[] = ["dept", "id", "instructor", "title", "uuid"];
     public mfields: string[] = ["avg", "pass", "fail", "audit", "year"];
+    public roomsSFields: string[] = ["fullname, shortname, number, name, address, type, furniture, href"];
+    public roomsMFields: string[] = ["lat, lon, seats"];
     public performQueryDatasetIds: string[] = [];
 
     constructor(query: any) {

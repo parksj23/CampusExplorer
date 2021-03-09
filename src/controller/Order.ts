@@ -11,6 +11,10 @@ export default class Order {
     private static OPTIONS: string = "OPTIONS";
     private static COLUMNS: string = "COLUMNS";
     private static ORDER: string = "ORDER";
+    private static SORT: string = "SORT";
+    private static TRANSFORMATIONS: string = "TRANSFORMATIONS";
+    private static GROUP: string = "GROUP";
+    private static APPLY: string = "APPLY";
 
     public options: any;
     public data: any[];

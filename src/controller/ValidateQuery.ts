@@ -42,6 +42,10 @@ export default class ValidateQuery {
             return false;
         }
         let operatorString = (Object.getOwnPropertyNames(filter));
+        if (operatorString.length !== 1) {
+            return false;
+        }
+
         let operator = operatorString[0];
         let next = filter[operator];
         if (typeof next !== "object") {

@@ -1,0 +1,26 @@
+{
+    "title": "Invalid -- Invalid key maxSeats in COLUMNS -- no transformations",
+    "query": {
+        "WHERE": {
+            "IS": {
+                "rooms_furniture": "Classroom-Fixed Tablets"
+            }
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "rooms_shortname",
+                "rooms_seats",
+                "rooms_furniture",
+                "maxSeats"
+            ],
+            "ORDER": {
+                "dir": "UP",
+                "keys": [
+                    "rooms_shortname"
+                ]
+            }
+        }
+    },
+    "isQueryValid": false,
+    "result": "InsightError"
+}

@@ -21,6 +21,8 @@ export default class Apply {
     public data: any[];
     public id: string;
 
+    public applyTokens: string[] = ["max", "min", "avg", "count", "sum"];
+
     constructor(transformations: any, data: any[]) {
         this.transformations = transformations;
         this.data = data;

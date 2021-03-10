@@ -1,5 +1,5 @@
 {
-    "title": "Invalid -- invalid apply rule target key",
+    "title": "Invalid -- all order keys must be in columns",
     "query": {
         "WHERE": {
             "IS": {

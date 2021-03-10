@@ -3,13 +3,13 @@ import {
     ResultTooLargeError
 } from "./IInsightFacade";
 import SCOMP from "./SCOMP";
+import ValidationHelper from "./ValidationHelper";
 
 export default class ValidateQuery {
     private static WHERE: string = "WHERE";
     private static OPTIONS: string = "OPTIONS";
     private static COLUMNS: string = "COLUMNS";
     private static ORDER: string = "ORDER";
-    private static SORT: string = "SORT";
     private static TRANSFORMATIONS: string = "TRANSFORMATIONS";
     private static GROUP: string = "GROUP";
     private static APPLY: string = "APPLY";
@@ -22,6 +22,10 @@ export default class ValidateQuery {
     public mfields: string[] = ["avg", "pass", "fail", "audit", "year", "lat", "lon", "seats"];
 
     public performQueryDatasetIds: string[] = [];
+
+    public applyKeys: string[] = [];
+
+    public applyTokens: string[] = ["MAX", "MIN", "AVG", "COUNT", "SUM"];
 
     constructor(query: any) {
         this.queryObj = query;
@@ -45,7 +49,11 @@ export default class ValidateQuery {
                 return false;
             }
 
-            if (!this.validateTransformations(query[ValidateQuery.TRANSFORMATIONS])) {
+            let vHelper = new ValidationHelper();
+            if (!vHelper.validateTransformations(
+                query[ValidateQuery.TRANSFORMATIONS],
+                this.performQueryDatasetIds,
+                this.applyKeys)) {
                 return false;
             }
         }
@@ -206,7 +214,9 @@ export default class ValidateQuery {
                     }
                     break;
                 case false: // applykey
-                    // TODO: make sure applykey is defined in APPLY block
+                    if (!this.applyKeys.includes(key)) {
+                        return false;
+                    }
                     break;
             }
         }
@@ -281,10 +291,6 @@ export default class ValidateQuery {
                 }
             }
         }
-        return false;
-    }
-
-    private validateTransformations(transformations: any): boolean {
-        return false;
+        return true;
     }
 }

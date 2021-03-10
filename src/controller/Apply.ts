@@ -6,6 +6,8 @@ import {
 import {Course} from "./Course";
 import InsightFacade from "./InsightFacade";
 import {split} from "ts-node";
+import Log from "../Util";
+import ValidateQuery from "./ValidateQuery";
 
 export default class Apply {
     private static WHERE: string = "WHERE";
@@ -21,9 +23,15 @@ export default class Apply {
     public data: any[];
     public id: string;
 
-    public applyTokens: string[] = ["max", "min", "avg", "count", "sum"];
+    public sfields: string[] = ["dept", "id", "instructor", "title", "uuid",
+        "fullname", "shortname", "number", "name", "address", "type", "furniture", "href"];
+
+    public mfields: string[] = ["avg", "pass", "fail", "audit", "year", "lat", "lon", "seats"];
+
+    public applyTokens: string[] = ["MAX", "MIN", "AVG", "COUNT", "SUM"];
 
     constructor(transformations: any, data: any[]) {
+        Log.trace("InsightFacadeImpl::init()");
         this.transformations = transformations;
         this.data = data;
     }

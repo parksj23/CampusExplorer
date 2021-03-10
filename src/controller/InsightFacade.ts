@@ -18,6 +18,7 @@ import {rejects} from "assert";
 import {expect} from "chai";
 import Dataset from "./Dataset";
 import DatasetHelper from "./DatasetHelper";
+import RoomsDatasetHelper from "./RoomsDatasetHelper";
 
 /**
  * This is the main programmatic entry point for the project.

@@ -14,27 +14,6 @@ export default class DatasetHelper {
         Log.trace("InsightFacadeImpl::init()");
     }
 
-    // public saveData(id: string, kind: InsightDatasetKind, validSections: any[]): Promise<boolean> {
-    //     return new Promise<boolean>((resolve, reject) => {
-    //         let fs = require("fs");
-    //         let insightDataset: InsightDataset = {id, kind, numRows: validSections.length};
-    //         this.datasets.push(insightDataset); // for listDatasets()
-    //         this.memory.push(id);
-    //         let datasetContent = new Dataset(id, validSections);
-    //         this.addedDatasetContent.push(datasetContent);
-    //         const directory = "./src/data/";
-    //         const filePath: string = directory + id;
-    //         // TODO is the content okay for loading? we can also do more separate files. Do we also load memory ->
-    //         //  helper functions need access to class variables?
-    //         const content = JSON.stringify(datasetContent);
-    //         fs.promises.mkdir(directory, {recursive: true}).then(() => {
-    //             fs.promises.writeFile(filePath, content).then(() => {
-    //                 resolve();
-    //             });
-    //         });
-    //     });
-    // }
-
     public saveData(id: string, kind: InsightDatasetKind, validSections: any[]) {
         let fs = require("fs");
         let insightDataset: InsightDataset = {id, kind, numRows: validSections.length};

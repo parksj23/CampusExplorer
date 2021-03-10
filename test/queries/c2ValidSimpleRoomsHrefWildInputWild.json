@@ -1,0 +1,80 @@
+{
+    "title": "Valid -- Simple SELECT rooms_href",
+    "query": {
+        "WHERE": {
+            "IS": {
+                "rooms_href": "*CHEM*"
+            }
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "rooms_shortname",
+                "rooms_seats",
+                "rooms_href",
+                "maxSeats"
+            ],
+            "ORDER": {
+                "dir": "UP",
+                "keys": [
+                    "rooms_shortname"
+                ]
+            }
+        },
+        "TRANSFORMATIONS": {
+            "GROUP": [
+                "rooms_shortname",
+                "rooms_seats",
+                "rooms_furniture",
+                "rooms_type",
+                "rooms_name",
+                "rooms_href"
+            ],
+            "APPLY": [
+                {
+                    "maxSeats": {
+                        "MAX": "rooms_seats"
+                    }
+                }
+            ]
+        }
+    },
+    "isQueryValid": true,
+    "result": [
+        {
+            "rooms_shortname": "CHEM",
+            "rooms_seats": 265,
+            "rooms_href": "http://students.ubc.ca/campus/discover/buildings-and-classrooms/room/CHEM-B150",
+            "maxSeats": 265
+        },
+        {
+            "rooms_shortname": "CHEM",
+            "rooms_seats": 240,
+            "rooms_href": "http://students.ubc.ca/campus/discover/buildings-and-classrooms/room/CHEM-B250",
+            "maxSeats": 240
+        },
+        {
+            "rooms_shortname": "CHEM",
+            "rooms_seats": 90,
+            "rooms_href": "http://students.ubc.ca/campus/discover/buildings-and-classrooms/room/CHEM-C124",
+            "maxSeats": 90
+        },
+        {
+            "rooms_shortname": "CHEM",
+            "rooms_seats": 90,
+            "rooms_href": "http://students.ubc.ca/campus/discover/buildings-and-classrooms/room/CHEM-C126",
+            "maxSeats": 90
+        },
+        {
+            "rooms_shortname": "CHEM",
+            "rooms_seats": 114,
+            "rooms_href": "http://students.ubc.ca/campus/discover/buildings-and-classrooms/room/CHEM-D200",
+            "maxSeats": 114
+        },
+        {
+            "rooms_shortname": "CHEM",
+            "rooms_seats": 114,
+            "rooms_href": "http://students.ubc.ca/campus/discover/buildings-and-classrooms/room/CHEM-D300",
+            "maxSeats": 114
+        }
+    ]
+}

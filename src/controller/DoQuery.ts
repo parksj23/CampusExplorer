@@ -7,12 +7,19 @@ import InsightFacade from "./InsightFacade";
 import {split} from "ts-node";
 import Column from "./Column";
 import Order from "./Order";
+import Group from "./Group";
+import Apply from "./Apply";
+import SCOMP from "./SCOMP";
 
 export default class DoQuery {
     private static WHERE: string = "WHERE";
     private static OPTIONS: string = "OPTIONS";
     private static COLUMNS: string = "COLUMNS";
     private static ORDER: string = "ORDER";
+    private static SORT: string = "SORT";
+    private static TRANSFORMATIONS: string = "TRANSFORMATIONS";
+    private static GROUP: string = "GROUP";
+    private static APPLY: string = "APPLY";
 
     public queryObj: any;
     public data: any[];
@@ -32,6 +39,13 @@ export default class DoQuery {
         let order = new Order(query[DoQuery.OPTIONS], columnedSections);
         let orderedSections = order.doOrder(query[DoQuery.OPTIONS], columnedSections);
 
+        // C2 stuff
+        let group = new Group(query[DoQuery.TRANSFORMATIONS], orderedSections);
+        let groupedSections = group.doGroup(query[DoQuery.TRANSFORMATIONS], orderedSections);
+
+        let apply = new Apply(query[DoQuery.TRANSFORMATIONS], groupedSections);
+        let applySections = apply.doApply(query[DoQuery.TRANSFORMATIONS], groupedSections);
+
         return orderedSections;
     }
 
@@ -49,7 +63,8 @@ export default class DoQuery {
                 return this.doNegation(next, operator, sections);
                 break;
             case "IS":
-                return this.doSCOMP(next, operator, sections);
+                let scomp = new SCOMP(this.queryObj);
+                return scomp.doSCOMP(next, operator, sections);
                 break;
             case "EQ":
             case "GT":
@@ -92,74 +107,6 @@ export default class DoQuery {
                 }
                 return result;
                 break;
-        }
-        return result;
-    }
-
-    private doSCOMP(next: any, operator: string, sections: any[]): any[] {
-        let result: any[] = [];
-        let keyString = (Object.getOwnPropertyNames(next));
-        let key = keyString[0];
-        let compValue = next[key];
-        let splitKey = key.split("_");
-        let smfield = splitKey[1];
-        for (let section of sections) {
-            if (compValue.includes("*")) {
-                result = this.doWildcard(section, compValue, smfield, result);
-            } else if (!compValue.includes("*")) {
-                if (section[smfield] === compValue) {
-                    result.push(section);
-                }
-            }
-        }
-        return result;
-    }
-
-    private doWildcard(section: any, compValue: string, smfield: string, result: any[]): any[] {
-        let firstChar: string = compValue.charAt(0);
-        let lastChar: string = compValue.charAt(compValue.length - 1);
-        let wildcardCount = compValue.match(/[*]/g);
-        if (wildcardCount === null) {
-            return result;
-        }
-        if (wildcardCount.length === 1 && compValue.length === 1) {
-            result.push(section);
-            return result;
-        }
-        if (wildcardCount.length === 1) {
-            if (firstChar === "*") {
-                let wildcardEndsWithInput: string = compValue.substring(1);
-                if (section[smfield].endsWith(wildcardEndsWithInput)) {
-                    result.push(section);
-                    return result;
-                }
-                return result;
-            } else if (lastChar === "*") {
-                let wildcardStartsWithInput: string = compValue.substring(0, compValue.length - 1);
-                if (section[smfield].startsWith(wildcardStartsWithInput)) {
-                    result.push(section);
-                    return result;
-                }
-                return result;
-            }
-        }
-        if ((wildcardCount.length === 2) && (compValue.length === 2)) {
-            result.push(section);
-            return result;
-        }
-        if ((wildcardCount.length === 2) && (firstChar === "*") && (lastChar === "*")) {
-            let wildcardContainsInput: string = compValue.substring(1, compValue.length - 1);
-            if (section[smfield].includes(wildcardContainsInput)) {
-                result.push(section);
-                return result;
-            }
-            return result;
-        }
-        if (wildcardCount.length > 2) {
-            return result;
-        }
-        if ((compValue.substr(1, compValue.length - 2)).includes("*")) {
-            return result;
         }
         return result;
     }

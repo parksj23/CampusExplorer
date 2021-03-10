@@ -61,29 +61,31 @@ export default class DatasetHelper {
 
         if (fs.existsSync(directory)) {
             const filePath: string = directory + queryingDatasetId;
-            let buffer = fs.readFileSync(filePath);
-            let diskData = JSON.parse(buffer);
-            if (diskData !== null || diskData !== undefined) {
-                if (this.memory.length === 0) {
-                    return data = diskData.coursesArray;
+            try {
+                let buffer = fs.readFileSync(filePath);
+                let diskData = JSON.parse(buffer);
+                if (diskData !== null || diskData !== undefined) {
+                    if (this.memory.length === 0) {
+                        return data = diskData.coursesArray;
+                    }
                 }
-            }
 
-            if (diskData === null || diskData === undefined) {
-                if (this.memory.length === 0) {
-                    throw new InsightError("There are no datasets added.");
+                if (diskData === null || diskData === undefined) {
+                    if (this.memory.length === 0) {
+                        throw new InsightError("There are no datasets added.");
+                    }
                 }
-            }
-        }
 
-        if (this.memory.length > 0 && this.memory.includes(queryingDatasetId)) {
-            for (let d of this.addedDatasetContent) {
-                if (d.getDatasetId() === queryingDatasetId) {
-                    return data = d.getCoursesArray();
+                if (this.memory.length > 0 && this.memory.includes(queryingDatasetId)) {
+                    for (let d of this.addedDatasetContent) {
+                        if (d.getDatasetId() === queryingDatasetId) {
+                            return data = d.getCoursesArray();
+                        }
+                    }
                 }
+            } catch (e) {
+                throw new InsightError("Cannot find directory or dataset.");
             }
-        } else {
-            throw new InsightError("Cannot query a database that is not in memory.");
         }
     }
 

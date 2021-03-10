@@ -1,0 +1,94 @@
+{
+    "title": "Valid -- Simple SELECT rooms_number -- input*",
+    "query": {
+        "WHERE": {
+            "IS": {
+                "rooms_number": "20*"
+            }
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "rooms_fullname",
+                "maxSeats"
+            ],
+            "ORDER": {
+                "dir": "UP",
+                "keys": [
+                    "maxSeats",
+                    "rooms_fullname"
+                ]
+            }
+        },
+        "TRANSFORMATIONS": {
+            "GROUP": [
+                "rooms_fullname"
+            ],
+            "APPLY": [
+                {
+                    "maxSeats": {
+                        "MAX": "rooms_seats"
+                    }
+                }
+            ]
+        }
+    },
+    "isQueryValid": true,
+    "result": [
+        {
+            "rooms_fullname": "Food, Nutrition and Health",
+            "maxSeats": 12
+        },
+        {
+            "rooms_fullname": "Hugh Dempster Pavilion",
+            "maxSeats": 40
+        },
+        {
+            "rooms_fullname": "Robert F. Osborne Centre",
+            "maxSeats": 40
+        },
+        {
+            "rooms_fullname": "War Memorial Gymnasium",
+            "maxSeats": 40
+        },
+        {
+            "rooms_fullname": "Mathematics",
+            "maxSeats": 48
+        },
+        {
+            "rooms_fullname": "Neville Scarfe",
+            "maxSeats": 60
+        },
+        {
+            "rooms_fullname": "Earth Sciences Building",
+            "maxSeats": 80
+        },
+        {
+            "rooms_fullname": "Anthropology and Sociology",
+            "maxSeats": 90
+        },
+        {
+            "rooms_fullname": "Geography",
+            "maxSeats": 100
+        },
+        {
+            "rooms_fullname": "Wesbrook",
+            "maxSeats": 102
+        },
+        {
+            "rooms_fullname": "MacLeod",
+            "maxSeats": 123
+        },
+        {
+            "rooms_fullname": "Leonard S. Klinck (also known as CSCI)",
+            "maxSeats": 205
+        },
+        {
+            "rooms_fullname": "Biological Sciences",
+            "maxSeats": 228
+        },
+        {
+            "rooms_fullname": "Hennings",
+            "maxSeats": 257
+        }
+    ]
+}

@@ -1,0 +1,34 @@
+{
+    "title": "Invalid case sensitivity -- NOT",
+    "query": {
+        "WHERE": {
+            "Not": {
+                "LT": {
+                    "courses_avg": 90
+                }
+            }
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "courses_title",
+                "courses_dept",
+                "AvgPass"
+            ]
+        },
+        "TRANSFORMATIONS": {
+            "GROUP": [
+                "courses_title",
+                "courses_dept"
+            ],
+            "APPLY": [
+                {
+                    "AvgPass": {
+                        "AVG": "courses_pass"
+                    }
+                }
+            ]
+        }
+    },
+    "isQueryValid": false,
+    "result": "InsightError"
+}

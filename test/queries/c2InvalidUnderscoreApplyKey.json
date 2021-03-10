@@ -1,0 +1,37 @@
+{
+    "title": "Invalid -- cannot have underscore in Apply key",
+    "query": {
+        "WHERE": {
+            "IS": {
+                "courses_dept": "engl"
+            }
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "courses_avg",
+                "courses_id"
+            ],
+            "ORDER": {
+                "dir": "DOWN",
+                "keys": [
+                    "courses_avg"
+                ]
+            }
+        },
+        "TRANSFORMATIONS": {
+            "GROUP": [
+                "courses_avg",
+                "courses_id"
+            ],
+            "APPLY": [
+                {
+                    "courses_avg": {
+                        "MAX": "courses_avg"
+                    }
+                }
+            ]
+        }
+    },
+    "isQueryValid": false,
+    "result": "InsightError"
+}

@@ -1,5 +1,5 @@
 {
-    "title": "Valid -- MIN applykey",
+    "title": "Valid -- COUNT applykey with strings",
     "query": {
         "WHERE": {
             "IS": {

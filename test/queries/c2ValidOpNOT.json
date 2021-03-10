@@ -1,5 +1,5 @@
 {
-    "title": "Valid -- NOT",
+    "title": "c2 valid -- NOT",
     "query": {
         "WHERE": {
             "NOT": {

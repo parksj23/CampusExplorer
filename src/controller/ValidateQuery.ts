@@ -44,6 +44,10 @@ export default class ValidateQuery {
             if (!keys.includes(ValidateQuery.TRANSFORMATIONS)) {
                 return false;
             }
+
+            if (!this.validateTransformations(query[ValidateQuery.TRANSFORMATIONS])) {
+                return false;
+            }
         }
 
         if (!keys.includes(ValidateQuery.WHERE)) {

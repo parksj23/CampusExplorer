@@ -165,17 +165,6 @@ export default class ValidateQuery {
                 }
             }
         }
-        if (optionsKeys.length === 3 && optionsKeys.includes(ValidateQuery.COLUMNS)
-            && optionsKeys.includes(ValidateQuery.ORDER) && optionsKeys.includes(ValidateQuery.TRANSFORMATIONS)) {
-            let columns = options[ValidateQuery.COLUMNS];
-            let order = options[ValidateQuery.ORDER];
-            let transformations = options[ValidateQuery.TRANSFORMATIONS];
-            if (this.validateColumns(columns) === true) {
-                if (this.validateOrder(order, columns) === true) {
-                    return true;
-                }
-            }
-        }
         return false;
     }
 
@@ -192,13 +181,10 @@ export default class ValidateQuery {
                 return false;
             } else if (typeof key !== "string") {
                 return false;
-                // we can't do this if maxavg is in columns
-                // } else if (!key.includes(("_"))) {
-                //     return false;
             }
 
             switch (key.includes("_")) {
-                case true:
+                case true: // regular key
                     let splitKey = key.split("_");
                     let id = splitKey[0];
                     let smfield = splitKey[1];
@@ -215,10 +201,8 @@ export default class ValidateQuery {
                         this.performQueryDatasetIds.push(id);
                     }
                     break;
-                case false:
-                    if (!this.performQueryDatasetIds.includes(id)) {
-                        this.performQueryDatasetIds.push(id);
-                    }
+                case false: // applykey
+                    // TODO: make sure applykey is defined in APPLY block
                     break;
             }
         }
@@ -226,12 +210,22 @@ export default class ValidateQuery {
     }
 
     private validateOrder(order: any, columns: any): boolean {
-        if (order === undefined) {
+        if (order === undefined || order === null) {
             return false;
         }
-        if (!columns.includes(order)) {
-            return false;
+
+        if (typeof order === "string") {
+            if (!columns.includes(order)) {
+                return false;
+            }
+
+            if (order.length > 1) {
+                return true;
+            } else {
+                return false;
+            }
         }
+
         if (typeof order !== "string") {
             if (Array.isArray(order)) {
                 if (order !== undefined || order !== null) {
@@ -246,13 +240,47 @@ export default class ValidateQuery {
                 }
             }
         }
-        if (order !== undefined && order !== null) {
-            if (order.length > 1) {
-                return true;
-            } else {
-                return false;
+
+        if (typeof order !== "string") {
+            if (typeof order === "object") {
+                return this.validateOrderObject(order, columns);
             }
         }
+        return false;
+    }
+
+    private validateOrderObject(order: any, columns: any): boolean {
+        if (order !== undefined || order !== null) {
+            let orderProp = Object.getOwnPropertyNames(order);
+            if (orderProp.length !== 2) {
+                return false;
+            }
+            if (orderProp[0] !== "dir") {
+                return false;
+            }
+            if (orderProp[1] !== "keys") {
+                return false;
+            }
+            let direction = order.dir;
+            if (typeof direction !== "string") {
+                return false;
+            }
+            if (direction !== "UP" && direction !== "DOWN") {
+                return false;
+            }
+            for (let key of order.keys) {
+                if (key === null) {
+                    return false;
+                }
+                if (!columns.includes(key)) {
+                    return false;
+                }
+            }
+        }
+        return false;
+    }
+
+    private validateTransformations(transformations: any): boolean {
         return false;
     }
 }

@@ -18,6 +18,7 @@ import {rejects} from "assert";
 import {expect} from "chai";
 import Dataset from "./Dataset";
 import DatasetHelper from "./DatasetHelper";
+import RoomsDatasetHelper from "./RoomsDatasetHelper";
 
 /**
  * This is the main programmatic entry point for the project.
@@ -144,8 +145,7 @@ export default class InsightFacade implements IInsightFacade {
                     let doQuery = new DoQuery(query, data);
                     let resultArray = doQuery.doInitialQuery(query);
                     if (resultArray.length > 5000) {
-                        // throw new ResultTooLargeError("Result has >5000 sections.");
-                        throw new InsightError("Result has >5000 sections.");
+                        throw new ResultTooLargeError("Result has >5000 sections.");
                     }
                     return resolve(resultArray);
                 } else {

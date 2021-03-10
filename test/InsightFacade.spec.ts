@@ -38,6 +38,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
         nonZipCourses: "./test/data/nonZipCourses.txt",
         noSections: "./test/data/noSections.zip",
         oneValidSection: "./test/data/oneValidSection.zip",
+        rooms: "./test/data/rooms.zip",
     };
     let datasets: { [id: string]: string } = {};
     let insightFacade: InsightFacade;
@@ -87,7 +88,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
 
     // addDataset tests
     it("Should add a valid dataset", function () {
-        this.timeout( 2000);
+        this.timeout( 10000);
         const id: string = "courses";
         const expected: string[] = [id];
         const futureResult: Promise<string[]> = insightFacade.addDataset(
@@ -316,27 +317,6 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
             });
     });
 
-    // it("Fail to add duplicate dataset", function () {
-    //     let id: string = "courses";
-    //     const expected: string[] = [id];
-    //     return insightFacade
-    //         .addDataset(id, datasets[id], InsightDatasetKind.Courses)
-    //         .then((result1) => {
-    //             return insightFacade
-    //                 .addDataset(id, datasets[id], InsightDatasetKind.Courses)
-    //                 .then((futureResult) => {
-    //                     expect.fail(
-    //                         futureResult,
-    //                         expected,
-    //                         "Should be rejected.",
-    //                     );
-    //                 })
-    //                 .catch((err: any) => {
-    //                     expect(err).to.be.rejectedWith(InsightError);
-    //                 });
-    //         });
-    // });
-
     it("Fail to add valid id but can not be found at the loaded databases", function () {
         const id: string = "courses";
         const id2: string = "hello";
@@ -554,8 +534,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
         return expect(removeResult).to.be.rejectedWith(NotFoundError);
     });
 
-    //
-    //
+
     // listDataset tests
     it("Should return empty array -- no datasets added", function () {
         const expected: InsightDataset[] = [];
@@ -680,20 +659,6 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
             });
     });
     // TODO: uncomment out all the tests above this line
-    // it("Fail to remove a dataset -- whitespace ID -- returned array is the same", function () {
-    //     const validID: string = "courses";
-    //     const invalidID: string = "   ";
-    //     const expected: string[] = [validID];
-    //     const futureResult: Promise<string[]> = insightFacade.addDataset(
-    //         validID,
-    //         datasets[validID],
-    //         InsightDatasetKind.Courses);
-    //     return expect(futureResult).to.eventually.deep.equal(expected)
-    //         .then(() => {
-    //             const future2: Promise<string> = insightFacade.removeDataset(invalidID);
-    //             return expect(future2).to.be.rejectedWith(InsightError);
-    //         });
-    // });
 });
 /*
  * This test suite dynamically generates tests from the JSON files in test/queries.

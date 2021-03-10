@@ -1,0 +1,55 @@
+{
+    "title": "Valid -- Simple SELECT rooms_seats EQ",
+    "query": {
+        "WHERE": {
+            "EQ": {
+                "rooms_seats": 100
+            }
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "rooms_shortname",
+                "rooms_seats",
+                "rooms_furniture"
+            ],
+            "ORDER": {
+                "dir": "UP",
+                "keys": [
+                    "rooms_shortname"
+                ]
+            }
+        },
+        "TRANSFORMATIONS": {
+            "GROUP": [
+                "rooms_shortname",
+                "rooms_seats",
+                "rooms_furniture"
+            ],
+            "APPLY": [
+                {
+                    "maxLat": {
+                        "MAX": "rooms_lat"
+                    }
+                }
+            ]
+        }
+    },
+    "isQueryValid": true,
+    "result": [
+        {
+            "rooms_shortname": "CEME",
+            "rooms_seats": 100,
+            "rooms_furniture": "Classroom-Fixed Tables/Fixed Chairs"
+        },
+        {
+            "rooms_shortname": "GEOG",
+            "rooms_seats": 100,
+            "rooms_furniture": "Classroom-Movable Tables & Chairs"
+        },
+        {
+            "rooms_shortname": "IONA",
+            "rooms_seats": 100,
+            "rooms_furniture": "Classroom-Fixed Tables/Movable Chairs"
+        }
+    ]
+}

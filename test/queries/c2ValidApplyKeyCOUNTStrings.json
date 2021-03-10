@@ -1,0 +1,61 @@
+{
+    "title": "Valid -- MIN applykey",
+    "query": {
+        "WHERE": {
+            "IS": {
+                "rooms_type": "Studio Lab"
+            }
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "rooms_shortname",
+                "rooms_seats",
+                "rooms_name",
+                "rooms_type",
+                "countFurniture"
+            ],
+            "ORDER": "countFurniture"
+        },
+        "TRANSFORMATIONS": {
+            "GROUP": [
+                "rooms_shortname",
+                "rooms_seats",
+                "rooms_furniture",
+                "rooms_type",
+                "rooms_name",
+                "rooms_href"
+            ],
+            "APPLY": [
+                {
+                    "countFurniture": {
+                        "COUNT": "rooms_furniture"
+                    }
+                }
+            ]
+        }
+    },
+    "isQueryValid": true,
+    "result": [
+        {
+            "rooms_shortname": "ORCH",
+            "rooms_seats": 48,
+            "rooms_name": "ORCH_3018",
+            "rooms_type": "Studio Lab",
+            "countFurniture": 1
+        },
+        {
+            "rooms_shortname": "ORCH",
+            "rooms_seats": 72,
+            "rooms_name": "ORCH_4074",
+            "rooms_type": "Studio Lab",
+            "countFurniture": 1
+        },
+        {
+            "rooms_shortname": "UCLL",
+            "rooms_seats": 30,
+            "rooms_name": "UCLL_109",
+            "rooms_type": "Studio Lab",
+            "countFurniture": 1
+        }
+    ]
+}

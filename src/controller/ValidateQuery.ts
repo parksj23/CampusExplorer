@@ -2,16 +2,30 @@ import {
     InsightError,
     ResultTooLargeError
 } from "./IInsightFacade";
+import SCOMP from "./SCOMP";
+import ValidationHelper from "./ValidationHelper";
 
 export default class ValidateQuery {
     private static WHERE: string = "WHERE";
     private static OPTIONS: string = "OPTIONS";
     private static COLUMNS: string = "COLUMNS";
     private static ORDER: string = "ORDER";
+    private static TRANSFORMATIONS: string = "TRANSFORMATIONS";
+    private static GROUP: string = "GROUP";
+    private static APPLY: string = "APPLY";
+
     public queryObj: any;
-    public sfields: string[] = ["dept", "id", "instructor", "title", "uuid"];
-    public mfields: string[] = ["avg", "pass", "fail", "audit", "year"];
+
+    public sfields: string[] = ["dept", "id", "instructor", "title", "uuid",
+        "fullname", "shortname", "number", "name", "address", "type", "furniture", "href"];
+
+    public mfields: string[] = ["avg", "pass", "fail", "audit", "year", "lat", "lon", "seats"];
+
     public performQueryDatasetIds: string[] = [];
+
+    public applyKeys: string[] = [];
+
+    public applyTokens: string[] = ["MAX", "MIN", "AVG", "COUNT", "SUM"];
 
     constructor(query: any) {
         this.queryObj = query;
@@ -22,8 +36,26 @@ export default class ValidateQuery {
             return false;
         }
         let keys: string[] = Object.keys(query);
-        if (keys.length !== 2) {
-            return false;
+        if (!keys.includes(ValidateQuery.TRANSFORMATIONS)) {
+            if (keys.length !== 2) {
+                return false;
+            }
+        } else {
+            if (keys.length !== 3) {
+                return false;
+            }
+
+            if (!keys.includes(ValidateQuery.TRANSFORMATIONS)) {
+                return false;
+            }
+
+            let vHelper = new ValidationHelper();
+            if (!vHelper.validateTransformations(
+                query[ValidateQuery.TRANSFORMATIONS],
+                this.performQueryDatasetIds,
+                this.applyKeys)) {
+                return false;
+            }
         }
 
         if (!keys.includes(ValidateQuery.WHERE)) {
@@ -42,6 +74,10 @@ export default class ValidateQuery {
             return false;
         }
         let operatorString = (Object.getOwnPropertyNames(filter));
+        if (operatorString.length !== 1) {
+            return false;
+        }
+
         let operator = operatorString[0];
         let next = filter[operator];
         if (typeof next !== "object") {
@@ -54,7 +90,8 @@ export default class ValidateQuery {
             return this.validateNegation(next, operator);
         }
         if (operator === "IS") {
-            return this.validateSCOMP(next, operator);
+            let scomp = new SCOMP(this.queryObj);
+            return scomp.validateSCOMP(next, operator);
         }
         if (operator === "EQ" || operator === "GT" || operator === "LT") {
             return this.validateMCOMP(next, operator);
@@ -80,70 +117,6 @@ export default class ValidateQuery {
             }
         }
         return true;
-    }
-
-    private validateSCOMP(next: any, operator: string): boolean {
-        if (Object.keys(next).length === 0) {
-            return false;
-        }
-        let keyString = (Object.getOwnPropertyNames(next));
-        if (keyString.length !== 1) {
-            return false;
-        }
-        let key = keyString[0];
-        if ((typeof key !== "string") || (key === undefined) || (key === null)) {
-            return false;
-        } else if (!key.includes("_")) {
-            return false;
-        }
-        let compValue = next[key];
-        let splitKey = key.split("_");
-        let id = splitKey[0];
-        let sfield = splitKey[1];
-        if (splitKey.length !== 2) {
-            return false;
-        } else if ((typeof compValue !== "string") || (compValue === undefined) || (compValue === null)) {
-            return false;
-        } else if (!this.sfields.includes(sfield)) {
-            return false;
-        } else if (compValue.includes("*")) {
-            return this.validateWildcard(compValue);
-        }
-        if (!this.performQueryDatasetIds.includes(id)) {
-            this.performQueryDatasetIds.push(id);
-        }
-        return true;
-    }
-
-    private validateWildcard(compValue: string): boolean {
-        let firstChar: string = compValue.charAt(0);
-        let lastChar: string = compValue.charAt(compValue.length - 1);
-        let wildcardCount = compValue.match(/[*]/g);
-        if (wildcardCount === null) {
-            return false;
-        }
-        if (wildcardCount.length === 1 && compValue.length === 1) {
-            return true;
-        }
-        if (wildcardCount.length === 1) {
-            if (firstChar === "*") {
-                return true;
-            } else if (lastChar === "*") {
-                return true;
-            }
-        }
-        if ((wildcardCount.length === 2) && (compValue.length === 2)) {
-            return true;
-        }
-        if ((wildcardCount.length === 2) && (firstChar === "*") && (lastChar === "*")) {
-            return true;
-        }
-        if (wildcardCount.length > 2) {
-            return false;
-        }
-        if ((compValue.substr(1, compValue.length - 2)).includes("*")) {
-            return false;
-        }
     }
 
     private validateMCOMP(next: any, operator: string): boolean {
@@ -220,36 +193,53 @@ export default class ValidateQuery {
                 return false;
             } else if (typeof key !== "string") {
                 return false;
-            } else if (!key.includes(("_"))) {
-                return false;
             }
 
-            let splitKey = key.split("_");
-            let id = splitKey[0];
-            let smfield = splitKey[1];
+            switch (key.includes("_")) {
+                case true: // regular key
+                    let splitKey = key.split("_");
+                    let id = splitKey[0];
+                    let smfield = splitKey[1];
 
-            if (splitKey.length !== 2) {
-                return false;
-            }
+                    if (splitKey.length !== 2) {
+                        return false;
+                    }
 
-            if (!this.sfields.includes(smfield) && (!this.mfields.includes(smfield))) {
-                return false;
-            }
+                    if (!this.sfields.includes(smfield) && (!this.mfields.includes(smfield))) {
+                        return false;
+                    }
 
-            if (!this.performQueryDatasetIds.includes(id)) {
-                this.performQueryDatasetIds.push(id);
+                    if (!this.performQueryDatasetIds.includes(id)) {
+                        this.performQueryDatasetIds.push(id);
+                    }
+                    break;
+                case false: // applykey
+                    if (!this.applyKeys.includes(key)) {
+                        return false;
+                    }
+                    break;
             }
         }
         return true;
     }
 
     private validateOrder(order: any, columns: any): boolean {
-        if (order === undefined) {
+        if (order === undefined || order === null) {
             return false;
         }
-        if (!columns.includes(order)) {
-            return false;
+
+        if (typeof order === "string") {
+            if (!columns.includes(order)) {
+                return false;
+            }
+
+            if (order.length > 1) {
+                return true;
+            } else {
+                return false;
+            }
         }
+
         if (typeof order !== "string") {
             if (Array.isArray(order)) {
                 if (order !== undefined || order !== null) {
@@ -264,13 +254,43 @@ export default class ValidateQuery {
                 }
             }
         }
-        if (order !== undefined && order !== null) {
-            if (order.length > 1) {
-                return true;
-            } else {
-                return false;
+
+        if (typeof order !== "string") {
+            if (typeof order === "object") {
+                return this.validateOrderObject(order, columns);
             }
         }
         return false;
+    }
+
+    private validateOrderObject(order: any, columns: any): boolean {
+        if (order !== undefined || order !== null) {
+            let orderProp = Object.getOwnPropertyNames(order);
+            if (orderProp.length !== 2) {
+                return false;
+            }
+            if (orderProp[0] !== "dir") {
+                return false;
+            }
+            if (orderProp[1] !== "keys") {
+                return false;
+            }
+            let direction = order.dir;
+            if (typeof direction !== "string") {
+                return false;
+            }
+            if (direction !== "UP" && direction !== "DOWN") {
+                return false;
+            }
+            for (let key of order.keys) {
+                if (key === null) {
+                    return false;
+                }
+                if (!columns.includes(key)) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }

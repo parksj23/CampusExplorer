@@ -1,0 +1,54 @@
+{
+    "title": "Valid -- OR",
+    "query": {
+        "WHERE": {
+            "OR": [
+                {
+                    "GT": {
+                        "courses_avg": 99
+                    }
+                },
+                {
+                    "EQ": {
+                        "courses_pass": 3000
+                    }
+                }
+            ]
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "courses_dept",
+                "maxPass"
+            ],
+            "ORDER": {
+                "dir": "DOWN",
+                "keys": [
+                    "maxPass"
+                ]
+            }
+        },
+        "TRANSFORMATIONS": {
+            "GROUP": [
+                "courses_dept"
+            ],
+            "APPLY": [
+                {
+                    "maxPass": {
+                        "MAX": "courses_pass"
+                    }
+                }
+            ]
+        }
+    },
+    "isQueryValid": true,
+    "result": [
+        {
+            "courses_dept": "cnps",
+            "maxPass": 16
+        },
+        {
+            "courses_dept": "math",
+            "maxPass": 9
+        }
+    ]
+}

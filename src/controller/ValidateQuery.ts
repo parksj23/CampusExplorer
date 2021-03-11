@@ -24,7 +24,6 @@ export default class ValidateQuery {
 
     public applyKeys: string[] = [];
     public groupKeys: string[] = [];
-    public columnKeys: string[] = [];
 
     public applyTokens: string[] = ["MAX", "MIN", "AVG", "COUNT", "SUM"];
 
@@ -45,7 +44,6 @@ export default class ValidateQuery {
             if (keys.length !== 3) {
                 return false;
             }
-
             if (!keys.includes(ValidateQuery.TRANSFORMATIONS)) {
                 return false;
             }
@@ -64,6 +62,13 @@ export default class ValidateQuery {
             return false;
         }
 
+        if (keys.includes(ValidateQuery.WHERE)) {
+            let operatorString = (Object.getOwnPropertyNames(query[ValidateQuery.WHERE]));
+            if (operatorString.length === 0) {
+                return this.validateOptions(query[ValidateQuery.OPTIONS]);
+            }
+        }
+
         if (!keys.includes(ValidateQuery.OPTIONS)) {
             return false;
         }
@@ -79,7 +84,6 @@ export default class ValidateQuery {
         if (operatorString.length !== 1) {
             return false;
         }
-
         let operator = operatorString[0];
         let next = filter[operator];
         if (typeof next !== "object") {
@@ -138,10 +142,7 @@ export default class ValidateQuery {
         if ((typeof key !== "string") || (key === undefined) || (key === null)) {
             return false;
         }
-        if (!key.includes("_")) {
-            return false;
-        }
-        if (splitKey.length !== 2) {
+        if (!key.includes("_") || splitKey.length !== 2) {
             return false;
         }
         if ((typeof compValue !== "number") || (compValue === undefined) || (compValue === null)) {

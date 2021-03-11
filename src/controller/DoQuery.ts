@@ -52,6 +52,11 @@ export default class DoQuery {
     public doQuery(filter: any, sections: any[]): any[] {
         let result: any[] = [];
         let operatorString = (Object.getOwnPropertyNames(filter));
+
+        if (operatorString.length === 0) { // if the WHERE block is empty, just format and return all data
+            return sections;
+        }
+
         let operator = operatorString[0];
         let next = filter[operator];
         switch (operator) {

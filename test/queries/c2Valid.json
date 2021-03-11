@@ -1,5 +1,5 @@
 {
-    "title": "Valid -- courses empty WHERE",
+    "title": "Valid",
     "query": {
         "WHERE": {
             "EQ": {

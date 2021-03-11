@@ -116,6 +116,9 @@ export default class ValidationHelper {
             }
             let applyKeyString = Object.getOwnPropertyNames(applyOuterObj);
             let applyKey = applyKeyString[0];
+            if (applyKeys.includes(applyKey)) {
+                return false;
+            }
             if (typeof applyKey !== "string") {
                 return false;
             }

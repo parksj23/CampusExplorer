@@ -27,7 +27,7 @@ export default class SCOMP {
         this.queryObj = query;
     }
 
-    public validateSCOMP(next: any, operator: string): boolean {
+    public validateSCOMP(next: any, operator: string, performQueryDatasetIds: string[]): boolean {
         let validateQuery = new ValidateQuery(this.queryObj);
 
         if (Object.keys(next).length === 0) {
@@ -56,8 +56,8 @@ export default class SCOMP {
         } else if (compValue.includes("*")) {
             return this.validateWildcard(compValue);
         }
-        if (!validateQuery.performQueryDatasetIds.includes(id)) {
-            validateQuery.performQueryDatasetIds.push(id);
+        if (!performQueryDatasetIds.includes(id)) {
+            performQueryDatasetIds.push(id);
         }
         return true;
     }

@@ -1,0 +1,69 @@
+{
+    "title": "c2 valid -- Simple SELECT Instructor",
+    "query": {
+        "WHERE": {
+            "IS": {
+                "courses_instructor": "lee, tara"
+            }
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "courses_title",
+                "countAvg"
+            ],
+            "ORDER": {
+                "dir": "UP",
+                "keys": [
+                    "countAvg"
+                ]
+            }
+        },
+        "TRANSFORMATIONS": {
+            "GROUP": [
+                "courses_title"
+            ],
+            "APPLY": [
+                {
+                    "countAvg": {
+                        "COUNT": "courses_avg"
+                    }
+                }
+            ]
+        }
+    },
+    "isQueryValid": true,
+    "result": [
+        {
+            "courses_title": "lit canada",
+            "countAvg": 1
+        },
+        {
+            "courses_title": "prose",
+            "countAvg": 1
+        },
+        {
+            "courses_title": "lit in canada",
+            "countAvg": 2
+        },
+        {
+            "courses_title": "read, write lit",
+            "countAvg": 3
+        },
+        {
+            "courses_title": "lit brit 18c+",
+            "countAvg": 4
+        },
+        {
+            "courses_title": "intro literature",
+            "countAvg": 5
+        },
+        {
+            "courses_title": "univrsty writing",
+            "countAvg": 15
+        },
+        {
+            "courses_title": "strat univ writ",
+            "countAvg": 21
+        }
+    ]
+}

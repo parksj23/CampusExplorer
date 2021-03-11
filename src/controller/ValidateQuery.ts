@@ -4,6 +4,7 @@ import {
 } from "./IInsightFacade";
 import SCOMP from "./SCOMP";
 import ValidationHelper from "./ValidationHelper";
+import {type} from "os";
 
 export default class ValidateQuery {
     private static WHERE: string = "WHERE";
@@ -11,8 +12,6 @@ export default class ValidateQuery {
     private static COLUMNS: string = "COLUMNS";
     private static ORDER: string = "ORDER";
     private static TRANSFORMATIONS: string = "TRANSFORMATIONS";
-    private static GROUP: string = "GROUP";
-    private static APPLY: string = "APPLY";
 
     public queryObj: any;
 
@@ -24,6 +23,8 @@ export default class ValidateQuery {
     public performQueryDatasetIds: string[] = [];
 
     public applyKeys: string[] = [];
+    public groupKeys: string[] = [];
+    public columnKeys: string[] = [];
 
     public applyTokens: string[] = ["MAX", "MIN", "AVG", "COUNT", "SUM"];
 
@@ -53,7 +54,8 @@ export default class ValidateQuery {
             if (!vHelper.validateTransformations(
                 query[ValidateQuery.TRANSFORMATIONS],
                 this.performQueryDatasetIds,
-                this.applyKeys)) {
+                this.applyKeys,
+                this.groupKeys)) {
                 return false;
             }
         }
@@ -91,7 +93,7 @@ export default class ValidateQuery {
         }
         if (operator === "IS") {
             let scomp = new SCOMP(this.queryObj);
-            return scomp.validateSCOMP(next, operator);
+            return scomp.validateSCOMP(next, operator, this.performQueryDatasetIds);
         }
         if (operator === "EQ" || operator === "GT" || operator === "LT") {
             return this.validateMCOMP(next, operator);
@@ -148,7 +150,6 @@ export default class ValidateQuery {
         if (!this.mfields.includes(mfield)) {
             return false;
         }
-        // add to list of global dataset ids IF it has not been seen yet
         if (!this.performQueryDatasetIds.includes(id)) {
             this.performQueryDatasetIds.push(id);
         }
@@ -156,7 +157,10 @@ export default class ValidateQuery {
     }
 
     private validateOptions(options: any): boolean {
-        if (typeof options !== "object") {
+        let columns = options[ValidateQuery.COLUMNS];
+        let order = options[ValidateQuery.ORDER];
+
+        if (typeof options !== "object" || columns === undefined || columns === null) {
             return false;
         }
         let optionsKeys: string[] = Object.keys(options);
@@ -164,67 +168,57 @@ export default class ValidateQuery {
             return false;
         }
         if (optionsKeys.length === 1 && optionsKeys.includes(ValidateQuery.COLUMNS)) {
-            let columns = options[ValidateQuery.COLUMNS];
-            return this.validateColumns(columns);
+            if (!this.validateColumns(columns)) {
+                return false;
+            }
         }
         if (optionsKeys.length === 2 && optionsKeys.includes(ValidateQuery.COLUMNS)
             && optionsKeys.includes(ValidateQuery.ORDER)) {
-            let columns = options[ValidateQuery.COLUMNS];
-            let order = options[ValidateQuery.ORDER];
-            if (this.validateColumns(columns) === true) {
-                if (this.validateOrder(order, columns) === true) {
-                    return true;
-                }
+            if (!this.validateColumns(columns)) {
+                return false;
+            }
+            if (!this.validateOrder(order, columns)) {
+                return false;
             }
         }
-        return false;
+        if (optionsKeys.length === 2 && optionsKeys.includes(ValidateQuery.COLUMNS)) {
+            if (!optionsKeys.includes(ValidateQuery.ORDER)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private validateColumns(columns: string[]): boolean {
-        if (columns === undefined) {
-            return false;
-        }
-        if (columns.length < 1) {
+        if (columns === undefined || columns.length < 1) {
             return false;
         }
 
         for (let key of columns) {
-            if (key === null || key === undefined) {
-                return false;
-            } else if (typeof key !== "string") {
+            if (typeof key !== "string" || key === null || key === undefined) {
                 return false;
             }
 
-            switch (key.includes("_")) {
-                case true: // regular key
-                    let splitKey = key.split("_");
-                    let id = splitKey[0];
-                    let smfield = splitKey[1];
-
-                    if (splitKey.length !== 2) {
-                        return false;
-                    }
-
-                    if (!this.sfields.includes(smfield) && (!this.mfields.includes(smfield))) {
-                        return false;
-                    }
-
-                    if (!this.performQueryDatasetIds.includes(id)) {
-                        this.performQueryDatasetIds.push(id);
-                    }
-                    break;
-                case false: // applykey
-                    if (!this.applyKeys.includes(key)) {
-                        return false;
-                    }
-                    break;
+            if (!this.checkSplitKeyOrApplyKey(key, columns)) {
+                return false;
+            }
+            // check if all keys in COLUMNS are in GROUP or APPLY when TRANSFORMATIONS is present
+            let queryKeys: string[] = Object.keys(this.queryObj);
+            if (queryKeys.includes(ValidateQuery.TRANSFORMATIONS)) {
+                if (!this.applyKeys.includes(key) && !this.groupKeys.includes(key)) {
+                    return false;
+                }
             }
         }
         return true;
     }
 
     private validateOrder(order: any, columns: any): boolean {
-        if (order === undefined || order === null) {
+        if (order === undefined || order === null || Array.isArray(order)) {
+            return false;
+        }
+
+        if (typeof order !== "string" && typeof order !== "object") {
             return false;
         }
 
@@ -232,63 +226,71 @@ export default class ValidateQuery {
             if (!columns.includes(order)) {
                 return false;
             }
-
-            if (order.length > 1) {
-                return true;
-            } else {
+            if (!(order.length > 1)) {
                 return false;
             }
         }
 
-        if (typeof order !== "string") {
-            if (Array.isArray(order)) {
-                if (order !== undefined || order !== null) {
-                    for (let key of order) {
-                        if (key === null) {
-                            return false;
-                        }
-                        if (!columns.includes(key)) {
-                            return false;
-                        }
-                    }
-                }
+        if (typeof order === "object") {
+            if (!this.validateOrderObject(order, columns)) {
+                return false;
             }
         }
-
-        if (typeof order !== "string") {
-            if (typeof order === "object") {
-                return this.validateOrderObject(order, columns);
-            }
-        }
-        return false;
+        return true;
     }
 
     private validateOrderObject(order: any, columns: any): boolean {
-        if (order !== undefined || order !== null) {
-            let orderProp = Object.getOwnPropertyNames(order);
-            if (orderProp.length !== 2) {
-                return false;
-            }
-            if (orderProp[0] !== "dir") {
-                return false;
-            }
-            if (orderProp[1] !== "keys") {
-                return false;
-            }
-            let direction = order.dir;
-            if (typeof direction !== "string") {
-                return false;
-            }
-            if (direction !== "UP" && direction !== "DOWN") {
-                return false;
-            }
+        let orderProp = Object.getOwnPropertyNames(order);
+        if (orderProp.length !== 2) {
+            return false;
+        }
+        if (orderProp[0] !== "dir" || orderProp[1] !== "keys") {
+            return false;
+        }
+        let direction = order.dir;
+        if (typeof direction !== "string") {
+            return false;
+        }
+        if (direction !== "UP" && direction !== "DOWN") {
+            return false;
+        }
+        if (order.keys.length === 0) {
+            return false;
+        }
+        if (order.keys.length > 0) {
             for (let key of order.keys) {
-                if (key === null) {
+                if (typeof key !== "string" || key === null || key === undefined) {
                     return false;
                 }
                 if (!columns.includes(key)) {
                     return false;
                 }
+                if (!this.checkSplitKeyOrApplyKey(key, columns)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private checkSplitKeyOrApplyKey(key: any, columns: any): boolean {
+        if (key.includes("_")) {
+            let splitKey = key.split("_");
+            let id = splitKey[0];
+            let smfield = splitKey[1];
+            if (splitKey.length !== 2) {
+                return false;
+            }
+            if (!this.sfields.includes(smfield) && (!this.mfields.includes(smfield))) {
+                return false;
+            }
+            if (!this.performQueryDatasetIds.includes(id)) {
+                this.performQueryDatasetIds.push(id);
+            }
+        }
+        if (!key.includes("_")) {
+            if (!this.applyKeys.includes(key)) {
+                return false;
             }
         }
         return true;

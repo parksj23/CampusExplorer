@@ -10,7 +10,13 @@
             "COLUMNS": [
                 "courses_title",
                 "minAvg"
-            ]
+            ],
+            "ORDER": {
+                "dir": "UP",
+                "keys": [
+                    "minAvg"
+                ]
+            }
         },
         "TRANSFORMATIONS": {
             "GROUP": [
@@ -36,12 +42,12 @@
             "minAvg": 85.14
         },
         {
-            "courses_title": "eval src evidenc",
-            "minAvg": 91.4
-        },
-        {
             "courses_title": "rehab learning",
             "minAvg": 85.73
+        },
+        {
+            "courses_title": "eval src evidenc",
+            "minAvg": 91.4
         }
     ]
 }

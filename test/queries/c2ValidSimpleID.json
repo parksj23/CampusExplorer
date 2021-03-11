@@ -1,0 +1,117 @@
+{
+    "title": "c2 valid -- Simple SELECT Course ID",
+    "query": {
+        "WHERE": {
+            "IS": {
+                "courses_id": "600"
+            }
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "courses_uuid",
+                "sumAvg"
+            ],
+            "ORDER": {
+                "dir": "UP",
+                "keys": [
+                    "sumAvg"
+                ]
+            }
+        },
+        "TRANSFORMATIONS": {
+            "GROUP": [
+                "courses_uuid"
+            ],
+            "APPLY": [
+                {
+                    "sumAvg": {
+                        "SUM": "courses_avg"
+                    }
+                }
+            ]
+        }
+    },
+    "isQueryValid": true,
+    "result": [
+        {
+            "courses_uuid": "58504",
+            "sumAvg": 75.82
+        },
+        {
+            "courses_uuid": "58505",
+            "sumAvg": 75.82
+        },
+        {
+            "courses_uuid": "21632",
+            "sumAvg": 77.85
+        },
+        {
+            "courses_uuid": "21633",
+            "sumAvg": 77.85
+        },
+        {
+            "courses_uuid": "69968",
+            "sumAvg": 79.75
+        },
+        {
+            "courses_uuid": "69969",
+            "sumAvg": 79.75
+        },
+        {
+            "courses_uuid": "52448",
+            "sumAvg": 81.1
+        },
+        {
+            "courses_uuid": "52449",
+            "sumAvg": 81.1
+        },
+        {
+            "courses_uuid": "11648",
+            "sumAvg": 82.31
+        },
+        {
+            "courses_uuid": "11649",
+            "sumAvg": 82.31
+        },
+        {
+            "courses_uuid": "22109",
+            "sumAvg": 83.52
+        },
+        {
+            "courses_uuid": "22110",
+            "sumAvg": 83.52
+        },
+        {
+            "courses_uuid": "96983",
+            "sumAvg": 85.75
+        },
+        {
+            "courses_uuid": "96984",
+            "sumAvg": 85.75
+        },
+        {
+            "courses_uuid": "91099",
+            "sumAvg": 86.25
+        },
+        {
+            "courses_uuid": "91100",
+            "sumAvg": 86.25
+        },
+        {
+            "courses_uuid": "78556",
+            "sumAvg": 87
+        },
+        {
+            "courses_uuid": "78557",
+            "sumAvg": 87
+        },
+        {
+            "courses_uuid": "74507",
+            "sumAvg": 88.4
+        },
+        {
+            "courses_uuid": "74508",
+            "sumAvg": 88.4
+        }
+    ]
+}

@@ -1,0 +1,72 @@
+{
+    "title": "valid query logic multiple union",
+    "query": {
+        "WHERE": {
+            "OR": [
+                {
+                    "EQ": {
+                        "courses_avg": 99
+                    }
+                },
+                {
+                    "EQ": {
+                        "courses_pass": 501
+                    }
+                },
+                {
+                    "EQ": {
+                        "courses_fail": 70
+                    }
+                }
+            ]
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "courses_dept",
+                "courses_id",
+                "courses_avg",
+                "courses_pass",
+                "courses_fail"
+            ],
+            "ORDER": "courses_avg"
+        }
+    },
+    "isQueryValid": true,
+    "result": [
+        {
+            "courses_dept": "geob",
+            "courses_id": "102",
+            "courses_avg": 67.4,
+            "courses_pass": 501,
+            "courses_fail": 42
+        },
+        {
+            "courses_dept": "phil",
+            "courses_id": "120",
+            "courses_avg": 69.7,
+            "courses_pass": 634,
+            "courses_fail": 70
+        },
+        {
+            "courses_dept": "phys",
+            "courses_id": "100",
+            "courses_avg": 72.3,
+            "courses_pass": 631,
+            "courses_fail": 70
+        },
+        {
+            "courses_dept": "math",
+            "courses_id": "100",
+            "courses_avg": 73.29,
+            "courses_pass": 1020,
+            "courses_fail": 70
+        },
+        {
+            "courses_dept": "fnh",
+            "courses_id": "200",
+            "courses_avg": 78.96,
+            "courses_pass": 501,
+            "courses_fail": 8
+        }
+    ]
+}

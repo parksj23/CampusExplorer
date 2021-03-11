@@ -132,7 +132,7 @@ export default class ValidateQuery {
         let id = splitKey[0];
         let mfield = splitKey[1];
 
-        if (keyString.length === undefined || keyString.length < 1) {
+        if (keyString === undefined || keyString === null || keyString.length < 1) {
             return false;
         }
         if ((typeof key !== "string") || (key === undefined) || (key === null)) {

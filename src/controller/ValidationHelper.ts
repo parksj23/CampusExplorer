@@ -94,7 +94,6 @@ export default class ValidationHelper {
             if (!performQueryDatasetIds.includes(id)) {
                 performQueryDatasetIds.push(id);
             }
-
             groupKeys.push(key);
         }
         return true;

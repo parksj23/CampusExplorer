@@ -31,22 +31,37 @@ export default class DoQuery {
     }
 
     public doInitialQuery(query: any): any[] {
+        let columnedSections: any[] = [];
+        let orderedSections: any[] = [];
+        let queryKeys = Object.getOwnPropertyNames(query);
+
         let queriedSections = this.doQuery(query[DoQuery.WHERE], this.data);
 
-        let column = new Column(query[DoQuery.OPTIONS], queriedSections);
-        let columnedSections = column.doColumns(query[DoQuery.OPTIONS], queriedSections);
+        if (!queryKeys.includes(DoQuery.TRANSFORMATIONS)) { // For C1
+            let column = new Column(query[DoQuery.OPTIONS], queriedSections);
+            columnedSections = column.doC1Columns(query[DoQuery.OPTIONS], queriedSections);
 
-        let order = new Order(query[DoQuery.OPTIONS], columnedSections);
-        let orderedSections = order.doOrder(query[DoQuery.OPTIONS], columnedSections);
+            let order = new Order(query[DoQuery.OPTIONS], columnedSections);
+            orderedSections = order.doOrder(query[DoQuery.OPTIONS], columnedSections);
 
-        // C2 stuff
-        let group = new Group(query[DoQuery.TRANSFORMATIONS], orderedSections);
-        let groupedSections = group.doGroup(query[DoQuery.TRANSFORMATIONS], orderedSections);
+            return orderedSections;
+        }
 
-        let apply = new Apply(query[DoQuery.TRANSFORMATIONS], groupedSections);
-        let applySections = apply.doApply(query[DoQuery.TRANSFORMATIONS], groupedSections);
+        if (queryKeys.includes(DoQuery.TRANSFORMATIONS)) {
+            let group = new Group(query[DoQuery.TRANSFORMATIONS], queriedSections);
+            let groupedSections = group.doGroup(query[DoQuery.TRANSFORMATIONS], queriedSections);
 
-        return orderedSections;
+            let apply = new Apply(query[DoQuery.TRANSFORMATIONS], groupedSections);
+            let applySections = apply.doApply(query[DoQuery.TRANSFORMATIONS], groupedSections);
+
+            let column = new Column(query[DoQuery.OPTIONS], applySections);
+            columnedSections = column.doC2Columns(query[DoQuery.OPTIONS], applySections);
+
+            let order = new Order(query[DoQuery.OPTIONS], columnedSections);
+            orderedSections = order.doOrder(query[DoQuery.OPTIONS], columnedSections);
+
+            return orderedSections;
+        }
     }
 
     public doQuery(filter: any, sections: any[]): any[] {

@@ -1,5 +1,5 @@
 {
-    "title": "Valid -- no results",
+    "title": "Valid -- empty WHERE",
     "query": {
         "WHERE": {},
         "OPTIONS": {

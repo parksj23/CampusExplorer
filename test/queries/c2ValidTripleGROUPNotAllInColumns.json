@@ -1,0 +1,85 @@
+{
+    "title": "Valid -- double GROUP",
+    "query": {
+        "WHERE": {
+            "EQ": {
+                "courses_fail": 50
+            }
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "courses_id",
+                "courses_dept",
+                "sumAvg"
+            ],
+            "ORDER": {
+                "dir": "UP",
+                "keys": [
+                    "sumAvg"
+                ]
+            }
+        },
+        "TRANSFORMATIONS": {
+            "GROUP": [
+                "courses_id",
+                "courses_dept",
+                "courses_instructor"
+            ],
+            "APPLY": [
+                {
+                    "sumAvg": {
+                        "SUM": "courses_avg"
+                    }
+                }
+            ]
+        }
+    },
+    "isQueryValid": true,
+    "result": [
+        {
+            "courses_id": "121",
+            "courses_dept": "chem",
+            "sumAvg": 59.83
+        },
+        {
+            "courses_id": "121",
+            "courses_dept": "chem",
+            "sumAvg": 61.54
+        },
+        {
+            "courses_id": "101",
+            "courses_dept": "math",
+            "sumAvg": 65
+        },
+        {
+            "courses_id": "255",
+            "courses_dept": "math",
+            "sumAvg": 66.48
+        },
+        {
+            "courses_id": "293",
+            "courses_dept": "busi",
+            "sumAvg": 66.86
+        },
+        {
+            "courses_id": "220",
+            "courses_dept": "math",
+            "sumAvg": 67.83
+        },
+        {
+            "courses_id": "105",
+            "courses_dept": "math",
+            "sumAvg": 68.65
+        },
+        {
+            "courses_id": "100",
+            "courses_dept": "japn",
+            "sumAvg": 70.66
+        },
+        {
+            "courses_id": "302",
+            "courses_dept": "bioc",
+            "sumAvg": 136.78
+        }
+    ]
+}

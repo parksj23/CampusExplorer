@@ -1,0 +1,37 @@
+{
+    "title": "Invalid -- double keys in Order obj",
+    "query": {
+        "WHERE": {
+            "EQ": {
+                "courses_avg": 91.3
+            }
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "courses_dept",
+                "minYear"
+            ],
+            "ORDER": {
+                "dir": "UP",
+                "keys": [
+                    "minYear",
+                    "minYear"
+                ]
+            },
+            "TRANSFORMATIONS": {
+                "GROUP": [
+                    "courses_dept"
+                ],
+                "APPLY": [
+                    {
+                        "minYear": {
+                            "MIN": "courses_year"
+                        }
+                    }
+                ]
+            }
+        }
+    },
+    "isQueryValid": false,
+    "result": "InsightError"
+}

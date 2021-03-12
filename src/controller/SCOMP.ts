@@ -9,14 +9,6 @@ import Log from "../Util";
 import ValidateQuery from "./ValidateQuery";
 
 export default class SCOMP {
-    private static WHERE: string = "WHERE";
-    private static OPTIONS: string = "OPTIONS";
-    private static COLUMNS: string = "COLUMNS";
-    private static ORDER: string = "ORDER";
-    private static SORT: string = "SORT";
-    private static TRANSFORMATIONS: string = "TRANSFORMATIONS";
-    private static GROUP: string = "GROUP";
-    private static APPLY: string = "APPLY";
 
     public queryObj: any;
     public data: any[];
@@ -27,37 +19,49 @@ export default class SCOMP {
         this.queryObj = query;
     }
 
-    public validateSCOMP(next: any, operator: string): boolean {
+    public validateSCOMP(next: any, operator: string, performQueryDatasetIds: string[]): boolean {
         let validateQuery = new ValidateQuery(this.queryObj);
+        let keyString = (Object.getOwnPropertyNames(next));
+        let key = keyString[0];
 
         if (Object.keys(next).length === 0) {
             return false;
         }
-        let keyString = (Object.getOwnPropertyNames(next));
+
         if (keyString.length !== 1) {
             return false;
         }
-        let key = keyString[0];
+
         if ((typeof key !== "string") || (key === undefined) || (key === null)) {
             return false;
-        } else if (!key.includes("_")) {
+        }
+
+        if (!key.includes("_")) {
             return false;
         }
+
         let compValue = next[key];
         let splitKey = key.split("_");
         let id = splitKey[0];
         let sfield = splitKey[1];
         if (splitKey.length !== 2) {
             return false;
-        } else if ((typeof compValue !== "string") || (compValue === undefined) || (compValue === null)) {
+        }
+
+        if ((typeof compValue !== "string") || (compValue === undefined) || (compValue === null)) {
             return false;
-        } else if (!validateQuery.sfields.includes(sfield)) {
+        }
+
+        if (!validateQuery.sfields.includes(sfield)) {
             return false;
-        } else if (compValue.includes("*")) {
+        }
+
+        if (compValue.includes("*")) {
             return this.validateWildcard(compValue);
         }
-        if (!validateQuery.performQueryDatasetIds.includes(id)) {
-            validateQuery.performQueryDatasetIds.push(id);
+
+        if (!performQueryDatasetIds.includes(id)) {
+            performQueryDatasetIds.push(id);
         }
         return true;
     }
@@ -66,28 +70,33 @@ export default class SCOMP {
         let firstChar: string = compValue.charAt(0);
         let lastChar: string = compValue.charAt(compValue.length - 1);
         let wildcardCount = compValue.match(/[*]/g);
+
         if (wildcardCount === null) {
             return false;
         }
-        if (wildcardCount.length === 1 && compValue.length === 1) {
+
+        if (wildcardCount.length === 1 && compValue.length === 1) { // * is valid
             return true;
         }
+
         if (wildcardCount.length === 1) {
-            if (firstChar === "*") {
-                return true;
-            } else if (lastChar === "*") {
+            if (firstChar === "*" || lastChar === "*") { // *input or input* is valid
                 return true;
             }
         }
-        if ((wildcardCount.length === 2) && (compValue.length === 2)) {
+
+        if ((wildcardCount.length === 2) && (compValue.length === 2)) { // ** is valid
             return true;
         }
-        if ((wildcardCount.length === 2) && (firstChar === "*") && (lastChar === "*")) {
+
+        if ((wildcardCount.length === 2) && (firstChar === "*") && (lastChar === "*")) { // *input*
             return true;
         }
-        if (wildcardCount.length > 2) {
+
+        if (wildcardCount.length > 2) { // *** is invalid
             return false;
         }
+
         if ((compValue.substr(1, compValue.length - 2)).includes("*")) {
             return false;
         }
@@ -95,11 +104,13 @@ export default class SCOMP {
 
     public doSCOMP(next: any, operator: string, sections: any[]): any[] {
         let result: any[] = [];
+
         let keyString = (Object.getOwnPropertyNames(next));
         let key = keyString[0];
         let compValue = next[key];
         let splitKey = key.split("_");
         let smfield = splitKey[1];
+
         for (let section of sections) {
             if (compValue.includes("*")) {
                 result = this.doWildcard(section, compValue, smfield, result);
@@ -116,6 +127,7 @@ export default class SCOMP {
         let firstChar: string = compValue.charAt(0);
         let lastChar: string = compValue.charAt(compValue.length - 1);
         let wildcardCount = compValue.match(/[*]/g);
+
         if (wildcardCount === null) {
             return result;
         }

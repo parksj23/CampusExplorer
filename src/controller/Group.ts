@@ -64,7 +64,10 @@ export default class Group {
             for (let [k, value] of Object.entries(groupResult)) {
                 let a = k;
                 let b = value;
-                // how to iterate through each value???
+                // for (let arr of value) {
+                //     // how to iterate through each value???
+                //     let help = 1;
+                // }
             }
         }
 

@@ -41,11 +41,10 @@ export default class Column {
         let groupValues: any[] = [];
         let groupedColumnedArr: any[] = [];
 
-        let groupedArray: any[] = [];
+        // let groupedArray: any[] = [];
 
-        for (groupedArray of sections) {
+        for (let groupedArray of sections) {
             for (let section of groupedArray[1]) {
-                let a = typeof groupedArray;
                 let columnedSection: any = {};
                 for (let key of columns) {
                     let splitKey = key.split("_");

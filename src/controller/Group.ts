@@ -37,7 +37,7 @@ export default class Group {
     public doGroup(query: any, data: any[]): any[] {
         let group = query[Group.GROUP];
         let groupResult: any = {};
-        if (group.length === 1) {
+        if (group.length === 1) { // if there is only one group key
             for (let key of group) {
                 let splitKey = key.split("_");
                 let smfield = splitKey[1];
@@ -51,7 +51,7 @@ export default class Group {
         }
 
         // TODO: Change this to make group for first key, then split those groups into groups for 2nd key...
-        for (let key of group) {
+        for (let key of group) { // if we need to group by more than 1 key
             let splitKey = key.split("_");
             let smfield = splitKey[1];
             // https://stackoverflow.com/questions/40774697/how-to-group-an-array-of-objects-by-key
@@ -60,9 +60,30 @@ export default class Group {
                 groupedSections[section[smfield]].push(section);
                 return groupedSections;
             }, Object.create(null));
+            let test = typeof groupResult;
+            for (let [k, value] of Object.entries(groupResult)) {
+                let a = k;
+                let b = value;
+                // how to iterate through each value???
+            }
         }
 
         let groupResultArr = Object.entries(groupResult);
         return groupResultArr;
     }
+
+    // private doGroupHelper(group: any, data: any[]) {
+    //     let groupResult: any = {};
+    //
+    //     for (let key of group) {
+    //         let splitKey = key.split("_");
+    //         let smfield = splitKey[1];
+    //         // https://stackoverflow.com/questions/40774697/how-to-group-an-array-of-objects-by-key
+    //         groupResult = data.reduce((groupedSections, section) => {
+    //             groupedSections[section[smfield]] = groupedSections[section[smfield]] || [];
+    //             groupedSections[section[smfield]].push(section);
+    //             return groupedSections;
+    //         }, Object.create(null));
+    //     }
+    // }
 }

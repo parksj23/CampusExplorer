@@ -37,6 +37,10 @@ export default class Apply {
     }
 
     public doApply(query: any, data: any[]): any[] {
+        let b = query[Apply.APPLY];
+        if (query[Apply.APPLY].length === 0) {
+            return data;
+        }
         return [];
     }
 }

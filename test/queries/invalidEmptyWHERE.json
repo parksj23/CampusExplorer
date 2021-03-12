@@ -1,5 +1,5 @@
 {
-    "title": "Invalid -- empty WHERE block",
+    "title": "Invalid -- empty WHERE block ResultTooLarge",
     "query": {
         "WHERE": {},
         "OPTIONS": {
@@ -19,5 +19,5 @@
         }
     },
     "isQueryValid": false,
-    "result": "InsightError"
+    "result": "ResultTooLargeError"
 }

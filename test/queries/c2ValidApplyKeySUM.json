@@ -1,5 +1,5 @@
 {
-    "title": "Valid -- MIN applykey",
+    "title": "Valid -- SUM applykey",
     "query": {
         "WHERE": {
             "IS": {

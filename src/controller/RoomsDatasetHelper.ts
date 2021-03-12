@@ -33,10 +33,6 @@ export default class RoomsDatasetHelper {
     //     }
     // }
 
-    public getAddress(): string {
-        return "";
-    }
-
     public getLatLong(address: string): number[] {
         // 0 = latitude, 1= longitude
         return [];
@@ -54,4 +50,7 @@ export default class RoomsDatasetHelper {
         return false;
     }
 
+    public getBuildingAddress(): string {
+        return "";
+    }
 }

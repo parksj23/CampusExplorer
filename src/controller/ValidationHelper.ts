@@ -36,7 +36,11 @@ export default class ValidationHelper {
 
     public validateTransformations(transformations: any,
                                    performQueryDatasetIds: string[],
-                                   applyKeys: string[]): boolean {
+                                   applyKeys: string[],
+                                   groupKeys: string[]): boolean {
+        if (transformations === undefined || transformations === null) {
+            return false;
+        }
         if (transformations !== undefined || transformations !== null) {
             let transProp = Object.getOwnPropertyNames(transformations);
             if (transProp.length !== 2) {
@@ -48,7 +52,7 @@ export default class ValidationHelper {
             if (transProp[1] !== "APPLY") {
                 return false;
             }
-            if (!this.validateGroup(transformations.GROUP, performQueryDatasetIds)) {
+            if (!this.validateGroup(transformations.GROUP, performQueryDatasetIds, groupKeys)) {
                 return false;
             }
             if (!this.validateApply(transformations.APPLY, performQueryDatasetIds, applyKeys)) {
@@ -58,7 +62,7 @@ export default class ValidationHelper {
         return true;
     }
 
-    public validateGroup(group: any, performQueryDatasetIds: string[]): boolean {
+    public validateGroup(group: any, performQueryDatasetIds: string[], groupKeys: string[]): boolean {
         if (group === undefined || group === null) {
             return false;
         }
@@ -90,6 +94,7 @@ export default class ValidationHelper {
             if (!performQueryDatasetIds.includes(id)) {
                 performQueryDatasetIds.push(id);
             }
+            groupKeys.push(key);
         }
         return true;
     }
@@ -110,7 +115,13 @@ export default class ValidationHelper {
             }
             let applyKeyString = Object.getOwnPropertyNames(applyOuterObj);
             let applyKey = applyKeyString[0];
+            if (applyKeys.includes(applyKey)) {
+                return false;
+            }
             if (typeof applyKey !== "string") {
+                return false;
+            }
+            if (applyKey.includes("_")) {
                 return false;
             }
             if (this.applyInnerObjValidation(applyKeyString, applyOuterObj, performQueryDatasetIds)) {
@@ -132,28 +143,33 @@ export default class ValidationHelper {
             if (applyTokenString.length !== 1) {
                 return false;
             }
+
             if (!this.applyTokens.includes(applyToken)) {
                 return false;
             }
+
             let applyTargetKeyStrArray = Object.entries(applyInnerObj);
             let applyTargetKeyArr = applyTargetKeyStrArray[0];
             let applyTargetKey = applyTargetKeyArr[1];
             if (applyTargetKeyArr.length !== 2) {
                 return false;
             }
+
             if (typeof applyTargetKey !== "string") {
                 return false;
             }
+
             if (applyTargetKey === undefined || applyTargetKey === null) {
                 return false;
             }
+
             if (!applyTargetKey.includes("_")) {
                 return false;
             }
+
             let splitKey = applyTargetKey.split("_");
             let id = splitKey[0];
             let smfield = splitKey[1];
-
             if (splitKey.length !== 2) {
                 return false;
             }

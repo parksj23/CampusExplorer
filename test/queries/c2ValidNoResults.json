@@ -1,5 +1,5 @@
 {
-    "title": "Valid -- no results",
+    "title": "c2 valid -- no results",
     "query": {
         "WHERE": {
             "IS": {

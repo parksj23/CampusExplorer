@@ -1,5 +1,5 @@
 {
-    "title": "Valid -- OR",
+    "title": "c2 valid -- OR",
     "query": {
         "WHERE": {
             "OR": [

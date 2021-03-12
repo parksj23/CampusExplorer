@@ -8,9 +8,7 @@ import InsightFacade from "./InsightFacade";
 import {split} from "ts-node";
 
 export default class Column {
-    private static OPTIONS: string = "OPTIONS";
     private static COLUMNS: string = "COLUMNS";
-    private static ORDER: string = "ORDER";
 
     public options: any;
     public data: any[];
@@ -21,7 +19,7 @@ export default class Column {
         this.data = data;
     }
 
-    public doColumns(query: any, sections: any[]): any[] {
+    public doC1Columns(query: any, sections: any[]): any[] {
         let columns = query[Column.COLUMNS];
         let columnedSections: any[] = [];
         for (let section of sections) {
@@ -34,5 +32,35 @@ export default class Column {
             columnedSections.push(columnedSection);
         }
         return columnedSections;
+    }
+
+    public doC2Columns(query: any, sections: any[]): any[] {
+        let columns = query[Column.COLUMNS];
+        let columnedSections: any[] = [];
+
+        let groupValues: any[] = [];
+        let groupedColumnedArr: any[] = [];
+
+        // let groupedArray: any[] = [];
+
+        for (let groupedArray of sections) {
+            for (let section of groupedArray[1]) {
+                let columnedSection: any = {};
+                for (let key of columns) {
+                    let splitKey = key.split("_");
+                    let smfield = splitKey[1];
+                    columnedSection[key] = section[smfield];
+                }
+                columnedSections.push(columnedSection);
+            }
+        }
+        for (let i = 0; i < columnedSections.length - 1; i++) {
+            let value = Object.values(columnedSections[i])[0];
+            if (!groupValues.includes(value)) {
+                groupValues.push(value);
+                groupedColumnedArr.push(columnedSections[i]);
+            }
+        }
+        return groupedColumnedArr;
     }
 }

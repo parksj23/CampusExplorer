@@ -20,6 +20,8 @@ import Dataset from "./Dataset";
 import DatasetHelper from "./DatasetHelper";
 import RoomsDatasetHelper from "./RoomsDatasetHelper";
 
+const parse5 = require("parse5");
+
 /**
  * This is the main programmatic entry point for the project.
  * Method documentation is in IInsightFacade
@@ -161,4 +163,38 @@ export default class InsightFacade implements IInsightFacade {
         return Promise.resolve(this.d.datasets);
     }
 
+    // rooms type methods --> will move them later to another file
+
+    public getBuildingAddress(fileContent: string): string {
+        let address: string = "";
+        this.parseHTML(fileContent).then((parsedHTML) => {
+            address = this.findAddress(parsedHTML);
+        });
+        return address;
+    }
+
+    private parseHTML(html: string): Promise<any> {
+        return Promise.resolve(parse5.parse(html));
+    }
+
+    private findAddress(parsedHTML: any): string {
+        // TODO
+        // if(element.nodeName === "a" && element.attrs.length > 1 && element.attrs[1].value === "full-image"){
+        //     return element.attrs[0].value;
+        // }
+        if (parsedHTML.nodeName === "td"
+        && parsedHTML.attrs.length > 1
+        && parsedHTML.attrs[1].value === "views-field views-field-field-building-address") {
+            return "";
+        }
+        if (parsedHTML.childNodes && parsedHTML.childNodes.length > 0) {
+            for (let child of parsedHTML.childNodes) {
+                let possibleAddress = this.findAddress(child);
+                if (!(possibleAddress === "" || possibleAddress === "-1" || possibleAddress === undefined)) {
+                    return possibleAddress;
+                }
+            }
+        }
+        return "-1";
+    }
 }

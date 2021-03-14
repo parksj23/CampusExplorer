@@ -56,7 +56,14 @@ export default class DoQuery {
             // TODO: How do I add the applyKey columns to COLUMNS? Maybe if applySections has another column???
 
             let column = new Column(query[DoQuery.OPTIONS], applySections);
-            columnedSections = column.doC2Columns(query[DoQuery.OPTIONS], applySections);
+            let t = query[DoQuery.TRANSFORMATIONS];
+            let g = t[DoQuery.GROUP];
+            if (g.length === 1) {
+                columnedSections = column.doC2ColumnsSingleGroup(query[DoQuery.OPTIONS], applySections);
+            }
+            if (g.length > 1) {
+                columnedSections = column.doC2ColumnsMultipleGroup(query[DoQuery.OPTIONS], applySections);
+            }
 
             let order = new Order(query[DoQuery.OPTIONS], columnedSections);
             orderedSections = order.doOrder(query[DoQuery.OPTIONS], columnedSections);

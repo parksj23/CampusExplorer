@@ -34,14 +34,12 @@ export default class Column {
         return columnedSections;
     }
 
-    public doC2Columns(query: any, sections: any[]): any[] {
+    public doC2ColumnsSingleGroup(query: any, sections: any[]): any[] {
         let columns = query[Column.COLUMNS];
         let columnedSections: any[] = [];
 
         let groupValues: any[] = [];
         let groupedColumnedArr: any[] = [];
-
-        // let groupedArray: any[] = [];
 
         for (let groupedArray of sections) {
             for (let section of groupedArray[1]) {
@@ -62,5 +60,32 @@ export default class Column {
             }
         }
         return groupedColumnedArr;
+    }
+
+    public doC2ColumnsMultipleGroup (query: any, sections: any[]): any[] {
+        let columns = query[Column.COLUMNS];
+        let columnedSections: any[] = [];
+
+        let groupValues: any[] = [];
+        let groupedColumnedArr: any[] = [];
+
+        let seen: any[] = [];
+
+        for (let groupedArray of sections) {
+            for (let section of groupedArray["sectionArrays"]) {
+                if (seen.map(String).includes(groupedArray["firstSectionValues"].toString())) {
+                    continue;
+                }
+                let columnedSection: any = {};
+                for (let key of columns) {
+                    let splitKey = key.split("_");
+                    let smfield = splitKey[1];
+                    columnedSection[key] = section[smfield];
+                }
+                columnedSections.push(columnedSection);
+                seen.push(groupedArray["firstSectionValues"]);
+            }
+        }
+        return columnedSections;
     }
 }

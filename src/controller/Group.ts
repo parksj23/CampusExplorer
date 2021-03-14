@@ -90,6 +90,7 @@ export default class Group {
     private doSingleGroup(group: any, data: any[]) {
         let groupResult: any = {};
         let groupResultArr: any[] = [];
+        let result: any[] = [];
 
         for (let key of group) {
             let splitKey = key.split("_");
@@ -102,7 +103,13 @@ export default class Group {
             }, Object.create(null));
         }
         groupResultArr = Object.entries(groupResult);
-        return groupResultArr;
+        for (let g of groupResultArr) {
+            let obj: any = {};
+            obj["key"] = g[0];
+            obj["arr"] = g[1];
+            result.push(obj);
+        }
+        return result;
     }
 
     private doMultipleGroup(group: any, data: any[]) {
@@ -149,16 +156,11 @@ export default class Group {
                 }
             }
             let obj: any = {};
-            obj = {firstSectionValues, sectionArrays};
+            obj["key"] = firstSectionValues;
+            obj["arr"] = sectionArrays;
+            // obj = {firstSectionValues, sectionArrays};
             groupResultArr.push(obj);
         }
-        // let temp = [];
-        // for (let o of groupResultArr) {
-        //     let a = Object.entries(o);
-        //     let array = Object.values(a[1]);
-        //     temp.push(array);
-        // }
-        // groupResultArr = temp;
         return groupResultArr;
     }
 

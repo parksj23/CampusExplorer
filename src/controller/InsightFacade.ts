@@ -165,36 +165,43 @@ export default class InsightFacade implements IInsightFacade {
 
     // rooms type methods --> will move them later to another file
 
-    public getBuildingAddress(fileContent: string): string {
-        let address: string = "";
-        this.parseHTML(fileContent).then((parsedHTML) => {
-            address = this.findAddress(parsedHTML);
+    public getBuildingAddress(fileContent: string): Promise<string> {
+        // let address: string = "nothing found";
+        return new Promise((resolve, reject) => {
+            this.getHTMLString(fileContent).then(this.parseHTML).then((parsedHTML) => {
+                let buildingAddress: string = (this.findAddress(parsedHTML)).trim();
+                return buildingAddress;
+            });
         });
-        return address;
+    }
+
+    private getHTMLString(file: string): Promise<string> {
+        let zip = new JSZip();
+        return new Promise((resolve, reject) => {
+            zip.loadAsync(file, {base64: true}).then((root) => {
+                root.file("rooms/index.htm").async("string").then((stringContent) => {
+                    return resolve(stringContent);
+                });
+            });
+        });
     }
 
     private parseHTML(html: string): Promise<any> {
         return Promise.resolve(parse5.parse(html));
     }
 
-    private findAddress(parsedHTML: any): string {
-        // TODO
-        // if(element.nodeName === "a" && element.attrs.length > 1 && element.attrs[1].value === "full-image"){
-        //     return element.attrs[0].value;
-        // }
-        if (parsedHTML.nodeName === "td"
-        && parsedHTML.attrs.length > 1
-        && parsedHTML.attrs[1].value === "views-field views-field-field-building-address") {
-            return "";
+    private findAddress(element: any): string {
+        if (element.nodeName === "td" && element.attrs[0].value === "views-field views-field-field-building-address") {
+            return element.childNodes[0].value;
         }
-        if (parsedHTML.childNodes && parsedHTML.childNodes.length > 0) {
-            for (let child of parsedHTML.childNodes) {
+        if (element.childNodes && element.childNodes.length > 0) {
+            for (let child of element.childNodes) {
                 let possibleAddress = this.findAddress(child);
-                if (!(possibleAddress === "" || possibleAddress === "-1" || possibleAddress === undefined)) {
+                if (!(possibleAddress === "")) {
                     return possibleAddress;
                 }
             }
         }
-        return "-1";
+        return "";
     }
 }

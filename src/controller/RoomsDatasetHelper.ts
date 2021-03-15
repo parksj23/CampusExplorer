@@ -14,25 +14,6 @@ export default class RoomsDatasetHelper {
         Log.trace("InsightFacadeImpl::init()");
     }
 
-    // public saveData(id: string, kind: InsightDatasetKind, validSections: any[]) {
-    //     let fs = require("fs");
-    //     let insightDataset: InsightDataset = {id, kind, numRows: validSections.length};
-    //     this.datasets.push(insightDataset);
-    //     this.memory.push(id);
-    //     let datasetContent = new Dataset(id, validSections);
-    //     this.addedDatasetContent.push(datasetContent);
-    //     const directory = "./src/data/";
-    //     try {
-    //         if (!fs.existsSync(directory)) {
-    //             fs.mkdirSync(directory);
-    //         }
-    //         const filePath: string = directory + id;
-    //         fs.writeFileSync(filePath, JSON.stringify(datasetContent));
-    //     } catch (e) {
-    //         throw new InsightError("Data was parsed correctly but not saved");
-    //     }
-    // }
-
     public getLatLong(address: string): number[] {
         // 0 = latitude, 1= longitude
         return [];

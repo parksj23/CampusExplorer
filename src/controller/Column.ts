@@ -74,7 +74,7 @@ export default class Column {
                         columnedSection[key] = section[smfield];
                     }
                     if (!key.includes("_")) {
-                        columnedSection[key] = groupedArray["apply"];
+                        columnedSection[key] = groupedArray[key];
                     }
                 }
                 columnedSections.push(columnedSection);
@@ -104,9 +104,14 @@ export default class Column {
                 }
                 let columnedSection: any = {};
                 for (let key of columns) {
-                    let splitKey = key.split("_");
-                    let smfield = splitKey[1];
-                    columnedSection[key] = section[smfield];
+                    if (key.includes("_")) {
+                        let splitKey = key.split("_");
+                        let smfield = splitKey[1];
+                        columnedSection[key] = section[smfield];
+                    }
+                    if (!key.includes("_")) {
+                        columnedSection[key] = groupedArray["apply"];
+                    }
                 }
                 columnedSections.push(columnedSection);
                 seen.push(groupedArray["key"]);

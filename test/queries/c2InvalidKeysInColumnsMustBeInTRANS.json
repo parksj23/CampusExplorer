@@ -1,38 +1,40 @@
 {
-    "title": "Valid -- AVG applykey",
+    "title": "Invalid -- Keys in COLUMNS must be in GROUP or APPLY when TRANSFORMATIONS is present",
     "query": {
         "WHERE": {
-            "GT": {
-                "courses_avg": 50
+            "LT": {
+                "courses_fail": 50
             }
         },
         "OPTIONS": {
             "COLUMNS": [
+                "courses_id",
                 "courses_dept",
-                "maxYear"
+                "courses_fail",
+                "sumAvg"
             ],
             "ORDER": {
                 "dir": "UP",
                 "keys": [
-                    "maxYear"
+                    "sumAvg",
+                    "courses_fail"
                 ]
             }
         },
         "TRANSFORMATIONS": {
             "GROUP": [
                 "courses_dept",
-                "courses_instructor"
-
+                "courses_id"
             ],
             "APPLY": [
                 {
-                    "maxYear": {
-                        "MAX": "courses_year"
+                    "sumAvg": {
+                        "SUM": "courses_avg"
                     }
                 }
             ]
         }
     },
     "isQueryValid": false,
-    "result": "ResultTooLargeError"
+    "result": "InsightError"
 }

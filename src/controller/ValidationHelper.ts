@@ -10,12 +10,6 @@ import Log from "../Util";
 import ValidateQuery from "./ValidateQuery";
 
 export default class ValidationHelper {
-    private static WHERE: string = "WHERE";
-    private static OPTIONS: string = "OPTIONS";
-    private static COLUMNS: string = "COLUMNS";
-    private static ORDER: string = "ORDER";
-    private static SORT: string = "SORT";
-    private static TRANSFORMATIONS: string = "TRANSFORMATIONS";
     private static GROUP: string = "GROUP";
     private static APPLY: string = "APPLY";
 
@@ -41,15 +35,18 @@ export default class ValidationHelper {
         if (transformations === undefined || transformations === null) {
             return false;
         }
+        if (typeof transformations !== "object") {
+            return false;
+        }
         if (transformations !== undefined || transformations !== null) {
             let transProp = Object.getOwnPropertyNames(transformations);
             if (transProp.length !== 2) {
                 return false;
             }
-            if (transProp[0] !== "GROUP") {
+            if (typeof transProp[0] !== "string" || transProp[0] !== "GROUP") {
                 return false;
             }
-            if (transProp[1] !== "APPLY") {
+            if (typeof transProp[1] !== "string" || transProp[1] !== "APPLY") {
                 return false;
             }
             if (!this.validateGroup(transformations.GROUP, performQueryDatasetIds, groupKeys)) {
@@ -67,6 +64,9 @@ export default class ValidationHelper {
             return false;
         }
         if (!Array.isArray(group)) {
+            return false;
+        }
+        if (group.length === 0) {
             return false;
         }
         for (let key of group) {
@@ -124,6 +124,9 @@ export default class ValidationHelper {
             if (applyKey.includes("_")) {
                 return false;
             }
+            if (applyKey.length === 0) {
+                return false;
+            }
             if (this.applyInnerObjValidation(applyKeyString, applyOuterObj, performQueryDatasetIds)) {
                 applyKeys.push(applyKey);
             } else {
@@ -138,16 +141,17 @@ export default class ValidationHelper {
                                     performQueryDatasetIds: string[]): boolean {
         for (let applyInnerObjKey of applyKeyString) {
             let applyInnerObj = applyOuterObj[applyInnerObjKey];
+            if (typeof applyInnerObj !== "object") {
+                return false;
+            }
             let applyTokenString = Object.getOwnPropertyNames(applyInnerObj);
             let applyToken = applyTokenString[0];
             if (applyTokenString.length !== 1) {
                 return false;
             }
-
             if (!this.applyTokens.includes(applyToken)) {
                 return false;
             }
-
             let applyTargetKeyStrArray = Object.entries(applyInnerObj);
             let applyTargetKeyArr = applyTargetKeyStrArray[0];
             let applyTargetKey = applyTargetKeyArr[1];

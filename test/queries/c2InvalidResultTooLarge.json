@@ -1,0 +1,38 @@
+{
+    "title": "Valid -- AVG applykey",
+    "query": {
+        "WHERE": {
+            "GT": {
+                "courses_avg": 50
+            }
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "courses_dept",
+                "maxYear"
+            ],
+            "ORDER": {
+                "dir": "UP",
+                "keys": [
+                    "maxYear"
+                ]
+            }
+        },
+        "TRANSFORMATIONS": {
+            "GROUP": [
+                "courses_dept",
+                "courses_instructor"
+
+            ],
+            "APPLY": [
+                {
+                    "maxYear": {
+                        "MAX": "courses_year"
+                    }
+                }
+            ]
+        }
+    },
+    "isQueryValid": false,
+    "result": "ResultTooLargeError"
+}

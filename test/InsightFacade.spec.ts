@@ -1043,11 +1043,12 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
 
     // getAddress tests
     it("c2- Should get address - ACU Building ", function () {
-        const expected = "2211 Wesbrook Mall";
-        const id = "rooms";
+        const expected: string = "2211 Wesbrook Mall";
+        const id: string = "rooms";
         const fileContent = datasets[id];
-        const futureResult = insightFacade.getBuildingAddress(fileContent);
-        return expect(futureResult).deep.equal(expected);
+        insightFacade.getBuildingAddress(fileContent).then((futureResult) => {
+            return expect(futureResult).to.eventually.deep.equal(expected);
+        });
     });
 
     // TODO: uncomment out all the tests above this line

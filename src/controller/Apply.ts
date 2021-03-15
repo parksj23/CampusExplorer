@@ -158,13 +158,13 @@ export default class Apply {
     private doMAX(applyInnerObj: any, applyTargetKey: string, columnName: string, sections: any[]): any[] {
         let result: any[] = [];
         let splitKey = (applyTargetKey as string).split("_");
-        let smfield = splitKey[1];
+        let mfield = splitKey[1];
         for (let group of sections) {
             let newGroup: any = {};
             let max = 0;
             let temp: any[] = [];
             for (let section of group["arr"]) {
-                temp.push(section[smfield]);
+                temp.push(section[mfield]);
             }
             max = Math.max(...temp);
             newGroup["key"] = group["key"];
@@ -178,13 +178,13 @@ export default class Apply {
     private doMIN(applyInnerObj: any, applyTargetKey: string, columnName: string, sections: any[]): any[] {
         let result: any[] = [];
         let splitKey = (applyTargetKey as string).split("_");
-        let smfield = splitKey[1];
+        let mfield = splitKey[1];
         for (let group of sections) {
             let newGroup: any = {};
             let min = 0;
             let temp: any[] = [];
             for (let section of group["arr"]) {
-                temp.push(section[smfield]);
+                temp.push(section[mfield]);
             }
             min = Math.min(...temp);
             newGroup["key"] = group["key"];
@@ -198,12 +198,12 @@ export default class Apply {
     private doAVG(applyInnerObj: any, applyTargetKey: string, columnName: string, sections: any[]): any[] {
         let result: any[] = [];
         let splitKey = (applyTargetKey as string).split("_");
-        let smfield = splitKey[1];
+        let mfield = splitKey[1];
         for (let group of sections) {
             let newGroup: any = {};
             let temp: any[] = [];
             for (let section of group["arr"]) {
-                temp.push(section[smfield]);
+                temp.push(section[mfield]);
             }
             // let total = new Decimal(0);
             // for (let val of temp) {
@@ -211,6 +211,7 @@ export default class Apply {
             // }
             // let avg = total.toNumber() / temp.length;
             // avg = Number(avg.toFixed(2));
+            // TODO: finish AVG and fix COUNT. Start ORDER.
             let sum = 0;
             let avg = 0;
             temp.forEach((val) => {
@@ -230,13 +231,13 @@ export default class Apply {
     private doSUM(applyInnerObj: any, applyTargetKey: string, columnName: string, sections: any[]): any[] {
         let result: any[] = [];
         let splitKey = (applyTargetKey as string).split("_");
-        let smfield = splitKey[1];
+        let mfield = splitKey[1];
         for (let group of sections) {
             let newGroup: any = {};
             let sum = 0;
             let temp: any[] = [];
             for (let section of group["arr"]) {
-                temp.push(section[smfield]);
+                temp.push(section[mfield]);
             }
             temp.forEach((val) => {
                 sum = sum + val;
@@ -258,10 +259,16 @@ export default class Apply {
             let newGroup: any = {};
             let count = 0;
             let temp: any[] = [];
+            let temp2: any[] = [];
             for (let section of group["arr"]) {
-                temp.push(section[smfield]);
+                temp.push(section[smfield]).toString();
             }
-            count = temp.length;
+            for (let i of temp) {
+                if (!temp2.includes(i)) {
+                    temp2.push(i);
+                }
+            }
+            count = temp2.length;
             newGroup["key"] = group["key"];
             newGroup["arr"] = group["arr"];
             newGroup[columnName] = count;

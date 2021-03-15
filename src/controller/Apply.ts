@@ -75,7 +75,7 @@ export default class Apply {
                 break;
             }
         }
-        // TODO: If there are more than one apply objects?
+        // TODO: If there are more than one apply objects? I guess just make a new column for it...?
     }
 
     private doMAX(applyInnerObj: any, applyTargetKey: string, sections: any[]): any[] {
@@ -108,12 +108,27 @@ export default class Apply {
             newGroup["arr"] = group["arr"];
             newGroup["apply"] = sum;
             result.push(newGroup);
-            let a = 1;
         }
         return result;
     }
 
     private doCOUNT(applyInnerObj: any, applyTargetKey: string, sections: any[]): any[] {
-        return [];
+        let result: any[] = [];
+        let splitKey = (applyTargetKey as string).split("_");
+        let smfield = splitKey[1];
+        for (let group of sections) {
+            let newGroup: any = {};
+            let count = 0;
+            let temp: any[] = [];
+            for (let section of group["arr"]) {
+                temp.push(section[smfield]);
+            }
+            count = temp.length;
+            newGroup["key"] = group["key"];
+            newGroup["arr"] = group["arr"];
+            newGroup["apply"] = count;
+            result.push(newGroup);
+        }
+        return result;
     }
 }

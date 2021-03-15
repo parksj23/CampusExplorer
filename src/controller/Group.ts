@@ -158,7 +158,6 @@ export default class Group {
             let obj: any = {};
             obj["key"] = firstSectionValues;
             obj["arr"] = sectionArrays;
-            // obj = {firstSectionValues, sectionArrays};
             groupResultArr.push(obj);
         }
         return groupResultArr;

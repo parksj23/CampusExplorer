@@ -915,7 +915,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
             });
     });
     // TODO: SP -- comment out above
-  
+
     it("c2- Should return empty array -- no datasets added -- rooms type", function () {
         const expected: InsightDataset[] = [];
         const futureResult = insightFacade.listDatasets();

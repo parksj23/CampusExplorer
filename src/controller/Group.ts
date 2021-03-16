@@ -10,14 +10,7 @@ import Log from "../Util";
 import {type} from "os";
 
 export default class Group {
-    private static WHERE: string = "WHERE";
-    private static OPTIONS: string = "OPTIONS";
-    private static COLUMNS: string = "COLUMNS";
-    private static ORDER: string = "ORDER";
-    private static SORT: string = "SORT";
-    private static TRANSFORMATIONS: string = "TRANSFORMATIONS";
     private static GROUP: string = "GROUP";
-    private static APPLY: string = "APPLY";
 
     public transformations: any;
     public data: any[];

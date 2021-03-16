@@ -7,7 +7,6 @@ import {Course} from "./Course";
 import InsightFacade from "./InsightFacade";
 import {split} from "ts-node";
 import Log from "../Util";
-import ValidateQuery from "./ValidateQuery";
 import Decimal from "decimal.js";
 
 export default class Apply {
@@ -205,20 +204,25 @@ export default class Apply {
             for (let section of group["arr"]) {
                 temp.push(section[mfield]);
             }
-            // let total = new Decimal(0);
-            // for (let val of temp) {
-            //     total.plus(val);
-            // }
+            // figure out avg according to ebnf
+            let total = new Decimal(0);
+            let x = new Decimal(total);
+            let totalValue = total["d"][0];
+            for (let val of temp) {
+                let newVal = new Decimal(val);
+                total.add(newVal);
+            }
+            let avg = total["d"][0] / temp.length;
             // let avg = total.toNumber() / temp.length;
-            // avg = Number(avg.toFixed(2));
-            // TODO: finish AVG and fix COUNT. Start ORDER.
-            let sum = 0;
-            let avg = 0;
-            temp.forEach((val) => {
-                sum = sum + val;
-            });
-            avg = sum / temp.length;
             avg = Number(avg.toFixed(2));
+            // TODO: fix AVG
+            // let sum = 0;
+            // let avg = 0;
+            // temp.forEach((val) => {
+            //     sum = sum + val;
+            // });
+            // avg = sum / temp.length;
+            // avg = Number(avg.toFixed(2));
 
             newGroup["key"] = group["key"];
             newGroup["arr"] = group["arr"];
@@ -261,7 +265,8 @@ export default class Apply {
             let temp: any[] = [];
             let temp2: any[] = [];
             for (let section of group["arr"]) {
-                temp.push(section[smfield]).toString();
+                let str = section[smfield].toString();
+                temp.push(str);
             }
             for (let i of temp) {
                 if (!temp2.includes(i)) {

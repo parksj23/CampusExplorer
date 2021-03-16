@@ -110,7 +110,7 @@ export default class Column {
                         columnedSection[key] = section[smfield];
                     }
                     if (!key.includes("_")) {
-                        columnedSection[key] = groupedArray["apply"];
+                        columnedSection[key] = groupedArray[key];
                     }
                 }
                 columnedSections.push(columnedSection);

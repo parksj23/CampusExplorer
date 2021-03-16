@@ -53,7 +53,6 @@ export default class DoQuery {
 
             let apply = new Apply(query[DoQuery.TRANSFORMATIONS], groupedSections);
             let applySections = apply.doApply(query[DoQuery.TRANSFORMATIONS], groupedSections);
-            // TODO: How do I add the applyKey columns to COLUMNS? Maybe if applySections has another column???
 
             let column = new Column(query[DoQuery.OPTIONS], applySections);
             columnedSections = column.c2ColumnsLauncher(query, applySections);

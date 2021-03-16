@@ -23,6 +23,7 @@ export default class ValidationHelper {
     public mfields: string[] = ["avg", "pass", "fail", "audit", "year", "lat", "lon", "seats"];
 
     public applyTokens: string[] = ["MAX", "MIN", "AVG", "COUNT", "SUM"];
+    public mApplyTokens: string[] = ["MAX", "MIN", "AVG", "SUM"];
 
     constructor() {
         Log.trace("InsightFacadeImpl::init()");
@@ -158,30 +159,29 @@ export default class ValidationHelper {
             if (applyTargetKeyArr.length !== 2) {
                 return false;
             }
-
             if (typeof applyTargetKey !== "string") {
                 return false;
             }
-
             if (applyTargetKey === undefined || applyTargetKey === null) {
                 return false;
             }
-
             if (!applyTargetKey.includes("_")) {
                 return false;
             }
-
             let splitKey = applyTargetKey.split("_");
             let id = splitKey[0];
             let smfield = splitKey[1];
             if (splitKey.length !== 2) {
                 return false;
             }
-
             if (!this.sfields.includes(smfield) && (!this.mfields.includes(smfield))) {
                 return false;
             }
-
+            if (this.mApplyTokens.includes(applyToken)) {
+                if (!this.mfields.includes(smfield)) {
+                    return false;
+                }
+            }
             if (!performQueryDatasetIds.includes(id)) {
                 performQueryDatasetIds.push(id);
             }

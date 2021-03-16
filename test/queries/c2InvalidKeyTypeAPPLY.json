@@ -1,0 +1,66 @@
+{
+    "title": "Invalid -- string in computing average (APPLY key type)",
+    "query": {
+        "WHERE": {
+            "EQ": {
+                "courses_pass": 1
+            }
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "courses_title",
+                "avgFail",
+                "avgYear",
+                "maxAudit",
+                "minAudit",
+                "countId",
+                "sumPass"
+            ],
+            "ORDER": {
+                "dir": "UP",
+                "keys": [
+                    "avgFail"
+                ]
+            }
+        },
+        "TRANSFORMATIONS": {
+            "GROUP": [
+                "courses_title"
+            ],
+            "APPLY": [
+                {
+                    "avgFail": {
+                        "AVG": "courses_dept"
+                    }
+                },
+                {
+                    "avgYear": {
+                        "AVG": "courses_year"
+                    }
+                },
+                {
+                    "maxAudit": {
+                        "MAX": "courses_audit"
+                    }
+                },
+                {
+                    "minAudit": {
+                        "MIN": "courses_audit"
+                    }
+                },
+                {
+                    "countId": {
+                        "COUNT": "courses_id"
+                    }
+                },
+                {
+                    "sumPass": {
+                        "SUM": "courses_pass"
+                    }
+                }
+            ]
+        }
+    },
+    "isQueryValid": false,
+    "result": "InsightError"
+}

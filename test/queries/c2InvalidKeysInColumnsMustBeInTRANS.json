@@ -1,0 +1,40 @@
+{
+    "title": "Invalid -- Keys in COLUMNS must be in GROUP or APPLY when TRANSFORMATIONS is present",
+    "query": {
+        "WHERE": {
+            "LT": {
+                "courses_fail": 50
+            }
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "courses_id",
+                "courses_dept",
+                "courses_fail",
+                "sumAvg"
+            ],
+            "ORDER": {
+                "dir": "UP",
+                "keys": [
+                    "sumAvg",
+                    "courses_fail"
+                ]
+            }
+        },
+        "TRANSFORMATIONS": {
+            "GROUP": [
+                "courses_dept",
+                "courses_id"
+            ],
+            "APPLY": [
+                {
+                    "sumAvg": {
+                        "SUM": "courses_avg"
+                    }
+                }
+            ]
+        }
+    },
+    "isQueryValid": false,
+    "result": "InsightError"
+}

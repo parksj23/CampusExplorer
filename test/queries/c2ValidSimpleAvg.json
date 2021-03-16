@@ -1,0 +1,43 @@
+{
+    "title": "Valid -- Simple SELECT Average",
+    "query": {
+        "WHERE": {
+            "EQ": {
+                "courses_avg": 97
+            }
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "courses_instructor",
+                "countFail"
+            ]
+        },
+        "TRANSFORMATIONS": {
+            "GROUP": [
+                "courses_instructor"
+            ],
+            "APPLY": [
+                {
+                    "countFail": {
+                        "COUNT": "courses_fail"
+                    }
+                }
+            ]
+        }
+    },
+    "isQueryValid": true,
+    "result": [
+        {
+            "courses_instructor": "campbell, deborah",
+            "countFail": 1
+        },
+        {
+            "courses_instructor": "amaral, deborah;ford, laurie",
+            "countFail": 1
+        },
+        {
+            "courses_instructor": "",
+            "countFail": 1
+        }
+    ]
+}

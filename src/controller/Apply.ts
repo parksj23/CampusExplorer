@@ -206,23 +206,13 @@ export default class Apply {
             }
             // figure out avg according to ebnf
             let total = new Decimal(0);
-            let x = new Decimal(total);
-            let totalValue = total["d"][0];
             for (let val of temp) {
                 let newVal = new Decimal(val);
-                total.add(newVal);
+                let t = Decimal.add(total, newVal);
+                total = t;
             }
-            let avg = total["d"][0] / temp.length;
-            // let avg = total.toNumber() / temp.length;
+            let avg = total.toNumber() / temp.length;
             avg = Number(avg.toFixed(2));
-            // TODO: fix AVG
-            // let sum = 0;
-            // let avg = 0;
-            // temp.forEach((val) => {
-            //     sum = sum + val;
-            // });
-            // avg = sum / temp.length;
-            // avg = Number(avg.toFixed(2));
 
             newGroup["key"] = group["key"];
             newGroup["arr"] = group["arr"];

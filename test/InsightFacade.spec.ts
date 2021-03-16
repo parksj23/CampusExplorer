@@ -666,6 +666,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
         const removeResult: Promise<string> = insightFacade.removeDataset(id);
         return expect(removeResult).to.be.rejectedWith(NotFoundError);
     });
+
     it("c2- should remove a valid dataset that exists -- rooms type", function () {
         // this.timeout(10000);
         const id = "rooms";
@@ -677,6 +678,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
             return expect(removeResult).to.eventually.deep.equal(removeExpected);
         });
     });
+
     it("c2- Should remove a dataset with id that starts with whitespaces -- rooms type", function () {
         const id = "   rooms";
         const expected = [id];
@@ -689,6 +691,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
                 return expect(removeResult).to.eventually.deep.equal(removeExpected);
             });
     });
+
     it("c2- Should remove a dataset with id of whitespaces in the middle -- rooms type", function () {
         const id = "r    oo    m     s";
         const expected = [id];
@@ -701,6 +704,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
                 return expect(removeResult).to.eventually.deep.equal(removeExpected);
             });
     });
+
     it("c2- Should remove a dataset with id that ends with whitespace -- rooms type", function () {
         const id = "rooms    ";
         const expected = [id];
@@ -713,11 +717,13 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
                 return expect(removeResult).to.eventually.deep.equal(removeExpected);
             });
     });
+
     it("c2- Fail to remove a dataset that does not exist -- rooms type", function () {
         const id = "rooms";
         const futureResult = insightFacade.removeDataset(id);
         return expect(futureResult).to.be.rejectedWith(NotFoundError);
     });
+
     it("c2- Fail to remove a dataset -- add and remove diff id's -- rooms type", function () {
         this.timeout(10000);
         const id1 = "rooms";
@@ -731,6 +737,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
                 return expect(future2).to.be.rejectedWith(NotFoundError);
             });
     });
+
     it("c2- Fail to remove a dataset -- underscore id -- rooms type", function () {
         const validID = "rooms";
         const invalidID = "rooms_underscore";
@@ -743,6 +750,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
                 return expect(future2).to.be.rejectedWith(InsightError);
             });
     });
+
     it("c2- Fail to remove a dataset -- whitespace id -- rooms type", function () {
         const validID = "rooms";
         const invalidID = "     ";
@@ -755,6 +763,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
                 return expect(future2).to.be.rejectedWith(InsightError);
             });
     });
+
     it("c2- Fail to remove a dataset null id -- rooms type", function () {
         const validID = "rooms";
         const invalidID: string = null;
@@ -767,6 +776,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
                 return expect(future2).to.be.rejectedWith(InsightError);
             });
     });
+
     it("c2- Fail to remove a dataset empty string id -- rooms type", function () {
         const validID = "rooms";
         const invalidID = "";
@@ -911,7 +921,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
         const futureResult = insightFacade.listDatasets();
         return expect(futureResult).to.eventually.deep.equal(expected);
     });
-  
+
     it("c2- Should return empty array after removing the last dataset -- rooms type", function () {
         let id = "rooms";
         const expected = [];
@@ -928,7 +938,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
             });
         });
     });
-  
+
     it("c2- Should return array of 1 dataset -- 1 add -- rooms type", function () {
         this.timeout(10000);
         let id = "rooms";
@@ -944,7 +954,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
             });
         });
     });
-  
+
     it("c2- Should return array of 1 dataset -- 2 add, 1 remove", function () {
         let id1 = "rooms";
         let id2 = "oneValidRoom";
@@ -980,7 +990,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
                     });
             });
     });
-  
+
     it("c2- Should return array of 1 dataset with 1 section -- rooms type", function () {
         let id = "oneValidRoom";
         const expectedString = [id];
@@ -994,7 +1004,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
             });
         });
     });
-  
+
     it("c2- Should return array of 2 datasets -- 2 rooms", function () {
         this.timeout(10000);
         let id1 = "rooms";
@@ -1021,7 +1031,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
                     });
             });
     });
-  
+
     it("c2- Should return array of 2 datasets -- 1 room, 1 course", function () {
         this.timeout(10000);
         let id1 = "rooms";

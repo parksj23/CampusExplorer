@@ -1,0 +1,292 @@
+{
+    "title": "Valid -- Simple SELECT Course Title",
+    "query": {
+        "WHERE": {
+            "IS": {
+                "courses_title": "korean cinema"
+            }
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "courses_dept",
+                "courses_id",
+                "courses_avg",
+                "courses_instructor",
+                "courses_title",
+                "courses_pass",
+                "courses_fail",
+                "courses_audit",
+                "courses_uuid",
+                "courses_year"
+            ],
+            "ORDER": "courses_avg"
+        }
+    },
+    "isQueryValid": true,
+    "result": [
+        {
+            "courses_dept": "asia",
+            "courses_id": "356",
+            "courses_avg": 73.3,
+            "courses_instructor": "",
+            "courses_title": "korean cinema",
+            "courses_pass": 88,
+            "courses_fail": 1,
+            "courses_audit": 0,
+            "courses_uuid": "32193",
+            "courses_year": 1900
+        },
+        {
+            "courses_dept": "asia",
+            "courses_id": "356",
+            "courses_avg": 73.3,
+            "courses_instructor": "citizen, robyn",
+            "courses_title": "korean cinema",
+            "courses_pass": 88,
+            "courses_fail": 1,
+            "courses_audit": 0,
+            "courses_uuid": "32192",
+            "courses_year": 2012
+        },
+        {
+            "courses_dept": "asia",
+            "courses_id": "356",
+            "courses_avg": 73.53,
+            "courses_instructor": "",
+            "courses_title": "korean cinema",
+            "courses_pass": 61,
+            "courses_fail": 1,
+            "courses_audit": 0,
+            "courses_uuid": "93143",
+            "courses_year": 1900
+        },
+        {
+            "courses_dept": "asia",
+            "courses_id": "356",
+            "courses_avg": 73.53,
+            "courses_instructor": "citizen, robyn",
+            "courses_title": "korean cinema",
+            "courses_pass": 61,
+            "courses_fail": 1,
+            "courses_audit": 0,
+            "courses_uuid": "93142",
+            "courses_year": 2013
+        },
+        {
+            "courses_dept": "asia",
+            "courses_id": "356",
+            "courses_avg": 73.84,
+            "courses_instructor": "",
+            "courses_title": "korean cinema",
+            "courses_pass": 69,
+            "courses_fail": 0,
+            "courses_audit": 0,
+            "courses_uuid": "26510",
+            "courses_year": 1900
+        },
+        {
+            "courses_dept": "asia",
+            "courses_id": "356",
+            "courses_avg": 73.84,
+            "courses_instructor": "",
+            "courses_title": "korean cinema",
+            "courses_pass": 69,
+            "courses_fail": 0,
+            "courses_audit": 0,
+            "courses_uuid": "26509",
+            "courses_year": 2008
+        },
+        {
+            "courses_dept": "asia",
+            "courses_id": "356",
+            "courses_avg": 74.7,
+            "courses_instructor": "",
+            "courses_title": "korean cinema",
+            "courses_pass": 42,
+            "courses_fail": 2,
+            "courses_audit": 1,
+            "courses_uuid": "39458",
+            "courses_year": 1900
+        },
+        {
+            "courses_dept": "asia",
+            "courses_id": "356",
+            "courses_avg": 74.7,
+            "courses_instructor": "citizen, robyn",
+            "courses_title": "korean cinema",
+            "courses_pass": 42,
+            "courses_fail": 2,
+            "courses_audit": 1,
+            "courses_uuid": "39457",
+            "courses_year": 2015
+        },
+        {
+            "courses_dept": "asia",
+            "courses_id": "356",
+            "courses_avg": 75.3,
+            "courses_instructor": "",
+            "courses_title": "korean cinema",
+            "courses_pass": 104,
+            "courses_fail": 0,
+            "courses_audit": 0,
+            "courses_uuid": "74607",
+            "courses_year": 1900
+        },
+        {
+            "courses_dept": "asia",
+            "courses_id": "356",
+            "courses_avg": 75.3,
+            "courses_instructor": "shin, eurie",
+            "courses_title": "korean cinema",
+            "courses_pass": 104,
+            "courses_fail": 0,
+            "courses_audit": 0,
+            "courses_uuid": "74606",
+            "courses_year": 2010
+        },
+        {
+            "courses_dept": "asia",
+            "courses_id": "356",
+            "courses_avg": 75.64,
+            "courses_instructor": "",
+            "courses_title": "korean cinema",
+            "courses_pass": 89,
+            "courses_fail": 2,
+            "courses_audit": 2,
+            "courses_uuid": "94611",
+            "courses_year": 1900
+        },
+        {
+            "courses_dept": "asia",
+            "courses_id": "356",
+            "courses_avg": 75.64,
+            "courses_instructor": "shin, eurie",
+            "courses_title": "korean cinema",
+            "courses_pass": 89,
+            "courses_fail": 2,
+            "courses_audit": 2,
+            "courses_uuid": "94610",
+            "courses_year": 2009
+        },
+        {
+            "courses_dept": "asia",
+            "courses_id": "356",
+            "courses_avg": 75.76,
+            "courses_instructor": "",
+            "courses_title": "korean cinema",
+            "courses_pass": 68,
+            "courses_fail": 3,
+            "courses_audit": 0,
+            "courses_uuid": "46819",
+            "courses_year": 1900
+        },
+        {
+            "courses_dept": "asia",
+            "courses_id": "356",
+            "courses_avg": 75.76,
+            "courses_instructor": "citizen, robyn",
+            "courses_title": "korean cinema",
+            "courses_pass": 68,
+            "courses_fail": 3,
+            "courses_audit": 0,
+            "courses_uuid": "46818",
+            "courses_year": 2014
+        },
+        {
+            "courses_dept": "asia",
+            "courses_id": "356",
+            "courses_avg": 76.55,
+            "courses_instructor": "",
+            "courses_title": "korean cinema",
+            "courses_pass": 84,
+            "courses_fail": 1,
+            "courses_audit": 0,
+            "courses_uuid": "26003",
+            "courses_year": 1900
+        },
+        {
+            "courses_dept": "asia",
+            "courses_id": "356",
+            "courses_avg": 76.55,
+            "courses_instructor": "shin, eurie",
+            "courses_title": "korean cinema",
+            "courses_pass": 84,
+            "courses_fail": 1,
+            "courses_audit": 0,
+            "courses_uuid": "26002",
+            "courses_year": 2011
+        },
+        {
+            "courses_dept": "asia",
+            "courses_id": "356",
+            "courses_avg": 77.04,
+            "courses_instructor": "",
+            "courses_title": "korean cinema",
+            "courses_pass": 47,
+            "courses_fail": 2,
+            "courses_audit": 0,
+            "courses_uuid": "4471",
+            "courses_year": 1900
+        },
+        {
+            "courses_dept": "asia",
+            "courses_id": "356",
+            "courses_avg": 77.04,
+            "courses_instructor": "citizen, robyn",
+            "courses_title": "korean cinema",
+            "courses_pass": 47,
+            "courses_fail": 2,
+            "courses_audit": 0,
+            "courses_uuid": "4470",
+            "courses_year": 2013
+        },
+        {
+            "courses_dept": "asia",
+            "courses_id": "356",
+            "courses_avg": 78.75,
+            "courses_instructor": "",
+            "courses_title": "korean cinema",
+            "courses_pass": 40,
+            "courses_fail": 0,
+            "courses_audit": 0,
+            "courses_uuid": "40205",
+            "courses_year": 1900
+        },
+        {
+            "courses_dept": "asia",
+            "courses_id": "356",
+            "courses_avg": 78.75,
+            "courses_instructor": "citizen, robyn",
+            "courses_title": "korean cinema",
+            "courses_pass": 40,
+            "courses_fail": 0,
+            "courses_audit": 0,
+            "courses_uuid": "40204",
+            "courses_year": 2014
+        },
+        {
+            "courses_dept": "asia",
+            "courses_id": "356",
+            "courses_avg": 80.59,
+            "courses_instructor": "",
+            "courses_title": "korean cinema",
+            "courses_pass": 44,
+            "courses_fail": 0,
+            "courses_audit": 0,
+            "courses_uuid": "64176",
+            "courses_year": 1900
+        },
+        {
+            "courses_dept": "asia",
+            "courses_id": "356",
+            "courses_avg": 80.59,
+            "courses_instructor": "shin, eurie",
+            "courses_title": "korean cinema",
+            "courses_pass": 44,
+            "courses_fail": 0,
+            "courses_audit": 0,
+            "courses_uuid": "64175",
+            "courses_year": 2010
+        }
+    ]
+}

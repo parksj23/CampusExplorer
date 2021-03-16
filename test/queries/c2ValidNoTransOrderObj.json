@@ -1,0 +1,45 @@
+{
+    "title": "Valid -- No transformation, order object",
+    "query": {
+        "WHERE": {
+            "EQ": {
+                "courses_avg": 91.3
+            }
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "courses_dept",
+                "courses_year"
+            ],
+            "ORDER": {
+                "dir": "UP",
+                "keys": [
+                    "courses_year"
+                ]
+            }
+        }
+    },
+    "isQueryValid": true,
+    "result": [
+        {
+            "courses_dept": "kin",
+            "courses_year": 1900
+        },
+        {
+            "courses_dept": "educ",
+            "courses_year": 2008
+        },
+        {
+            "courses_dept": "etec",
+            "courses_year": 2012
+        },
+        {
+            "courses_dept": "kin",
+            "courses_year": 2012
+        },
+        {
+            "courses_dept": "dhyg",
+            "courses_year": 2013
+        }
+    ]
+}

@@ -1,0 +1,20 @@
+{
+    "title": "invalid-- missing underscore idstring",
+    "query": {
+        "WHERE": {
+            "EQ": {
+                "year": 2013
+            }
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "dept",
+                "id",
+                "avg"
+            ],
+            "ORDER": "avg"
+        }
+    },
+    "isQueryValid": false,
+    "result": "InsightError"
+}

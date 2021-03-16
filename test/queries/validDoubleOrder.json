@@ -1,0 +1,108 @@
+{
+    "title": "Valid -- double ORDER block",
+    "query": {
+        "WHERE": {
+            "LT": {
+                "courses_avg": 40
+            }
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "courses_dept",
+                "courses_id",
+                "courses_avg",
+                "courses_instructor",
+                "courses_title"
+            ],
+            "ORDER": "courses_avg",
+            "ORDER": "courses_dept"
+        }
+    },
+    "isQueryValid": true,
+    "result": [
+        {
+            "courses_dept": "busi",
+            "courses_id": "330",
+            "courses_avg": 4,
+            "courses_instructor": "",
+            "courses_title": "found re apprai"
+        },
+        {
+            "courses_dept": "busi",
+            "courses_id": "330",
+            "courses_avg": 4,
+            "courses_instructor": "",
+            "courses_title": "found re apprai"
+        },
+        {
+            "courses_dept": "civl",
+            "courses_id": "403",
+            "courses_avg": 33,
+            "courses_instructor": "",
+            "courses_title": "engr econ anlys"
+        },
+        {
+            "courses_dept": "educ",
+            "courses_id": "172",
+            "courses_avg": 39.03,
+            "courses_instructor": "",
+            "courses_title": "language & curr"
+        },
+        {
+            "courses_dept": "educ",
+            "courses_id": "172",
+            "courses_avg": 39.03,
+            "courses_instructor": "james, kedrick",
+            "courses_title": "language & curr"
+        },
+        {
+            "courses_dept": "fopr",
+            "courses_id": "362",
+            "courses_avg": 4.5,
+            "courses_instructor": "bendickson, dennis",
+            "courses_title": "sustnbt&frst ops"
+        },
+        {
+            "courses_dept": "frst",
+            "courses_id": "202",
+            "courses_avg": 0,
+            "courses_instructor": "",
+            "courses_title": "forest ecology"
+        },
+        {
+            "courses_dept": "hist",
+            "courses_id": "102",
+            "courses_avg": 34,
+            "courses_instructor": "gossen, david",
+            "courses_title": "hist 1500 - 20 c"
+        },
+        {
+            "courses_dept": "lfs",
+            "courses_id": "100",
+            "courses_avg": 0,
+            "courses_instructor": "",
+            "courses_title": "in land food com"
+        },
+        {
+            "courses_dept": "lfs",
+            "courses_id": "100",
+            "courses_avg": 0,
+            "courses_instructor": "",
+            "courses_title": "in land food com"
+        },
+        {
+            "courses_dept": "phil",
+            "courses_id": "120",
+            "courses_avg": 33.2,
+            "courses_instructor": "",
+            "courses_title": "log & crit think"
+        },
+        {
+            "courses_dept": "wood",
+            "courses_id": "475",
+            "courses_avg": 1,
+            "courses_instructor": "",
+            "courses_title": "prpty,ident&uses"
+        }
+    ]
+}

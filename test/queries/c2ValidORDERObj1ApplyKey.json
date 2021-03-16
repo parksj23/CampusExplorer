@@ -1,0 +1,89 @@
+{
+    "title": "Valid -- ORDER object has 1 applykey",
+    "query": {
+        "WHERE": {
+            "IS": {
+                "courses_dept": "crwr"
+            }
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "courses_title",
+                "countFail"
+            ],
+            "ORDER": {
+                "dir": "DOWN",
+                "keys": [
+                    "countFail"
+                ]
+            }
+        },
+        "TRANSFORMATIONS": {
+            "GROUP": [
+                "courses_title"
+            ],
+            "APPLY": [
+                {
+                    "countFail": {
+                        "COUNT": "courses_fail"
+                    }
+                }
+            ]
+        }
+    },
+    "isQueryValid": true,
+    "result": [
+        {
+            "courses_title": "intr cr writing",
+            "countFail": 15
+        },
+        {
+            "courses_title": "child & yng adlt",
+            "countFail": 7
+        },
+        {
+            "courses_title": "intr writ nw med",
+            "countFail": 7
+        },
+        {
+            "courses_title": "intr crtv nonfic",
+            "countFail": 6
+        },
+        {
+            "courses_title": "intr writ fictin",
+            "countFail": 6
+        },
+        {
+            "courses_title": "intr wrt screen",
+            "countFail": 5
+        },
+        {
+            "courses_title": "intr writ poetry",
+            "countFail": 4
+        },
+        {
+            "courses_title": "intr graph forms",
+            "countFail": 4
+        },
+        {
+            "courses_title": "intr writ comdic",
+            "countFail": 4
+        },
+        {
+            "courses_title": "intr scrnplay i",
+            "countFail": 3
+        },
+        {
+            "courses_title": "intr graph novel",
+            "countFail": 2
+        },
+        {
+            "courses_title": "prep writ career",
+            "countFail": 1
+        },
+        {
+            "courses_title": "thesis",
+            "countFail": 1
+        }
+    ]
+}

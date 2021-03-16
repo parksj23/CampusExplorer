@@ -1,0 +1,43 @@
+{
+    "title": "Invalid -- Cannot query more than one dataset",
+    "query": {
+        "WHERE": {
+            "IS": {
+                "rooms_type": "Studio Lab"
+            }
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "rooms_shortname",
+                "rooms_seats",
+                "rooms_type",
+                "courses_type"
+            ],
+            "ORDER": {
+                "dir": "UP",
+                "keys": [
+                    "rooms_shortname"
+                ]
+            }
+        },
+        "TRANSFORMATIONS": {
+            "GROUP": [
+                "rooms_shortname",
+                "rooms_seats",
+                "rooms_furniture",
+                "rooms_type",
+                "rooms_name",
+                "rooms_href"
+            ],
+            "APPLY": [
+                {
+                    "maxLat": {
+                        "MAX": "rooms_lat"
+                    }
+                }
+            ]
+        }
+    },
+    "isQueryValid": false,
+    "result": "InsightError"
+}

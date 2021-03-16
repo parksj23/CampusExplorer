@@ -1,0 +1,533 @@
+{
+    "title": "Valid -- Simple SELECT rooms_type -- *input*",
+    "query": {
+        "WHERE": {
+            "IS": {
+                "rooms_type": "*n*"
+            }
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "rooms_shortname",
+                "rooms_seats",
+                "rooms_type"
+            ],
+            "ORDER": {
+                "dir": "UP",
+                "keys": [
+                    "rooms_shortname"
+                ]
+            }
+        },
+        "TRANSFORMATIONS": {
+            "GROUP": [
+                "rooms_shortname",
+                "rooms_seats",
+                "rooms_furniture",
+                "rooms_type",
+                "rooms_name",
+                "rooms_href"
+            ],
+            "APPLY": [
+                {
+                    "maxLat": {
+                        "MAX": "rooms_lat"
+                    }
+                }
+            ]
+        }
+    },
+    "isQueryValid": true,
+    "result": [
+        {
+            "rooms_shortname": "ALRD",
+            "rooms_seats": 20,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "ALRD",
+            "rooms_seats": 20,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "ALRD",
+            "rooms_seats": 44,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "ANGU",
+            "rooms_seats": 80,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "ANGU",
+            "rooms_seats": 54,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "ANGU",
+            "rooms_seats": 54,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "ANGU",
+            "rooms_seats": 37,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "ANGU",
+            "rooms_seats": 16,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "ANGU",
+            "rooms_seats": 53,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "ANGU",
+            "rooms_seats": 32,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "ANSO",
+            "rooms_seats": 90,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "BRKX",
+            "rooms_seats": 24,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "BUCH",
+            "rooms_seats": 42,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "BUCH",
+            "rooms_seats": 26,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "BUCH",
+            "rooms_seats": 40,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "BUCH",
+            "rooms_seats": 48,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "BUCH",
+            "rooms_seats": 40,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "BUCH",
+            "rooms_seats": 40,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "BUCH",
+            "rooms_seats": 24,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "BUCH",
+            "rooms_seats": 40,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "BUCH",
+            "rooms_seats": 40,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "BUCH",
+            "rooms_seats": 40,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "BUCH",
+            "rooms_seats": 40,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "BUCH",
+            "rooms_seats": 40,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "BUCH",
+            "rooms_seats": 40,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "BUCH",
+            "rooms_seats": 40,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "BUCH",
+            "rooms_seats": 40,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "BUCH",
+            "rooms_seats": 50,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "BUCH",
+            "rooms_seats": 50,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "BUCH",
+            "rooms_seats": 50,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "CHBE",
+            "rooms_seats": 60,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "EOSM",
+            "rooms_seats": 50,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "FNH",
+            "rooms_seats": 54,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "FNH",
+            "rooms_seats": 43,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "FORW",
+            "rooms_seats": 63,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "GEOG",
+            "rooms_seats": 60,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "GEOG",
+            "rooms_seats": 60,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "GEOG",
+            "rooms_seats": 100,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "GEOG",
+            "rooms_seats": 42,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "GEOG",
+            "rooms_seats": 72,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "HEBB",
+            "rooms_seats": 54,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "HEBB",
+            "rooms_seats": 54,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "HEBB",
+            "rooms_seats": 54,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "IBLC",
+            "rooms_seats": 112,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "IONA",
+            "rooms_seats": 50,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "LASR",
+            "rooms_seats": 51,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "LSK",
+            "rooms_seats": 75,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "LSK",
+            "rooms_seats": 42,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "MATH",
+            "rooms_seats": 48,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "MATH",
+            "rooms_seats": 30,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "MATH",
+            "rooms_seats": 48,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "MATH",
+            "rooms_seats": 30,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "MCLD",
+            "rooms_seats": 60,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "MCLD",
+            "rooms_seats": 60,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "MCLD",
+            "rooms_seats": 84,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "MCML",
+            "rooms_seats": 47,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "MGYM",
+            "rooms_seats": 25,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "MGYM",
+            "rooms_seats": 40,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "ORCH",
+            "rooms_seats": 72,
+            "rooms_type": "Active Learning"
+        },
+        {
+            "rooms_shortname": "ORCH",
+            "rooms_seats": 25,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "ORCH",
+            "rooms_seats": 25,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "ORCH",
+            "rooms_seats": 25,
+            "rooms_type": "Active Learning"
+        },
+        {
+            "rooms_shortname": "ORCH",
+            "rooms_seats": 25,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "ORCH",
+            "rooms_seats": 25,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "ORCH",
+            "rooms_seats": 16,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "ORCH",
+            "rooms_seats": 16,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "ORCH",
+            "rooms_seats": 16,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "ORCH",
+            "rooms_seats": 72,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "ORCH",
+            "rooms_seats": 25,
+            "rooms_type": "Active Learning"
+        },
+        {
+            "rooms_shortname": "ORCH",
+            "rooms_seats": 25,
+            "rooms_type": "Active Learning"
+        },
+        {
+            "rooms_shortname": "ORCH",
+            "rooms_seats": 25,
+            "rooms_type": "Active Learning"
+        },
+        {
+            "rooms_shortname": "ORCH",
+            "rooms_seats": 48,
+            "rooms_type": "Active Learning"
+        },
+        {
+            "rooms_shortname": "ORCH",
+            "rooms_seats": 25,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "ORCH",
+            "rooms_seats": 25,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "ORCH",
+            "rooms_seats": 16,
+            "rooms_type": "Active Learning"
+        },
+        {
+            "rooms_shortname": "ORCH",
+            "rooms_seats": 16,
+            "rooms_type": "Active Learning"
+        },
+        {
+            "rooms_shortname": "ORCH",
+            "rooms_seats": 20,
+            "rooms_type": "Active Learning"
+        },
+        {
+            "rooms_shortname": "OSBO",
+            "rooms_seats": 442,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "PCOH",
+            "rooms_seats": 40,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "PCOH",
+            "rooms_seats": 40,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "PCOH",
+            "rooms_seats": 40,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "PHRM",
+            "rooms_seats": 72,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "SOWK",
+            "rooms_seats": 68,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "SOWK",
+            "rooms_seats": 29,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "SOWK",
+            "rooms_seats": 29,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "SOWK",
+            "rooms_seats": 31,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "SPPH",
+            "rooms_seats": 66,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "SWNG",
+            "rooms_seats": 47,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "SWNG",
+            "rooms_seats": 47,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "SWNG",
+            "rooms_seats": 47,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "SWNG",
+            "rooms_seats": 47,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "SWNG",
+            "rooms_seats": 47,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "SWNG",
+            "rooms_seats": 47,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "SWNG",
+            "rooms_seats": 47,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "SWNG",
+            "rooms_seats": 47,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "SWNG",
+            "rooms_seats": 47,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "UCLL",
+            "rooms_seats": 55,
+            "rooms_type": "Open Design General Purpose"
+        },
+        {
+            "rooms_shortname": "UCLL",
+            "rooms_seats": 48,
+            "rooms_type": "Open Design General Purpose"
+        }
+    ]
+}

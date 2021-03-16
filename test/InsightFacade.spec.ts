@@ -904,11 +904,14 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
                     });
             });
     });
+    // TODO: SP -- comment out above
+  
     it("c2- Should return empty array -- no datasets added -- rooms type", function () {
         const expected: InsightDataset[] = [];
         const futureResult = insightFacade.listDatasets();
         return expect(futureResult).to.eventually.deep.equal(expected);
     });
+  
     it("c2- Should return empty array after removing the last dataset -- rooms type", function () {
         let id = "rooms";
         const expected = [];
@@ -925,6 +928,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
             });
         });
     });
+  
     it("c2- Should return array of 1 dataset -- 1 add -- rooms type", function () {
         this.timeout(10000);
         let id = "rooms";
@@ -940,6 +944,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
             });
         });
     });
+  
     it("c2- Should return array of 1 dataset -- 2 add, 1 remove", function () {
         let id1 = "rooms";
         let id2 = "oneValidRoom";
@@ -975,6 +980,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
                     });
             });
     });
+  
     it("c2- Should return array of 1 dataset with 1 section -- rooms type", function () {
         let id = "oneValidRoom";
         const expectedString = [id];
@@ -988,6 +994,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
             });
         });
     });
+  
     it("c2- Should return array of 2 datasets -- 2 rooms", function () {
         this.timeout(10000);
         let id1 = "rooms";
@@ -1014,6 +1021,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
                     });
             });
     });
+  
     it("c2- Should return array of 2 datasets -- 1 room, 1 course", function () {
         this.timeout(10000);
         let id1 = "rooms";
@@ -1050,8 +1058,6 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
             return expect(futureResult).to.eventually.deep.equal(expected);
         });
     });
-
-    // TODO: uncomment out all the tests above this line
 });
 /*
  * This test suite dynamically generates tests from the JSON files in test/queries.

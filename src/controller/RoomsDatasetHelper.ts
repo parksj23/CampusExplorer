@@ -1,14 +1,15 @@
 import {InsightDataset, InsightDatasetKind, InsightError} from "./IInsightFacade";
 import Log from "../Util";
-import Dataset from "./Dataset";
 import * as JSZip from "jszip";
 import GeoResponse from "./GeoResponse";
 import {JSZipObject} from "jszip";
+import FindRoomFields from "./FindRoomFields";
 
 const parse5 = require("parse5");
 
 export default class RoomsDatasetHelper {
     public datasets: InsightDataset[] = [];
+    public fields = new FindRoomFields();
 
     public constructor() {
         Log.trace("InsightFacadeImpl::init()");
@@ -37,216 +38,73 @@ export default class RoomsDatasetHelper {
         // let address: string = "nothing found";
         return new Promise((resolve, reject) => {
             this.getHTMLString(fileContent).then(this.parseHTML).then((parsedHTML) => {
-                let address: string = (this.findAddress(parsedHTML)).trim();
+                let address: string = (this.fields.findAddress(parsedHTML)).trim();
                 return resolve(address);
             });
         });
     }
 
-    private findAddress(element: any): string {
-        if (element.nodeName === "td" && element.attrs[0].value === "views-field views-field-field-building-address") {
-            return element.childNodes[0].value;
-        }
-        if (element.childNodes && element.childNodes.length > 0) {
-            for (let child of element.childNodes) {
-                let possibleAddress = this.findAddress(child);
-                if (!(possibleAddress === "")) {
-                    return possibleAddress;
-                }
-            }
-        }
-        return "";
-    }
-
     public getShortName(fileContent: string) {
         return new Promise((resolve, reject) => {
             this.getHTMLString(fileContent).then(this.parseHTML).then((parsedHTML) => {
-                let shortName: string = (this.findShortName(parsedHTML)).trim();
+                let shortName: string = (this.fields.findShortName(parsedHTML)).trim();
                 return resolve(shortName);
             });
         });
     }
 
-    private findShortName(element: any): string {
-        if (element.nodeName === "td" && element.attrs[0].value === "views-field views-field-field-building-code") {
-            return element.childNodes[0].value;
-        }
-        if (element.childNodes && element.childNodes.length > 0) {
-            for (let child of element.childNodes) {
-                let possibleShortName = this.findShortName(child);
-                if (!(possibleShortName === "")) {
-                    return possibleShortName;
-                }
-            }
-        }
-        return "";
-    }
-
     public getLongName(fileContent: string) {
         return new Promise((resolve, reject) => {
             this.getHTMLString(fileContent).then(this.parseHTML).then((parsedHTML) => {
-                let longName: string = (this.findLongName(parsedHTML)).trim();
+                let longName: string = (this.fields.findLongName(parsedHTML)).trim();
                 return resolve(longName);
             });
         });
     }
 
-    private findLongName(element: any): string {
-        if (element.nodeName === "a" && element.attrs[0].name === "href"
-            && element.attrs[0].value.startsWith("./campus/discover/buildings-and-classrooms")
-            && element.childNodes[0].nodeName === "#text" ) {
-            return element.childNodes[0].value;
-        }
-        if (element.childNodes && element.childNodes.length > 0) {
-            for (let child of element.childNodes) {
-                let possibleLongName = this.findLongName(child);
-                if (!(possibleLongName === "")) {
-                    return possibleLongName;
-                }
-            }
-        }
-        return "";
-    }
-
     public getNumber(root: JSZip, shortName: string) {
         return new Promise((resolve, reject) => {
             this.getRoomHTML(root, shortName).then(this.parseHTML).then((parsedHTML) => {
-                let rNumber: string = this.findNumber(parsedHTML);
+                let rNumber: string = this.fields.findNumber(parsedHTML);
                 return resolve(rNumber);
             });
         });
     }
 
-    private findNussmber(element: any): string {
-        if  (element.nodeName === "a" && element.attrs[0].name === "href"
-            && element.attrs.length() > 0
-            && element.attrs[1].value === "Room Details") {
-            return element.childNodes[0].value;
-        }
-        if (element.childNodes && element.childNodes.length > 0) {
-            for (let child of element.childNodes) {
-                let possibleNumber = this.findNumber(child);
-                if (!(possibleNumber === "")) {
-                    return possibleNumber;
-                }
-            }
-        }
-        return "";
-    }
-
-    private findNumber(element: any): string {
-        if (element.nodeName === "a" && element.attrs[0].name === "href"
-            && element.attrs.length > 1
-            && element.attrs[1].value === "Room Details") {
-            return element.childNodes[0].value;
-        }
-        if (element.childNodes && element.childNodes.length > 0) {
-            for (let child of element.childNodes) {
-                let possibleNumber = this.findNumber(child);
-                if (!(possibleNumber === "")) {
-                    return possibleNumber;
-                }
-            }
-        }
-        return "";
-    }
-
     public getSeats(root: JSZip, shortName: string): Promise<number> {
         return new Promise((resolve, reject) => {
             this.getRoomHTML(root, shortName).then(this.parseHTML).then((parsedHTML) => {
-                let seats: number = (this.findSeats(parsedHTML));
+                let seats: number = (this.fields.findSeats(parsedHTML));
                 return resolve(seats);
             });
         });
     }
 
-    private findSeats(element: any): number {
-        if (element.nodeName === "td" && element.attrs[0].value === "views-field views-field-field-room-capacity") {
-            const numInString: string = element.childNodes[0].value;
-            const num: number = Number(numInString);
-            return num;
-        }
-        if (element.childNodes && element.childNodes.length > 0) {
-            for (let child of element.childNodes) {
-                let possibleSeats = this.findSeats(child);
-                if (possibleSeats !== -1) {
-                    return possibleSeats;
-                }
-            }
-        }
-        return -1;
-    }
-
     public getType(root: JSZip, shortName: string) {
         return new Promise((resolve, reject) => {
             this.getRoomHTML(root, shortName).then(this.parseHTML).then((parsedHTML) => {
-                let type: string = (this.findType(parsedHTML)).trim();
+                let type: string = (this.fields.findType(parsedHTML)).trim();
                 return resolve(type);
             });
         });
     }
 
-    private findType(element: any): string {
-        if  (element.nodeName === "td" && element.attrs[0].value === "views-field views-field-field-room-type" ) {
-            return element.childNodes[0].value;
-        }
-        if (element.childNodes && element.childNodes.length > 0) {
-            for (let child of element.childNodes) {
-                let possibleType = this.findType(child);
-                if (!(possibleType === "")) {
-                    return possibleType;
-                }
-            }
-        }
-        return "";
-    }
-
     public getFurniture(root: JSZip, shortName: string) {
         return new Promise((resolve, reject) => {
             this.getRoomHTML(root, shortName).then(this.parseHTML).then((parsedHTML) => {
-                let furniture: string = (this.findFurniture(parsedHTML)).trim();
+                let furniture: string = (this.fields.findFurniture(parsedHTML)).trim();
                 return resolve(furniture);
             });
         });
     }
 
-    private findFurniture(element: any): string {
-        if  (element.nodeName === "td" && element.attrs[0].value === "views-field views-field-field-room-furniture" ) {
-            return element.childNodes[0].value;
-        }
-        if (element.childNodes && element.childNodes.length > 0) {
-            for (let child of element.childNodes) {
-                let possibleFurniture = this.findFurniture(child);
-                if (!(possibleFurniture === "")) {
-                    return possibleFurniture;
-                }
-            }
-        }
-        return "";
-    }
-
     public getHref(root: JSZip, shortName: string) {
         return new Promise((resolve, reject) => {
             this.getRoomHTML(root, shortName).then(this.parseHTML).then((parsedHTML) => {
-                let href: string = (this.findHref(parsedHTML)).trim();
+                let href: string = (this.fields.findHref(parsedHTML)).trim();
                 return resolve(href);
             });
         });
-    }
-
-    private findHref(element: any): string {
-        if  (element.nodeName === "a" && element.childNodes[0].value === "More info") {
-            return element.atttrs[0].value;
-        }
-        if (element.childNodes && element.childNodes.length > 0) {
-            for (let child of element.childNodes) {
-                let possibleHref = this.findHref(child);
-                if (!(possibleHref === "")) {
-                    return possibleHref;
-                }
-            }
-        }
-        return "";
     }
 
     public getRoomHTML(root: JSZip, shortName: string): Promise<string> {

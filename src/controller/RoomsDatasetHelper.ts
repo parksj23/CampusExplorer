@@ -19,12 +19,12 @@ export default class RoomsDatasetHelper {
             let allRooms: any[] = [];
             let room: any = {};
             // TODO parse index --> I know I do that on all methods, but when i pieced it together the first time it
-            //  did not work so I put them back for now
-            // TODO get building shortName, longName, address, geoLocation
-            // TODO forEach building, get HTML file
-            // TODO get number, seats, type, furniture, href
-            // TODO put name together (string)
-            // TODO check all fields
+            let zip: JSZip = new JSZip();
+            root.file("rooms/index.htm").async("string").then(this.parseHTML).then((parsedHTML) => {
+                const hello = 1;
+            });
+            // TODO get building shortName, longName, address, geoLocation TODO forEach building, get HTML file TODO
+            //  get number, seats, type, furniture, href TODO put name together (string) TODO check all fields
             if (this.checkFieldTypeRoom(room)) {
                 // add to rooms
                 allRooms.push(room);
@@ -33,20 +33,12 @@ export default class RoomsDatasetHelper {
         });
     }
 
-    // public getHTMLForAll(fileContent: string): Promise<string> {
-    //     return new Promise((resolve, reject) => {
-    //         this.getHTMLString(fileContent).then(this.parseHTML).then((parsedHTML) => {
-    //             return parsedHTML;
-    //         });
-    //     });
-    // }
-
     public getAddress(fileContent: string): Promise<string> {
         // let address: string = "nothing found";
         return new Promise((resolve, reject) => {
             this.getHTMLString(fileContent).then(this.parseHTML).then((parsedHTML) => {
                 let address: string = (this.findAddress(parsedHTML)).trim();
-                return address;
+                return resolve(address);
             });
         });
     }
@@ -70,7 +62,7 @@ export default class RoomsDatasetHelper {
         return new Promise((resolve, reject) => {
             this.getHTMLString(fileContent).then(this.parseHTML).then((parsedHTML) => {
                 let shortName: string = (this.findShortName(parsedHTML)).trim();
-                return shortName;
+                return resolve(shortName);
             });
         });
     }
@@ -94,7 +86,7 @@ export default class RoomsDatasetHelper {
         return new Promise((resolve, reject) => {
             this.getHTMLString(fileContent).then(this.parseHTML).then((parsedHTML) => {
                 let longName: string = (this.findLongName(parsedHTML)).trim();
-                return longName;
+                return resolve(longName);
             });
         });
     }
@@ -103,7 +95,6 @@ export default class RoomsDatasetHelper {
         if (element.nodeName === "a" && element.attrs[0].name === "href"
             && element.attrs[0].value.startsWith("./campus/discover/buildings-and-classrooms")
             && element.childNodes[0].nodeName === "#text" ) {
-            // && element.attrs[0].value.startsWith("./campus/discover/buildings-and-classrooms/")) {) {
             return element.childNodes[0].value;
         }
         if (element.childNodes && element.childNodes.length > 0) {
@@ -120,17 +111,16 @@ export default class RoomsDatasetHelper {
     public getNumber(root: JSZip, shortName: string) {
         return new Promise((resolve, reject) => {
             this.getRoomHTML(root, shortName).then(this.parseHTML).then((parsedHTML) => {
-                let rNumber: string = (this.findNumber(parsedHTML)).trim();
-                return rNumber;
+                let rNumber: string = this.findNumber(parsedHTML);
+                return resolve(rNumber);
             });
         });
     }
 
-    private findNumber(element: any): string {
+    private findNussmber(element: any): string {
         if  (element.nodeName === "a" && element.attrs[0].name === "href"
-            && element.attrs.length() > 1
-            && element.attrs[0].value.startsWith("http://students.ubc.ca/campus/discover/buildings-and-classrooms/room")
-            && element.attrs[2].value === "Room Details" ) {
+            && element.attrs.length() > 0
+            && element.attrs[1].value === "Room Details") {
             return element.childNodes[0].value;
         }
         if (element.childNodes && element.childNodes.length > 0) {
@@ -144,23 +134,42 @@ export default class RoomsDatasetHelper {
         return "";
     }
 
-    public getSeats(root: JSZip, shortName: string) {
+    private findNumber(element: any): string {
+        if (element.nodeName === "a" && element.attrs[0].name === "href"
+            && element.attrs.length > 1
+            && element.attrs[1].value === "Room Details") {
+            return element.childNodes[0].value;
+        }
+        if (element.childNodes && element.childNodes.length > 0) {
+            for (let child of element.childNodes) {
+                let possibleNumber = this.findNumber(child);
+                if (!(possibleNumber === "")) {
+                    return possibleNumber;
+                }
+            }
+        }
+        return "";
+    }
+
+    public getSeats(root: JSZip, shortName: string): Promise<number> {
         return new Promise((resolve, reject) => {
             this.getRoomHTML(root, shortName).then(this.parseHTML).then((parsedHTML) => {
                 let seats: number = (this.findSeats(parsedHTML));
-                return seats;
+                return resolve(seats);
             });
         });
     }
 
     private findSeats(element: any): number {
         if (element.nodeName === "td" && element.attrs[0].value === "views-field views-field-field-room-capacity") {
-            return element.childNodes[0].value;
+            const numInString: string = element.childNodes[0].value;
+            const num: number = Number(numInString);
+            return num;
         }
         if (element.childNodes && element.childNodes.length > 0) {
             for (let child of element.childNodes) {
                 let possibleSeats = this.findSeats(child);
-                if (!(possibleSeats = -1)) {
+                if (possibleSeats !== -1) {
                     return possibleSeats;
                 }
             }
@@ -172,7 +181,7 @@ export default class RoomsDatasetHelper {
         return new Promise((resolve, reject) => {
             this.getRoomHTML(root, shortName).then(this.parseHTML).then((parsedHTML) => {
                 let type: string = (this.findType(parsedHTML)).trim();
-                return type;
+                return resolve(type);
             });
         });
     }
@@ -196,7 +205,7 @@ export default class RoomsDatasetHelper {
         return new Promise((resolve, reject) => {
             this.getRoomHTML(root, shortName).then(this.parseHTML).then((parsedHTML) => {
                 let furniture: string = (this.findFurniture(parsedHTML)).trim();
-                return furniture;
+                return resolve(furniture);
             });
         });
     }
@@ -220,7 +229,7 @@ export default class RoomsDatasetHelper {
         return new Promise((resolve, reject) => {
             this.getRoomHTML(root, shortName).then(this.parseHTML).then((parsedHTML) => {
                 let href: string = (this.findHref(parsedHTML)).trim();
-                return href;
+                return resolve(href);
             });
         });
     }
@@ -267,17 +276,9 @@ export default class RoomsDatasetHelper {
     }
 
     private getLatLong(address: string): GeoResponse {
-        return {
-            lat: 0,
-            lon: 0,
-            error: null,
-        };
+        return { lat: 0, lon: 0, error: null, };
         if (Error) {
-            return {
-                lat: null,
-                lon: null,
-                error: "error- geoLocation not found",
-            };
+            return { lat: null, lon: null, error: "error- geoLocation not found", };
         }
     }
 
@@ -291,5 +292,4 @@ export default class RoomsDatasetHelper {
         }
         return false;
     }
-
 }

@@ -3,7 +3,7 @@ import {
     InsightError,
     ResultTooLargeError
 } from "./IInsightFacade";
-import {Course} from "./Course";
+// import {Course} from "./Course";
 import InsightFacade from "./InsightFacade";
 import {split} from "ts-node";
 
@@ -29,8 +29,17 @@ export default class Order {
         let optionsKeys = Object.getOwnPropertyNames(query);
         if (optionsKeys.includes(Order.ORDER)) {
             let order = query[Order.ORDER];
-            if (typeof order === "string") { // c1 sort
-                let ascending = this.doStringOrder(order, sections);
+            if (typeof order === "string") { // if there is only 1 key in order, then we sort by that
+                let ascending = sections.sort((a: any, b: any) => {
+                    if (a[order] < b[order]) {
+                        return -1;
+                    }
+                    if (a[order] > b[order]) {
+                        return 1;
+                    } else {
+                        return 0;
+                    }
+                });
                 sections = ascending;
             }
 
@@ -50,85 +59,6 @@ export default class Order {
             //     });
             //     sections = ascending;
             // }
-
-            if (typeof order === "object") { // c2 sort
-                let sorted = this.doOrderObj(order, sections);
-                sections = sorted;
-            }
-        }
-        return sections;
-    }
-
-    private doStringOrder(order: string, sections: any[]): any[] {
-        let ascending = sections.sort((a: any, b: any) => {
-            if (a[order] < b[order]) {
-                return -1;
-            }
-            if (a[order] > b[order]) {
-                return 1;
-            } else {
-                return 0;
-            }
-        });
-        return ascending;
-    }
-
-    private doOrderObj(order: any, sections: any[]): any[] {
-        let direction = order.dir;
-        if (order.keys.length === 1) {
-            let key = order.keys[0];
-            if (direction === "UP") {
-                sections = this.doAscendingSingleKey(key, sections);
-            }
-            if (direction === "DOWN") {
-                sections = this.doDescendingSingleKey(key, sections);
-            }
-        }
-
-        if (order.keys.length > 1) {
-            sections = this.doSortMultipleKey(order, sections);
-        }
-        return sections;
-    }
-
-    private doAscendingSingleKey(key: any, sections: any[]) {
-        let ascending = sections.sort((a: any, b: any) => {
-            if (a[key] < b[key]) {
-                return -1;
-            }
-            if (a[key] > b[key]) {
-                return 1;
-            } else {
-                return 0;
-            }
-        });
-        return ascending;
-    }
-
-    private doDescendingSingleKey(key: any, sections: any[]) {
-        let descending = sections.sort((a: any, b: any) => {
-            if (a[key] > b[key]) {
-                return -1;
-            }
-            if (a[key] < b[key]) {
-                return 1;
-            } else {
-                return 0;
-            }
-        });
-        return descending;
-    }
-
-    private doSortMultipleKey(order: any, sections: any[]) {
-        let direction = order.dir;
-        for (let key of order.keys) {
-            // TODO: fix this so it only resorts if the first key is a tie
-            if (direction === "UP") {
-                sections = this.doAscendingSingleKey(key, sections);
-            }
-            if (direction === "DOWN") {
-                sections = this.doDescendingSingleKey(key, sections);
-            }
         }
         return sections;
     }

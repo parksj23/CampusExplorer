@@ -119,17 +119,54 @@ export default class Order {
         return descending;
     }
 
-    private doSortMultipleKey(order: any, sections: any[]) {
+    private doSortMultipleKey(order: any, sections: any[]): any[] {
         let direction = order.dir;
-        for (let key of order.keys) {
-            // TODO: fix this so it only resorts if the first key is a tie
-            if (direction === "UP") {
-                sections = this.doAscendingSingleKey(key, sections);
-            }
-            if (direction === "DOWN") {
-                sections = this.doDescendingSingleKey(key, sections);
-            }
+        if (direction === "UP") {
+            sections = this.doAscendingMultipleKey(order, sections);
+        }
+        if (direction === "DOWN") {
+            sections = this.doDescendingMultipleKey(order, sections);
         }
         return sections;
+    }
+
+    private doAscendingMultipleKey(order: any, sections: any[]) {
+        let keys = order.keys;
+        let firstSort = this.doAscendingSingleKey(keys[0], sections);
+        for (let i = 1; i < keys.length; i++) {
+            let ascending = firstSort.sort((a: any, b: any) => {
+                if (a[keys[i - 1]] === b[keys[i - 1]]) {
+                    if (a[keys[i]] < b[keys[i]]) {
+                        return -1;
+                    }
+                    if (a[keys[i]] > b[keys[i]]) {
+                        return 1;
+                    } else {
+                        return 0;
+                    }
+                }
+            });
+            return ascending;
+        }
+    }
+
+    private doDescendingMultipleKey(order: any, sections: any[]): any[] {
+        let keys = order.keys;
+        // let firstSort = this.doDescendingSingleKey(keys[0], sections);
+        // for (let i = 1; i < keys.length; i++) {
+        //     let key = keys[i];
+        //     let descending = sections.sort((a: any, b: any) => {
+        //         if (a[keys[i - 1]] > b[keys[i - 1]]) {
+        //             return -1;
+        //         }
+        //         if (a[key] < b[key]) {
+        //             return 1;
+        //         } else {
+        //             return 0;
+        //         }
+        //     });
+        //     return descending;
+        // }
+        return [];
     }
 }

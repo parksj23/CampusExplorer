@@ -36,9 +36,11 @@ export default class ValidationHelper {
         if (transformations === undefined || transformations === null) {
             return false;
         }
+
         if (typeof transformations !== "object") {
             return false;
         }
+
         if (transformations !== undefined || transformations !== null) {
             let transProp = Object.getOwnPropertyNames(transformations);
             if (transProp.length !== 2) {
@@ -107,27 +109,35 @@ export default class ValidationHelper {
         if (apply === undefined || apply === null) {
             return false;
         }
+
         if (!Array.isArray(apply)) {
             return false;
         }
+
         for (let applyOuterObj of apply) {
             if (typeof applyOuterObj !== "object") {
                 return false;
             }
+
             let applyKeyString = Object.getOwnPropertyNames(applyOuterObj);
             let applyKey = applyKeyString[0];
+
             if (applyKeys.includes(applyKey)) {
                 return false;
             }
+
             if (typeof applyKey !== "string") {
                 return false;
             }
+
             if (applyKey.includes("_")) {
                 return false;
             }
+
             if (applyKey.length === 0) {
                 return false;
             }
+
             if (this.applyInnerObjValidation(applyKeyString, applyOuterObj, performQueryDatasetIds)) {
                 applyKeys.push(applyKey);
             } else {

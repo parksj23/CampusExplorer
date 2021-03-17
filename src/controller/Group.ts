@@ -3,7 +3,7 @@ import {
     InsightError,
     ResultTooLargeError
 } from "./IInsightFacade";
-import {Course} from "./Course";
+// import {Course} from "./Course";
 import InsightFacade from "./InsightFacade";
 import {split} from "ts-node";
 import Log from "../Util";

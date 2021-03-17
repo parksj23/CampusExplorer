@@ -46,6 +46,10 @@ export default class DoQuery {
             let group = new Group(query[DoQuery.TRANSFORMATIONS], queriedSections);
             let groupedSections = group.doGroup(query[DoQuery.TRANSFORMATIONS], queriedSections);
 
+            if (groupedSections.length > 5000) {
+                throw new ResultTooLargeError("Result is >5000 hits.");
+            }
+
             let apply = new Apply(query[DoQuery.TRANSFORMATIONS], groupedSections);
             let applySections = apply.doApply(query[DoQuery.TRANSFORMATIONS], groupedSections);
 

@@ -119,10 +119,14 @@ export default class ValidationHelper {
                 return false;
             }
 
+            if (applyOuterObj === undefined || applyOuterObj === null) {
+                return false;
+            }
+
             let applyKeyString = Object.getOwnPropertyNames(applyOuterObj);
             let applyKey = applyKeyString[0];
 
-            if (applyKeys.includes(applyKey)) {
+            if (applyKeys.includes(applyKey)) { // check if duplicate applykeys
                 return false;
             }
 
@@ -155,6 +159,9 @@ export default class ValidationHelper {
             if (typeof applyInnerObj !== "object") {
                 return false;
             }
+            if (applyInnerObj === undefined || applyInnerObj === null) {
+                return false;
+            }
             let applyTokenString = Object.getOwnPropertyNames(applyInnerObj);
             let applyToken = applyTokenString[0];
             if (applyTokenString.length !== 1) {
@@ -169,10 +176,7 @@ export default class ValidationHelper {
             if (applyTargetKeyArr.length !== 2) {
                 return false;
             }
-            if (typeof applyTargetKey !== "string") {
-                return false;
-            }
-            if (applyTargetKey === undefined || applyTargetKey === null) {
+            if (typeof applyTargetKey !== "string" || applyTargetKey === undefined || applyTargetKey === null) {
                 return false;
             }
             if (!applyTargetKey.includes("_")) {

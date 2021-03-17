@@ -1,0 +1,52 @@
+{
+    "title": "Invalid -- ORDER key is number",
+    "query": {
+        "WHERE": {
+            "AND": [
+                {
+                    "NOT": {
+                        "GT": {
+                            "courses_avg": 70
+                        }
+                    }
+                },
+                {
+                    "IS": {
+                        "courses_dept": "engl"
+                    }
+                }
+            ]
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "courses_id",
+                "countDept",
+                "courses_year"
+            ],
+            "ORDER": {
+                "dir": 10,
+                "keys": [
+                    "courses_id",
+                    "countDept",
+                    "courses_year"
+                ]
+            }
+        },
+        "TRANSFORMATIONS": {
+            "GROUP": [
+                "courses_dept",
+                "courses_id",
+                "courses_year"
+            ],
+            "APPLY": [
+                {
+                    "countDept": {
+                        "COUNT": "courses_dept"
+                    }
+                }
+            ]
+        }
+    },
+    "isQueryValid": false,
+    "result": "InsightError"
+}

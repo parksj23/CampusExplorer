@@ -65,8 +65,14 @@ export default class InsightFacade implements IInsightFacade {
                         throw(e);
                     }
                 } else if (kind === "rooms") {
-                    // const datasetArray: any[] = this.rDataset.getDataset(root);
-                    const placeHolder = 1;
+                    try {
+                        return this.rDataset.getDataset(root).then((array) => {
+                            datasetArray = array;
+                            return datasetArray;
+                        });
+                    } catch (e) {
+                        throw(e);
+                    }
                 }
             }).then(() => {
                 if (datasetArray.length < 1) {

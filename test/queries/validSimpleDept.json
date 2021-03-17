@@ -1,0 +1,124 @@
+{
+    "title": "Valid -- Simple SELECT Dept",
+    "query": {
+        "WHERE": {
+            "IS": {
+                "courses_dept": "appp"
+            }
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "courses_dept",
+                "courses_id",
+                "courses_avg",
+                "courses_instructor",
+                "courses_title",
+                "courses_pass",
+                "courses_fail",
+                "courses_audit",
+                "courses_uuid",
+                "courses_year"
+            ],
+            "ORDER": "courses_avg"
+        }
+    },
+    "isQueryValid": true,
+    "result": [
+        {
+            "courses_dept": "appp",
+            "courses_id": "503",
+            "courses_avg": 77.99,
+            "courses_instructor": "",
+            "courses_title": "orgnztnl ldrshp",
+            "courses_pass": 69,
+            "courses_fail": 1,
+            "courses_audit": 0,
+            "courses_uuid": "61499",
+            "courses_year": 1900
+        },
+        {
+            "courses_dept": "appp",
+            "courses_id": "503",
+            "courses_avg": 77.99,
+            "courses_instructor": "prowse, robert",
+            "courses_title": "orgnztnl ldrshp",
+            "courses_pass": 69,
+            "courses_fail": 1,
+            "courses_audit": 0,
+            "courses_uuid": "61498",
+            "courses_year": 2015
+        },
+        {
+            "courses_dept": "appp",
+            "courses_id": "505",
+            "courses_avg": 78,
+            "courses_instructor": "",
+            "courses_title": "anyltcs & interp",
+            "courses_pass": 42,
+            "courses_fail": 0,
+            "courses_audit": 0,
+            "courses_uuid": "61501",
+            "courses_year": 1900
+        },
+        {
+            "courses_dept": "appp",
+            "courses_id": "505",
+            "courses_avg": 78,
+            "courses_instructor": "begg, iain",
+            "courses_title": "anyltcs & interp",
+            "courses_pass": 42,
+            "courses_fail": 0,
+            "courses_audit": 0,
+            "courses_uuid": "61500",
+            "courses_year": 2015
+        },
+        {
+            "courses_dept": "appp",
+            "courses_id": "502",
+            "courses_avg": 81.64,
+            "courses_instructor": "",
+            "courses_title": "sustn & ldrshp",
+            "courses_pass": 65,
+            "courses_fail": 2,
+            "courses_audit": 0,
+            "courses_uuid": "88042",
+            "courses_year": 1900
+        },
+        {
+            "courses_dept": "appp",
+            "courses_id": "502",
+            "courses_avg": 81.64,
+            "courses_instructor": "etmannski, tamara",
+            "courses_title": "sustn & ldrshp",
+            "courses_pass": 65,
+            "courses_fail": 2,
+            "courses_audit": 0,
+            "courses_uuid": "88041",
+            "courses_year": 2016
+        },
+        {
+            "courses_dept": "appp",
+            "courses_id": "501",
+            "courses_avg": 85.16,
+            "courses_instructor": "",
+            "courses_title": "mngmt & ldrshp",
+            "courses_pass": 70,
+            "courses_fail": 0,
+            "courses_audit": 0,
+            "courses_uuid": "61497",
+            "courses_year": 1900
+        },
+        {
+            "courses_dept": "appp",
+            "courses_id": "501",
+            "courses_avg": 85.16,
+            "courses_instructor": "page, tracy",
+            "courses_title": "mngmt & ldrshp",
+            "courses_pass": 70,
+            "courses_fail": 0,
+            "courses_audit": 0,
+            "courses_uuid": "61496",
+            "courses_year": 2015
+        }
+    ]
+}

@@ -1,0 +1,47 @@
+{
+    "title": "Invalid -- invalid transformation operator min",
+    "query": {
+        "WHERE": {
+            "AND": [
+                {
+                    "NOT": {
+                        "GT": {
+                            "courses_avg": 75
+                        }
+                    }
+                },
+                {
+                    "IS": {
+                        "courses_dept": "crwr"
+                    }
+                }
+            ]
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "courses_dept",
+                "minAvg"
+            ],
+            "ORDER": {
+                "dir": "UP",
+                "keys": [
+                    "minAvg"
+                ]
+            }
+        },
+        "TRANSFORMATIONS": {
+            "GROUP": [
+                "courses_dept"
+            ],
+            "APPLY": [
+                {
+                    "minAvg": {
+                        "min": "courses_avg"
+                    }
+                }
+            ]
+        }
+    },
+    "isQueryValid": false,
+    "result": "InsightError"
+}

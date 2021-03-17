@@ -1,0 +1,66 @@
+{
+    "title": "Valid -- Simple SELECT rooms_seats EQ with other columns",
+    "query": {
+        "WHERE": {
+            "EQ": {
+                "rooms_seats": 100
+            }
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "rooms_shortname",
+                "rooms_seats",
+                "rooms_name",
+                "rooms_type",
+                "rooms_href"
+            ],
+            "ORDER": {
+                "dir": "UP",
+                "keys": [
+                    "rooms_shortname"
+                ]
+            }
+        },
+        "TRANSFORMATIONS": {
+            "GROUP": [
+                "rooms_shortname",
+                "rooms_seats",
+                "rooms_furniture",
+                "rooms_type",
+                "rooms_name",
+                "rooms_href"
+            ],
+            "APPLY": [
+                {
+                    "maxLat": {
+                        "MAX": "rooms_lat"
+                    }
+                }
+            ]
+        }
+    },
+    "isQueryValid": true,
+    "result": [
+        {
+            "rooms_shortname": "CEME",
+            "rooms_seats": 100,
+            "rooms_name": "CEME_1202",
+            "rooms_type": "Tiered Large Group",
+            "rooms_href": "http://students.ubc.ca/campus/discover/buildings-and-classrooms/room/CEME-1202"
+        },
+        {
+            "rooms_shortname": "GEOG",
+            "rooms_seats": 100,
+            "rooms_name": "GEOG_200",
+            "rooms_type": "Open Design General Purpose",
+            "rooms_href": "http://students.ubc.ca/campus/discover/buildings-and-classrooms/room/GEOG-200"
+        },
+        {
+            "rooms_shortname": "IONA",
+            "rooms_seats": 100,
+            "rooms_name": "IONA_301",
+            "rooms_type": "Case Style",
+            "rooms_href": "http://students.ubc.ca/campus/discover/buildings-and-classrooms/room/IONA-301"
+        }
+    ]
+}

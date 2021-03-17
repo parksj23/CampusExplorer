@@ -1,0 +1,21 @@
+{
+    "title": "Invalid -- 2 inputs for IS",
+    "query": {
+        "WHERE": {
+            "IS": {
+                "courses_id": "101",
+                "courses_title": "math"
+            }
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "courses_dept",
+                "courses_id",
+                "courses_avg"
+            ],
+            "ORDER": "courses_avg"
+        }
+    },
+    "isQueryValid": false,
+    "result": "InsightError"
+}

@@ -1,0 +1,156 @@
+{
+    "title": "Valid -- Rooms SELECT Room Addr -- Input* (2)",
+    "query": {
+        "WHERE": {
+            "IS": {
+                "rooms_address": "2*"
+            }
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "rooms_fullname",
+                "maxSeats",
+                "rooms_lat",
+                "rooms_lon"
+            ],
+            "ORDER": {
+                "dir": "UP",
+                "keys": [
+                    "maxSeats",
+                    "rooms_fullname"
+                ]
+            }
+        },
+        "TRANSFORMATIONS": {
+            "GROUP": [
+                "rooms_fullname",
+                "rooms_lat",
+                "rooms_lon"
+            ],
+            "APPLY": [
+                {
+                    "maxSeats": {
+                        "MAX": "rooms_seats"
+                    }
+                }
+            ]
+        }
+    },
+    "isQueryValid": true,
+    "result": [
+        {
+            "rooms_fullname": "School of Population and Public Health",
+            "maxSeats": 66,
+            "rooms_lat": 49.2642,
+            "rooms_lon": -123.24842
+        },
+        {
+            "rooms_fullname": "Jack Bell Building for the School of Social Work",
+            "maxSeats": 68,
+            "rooms_lat": 49.2643,
+            "rooms_lon": -123.25505
+        },
+        {
+            "rooms_fullname": "Food, Nutrition and Health",
+            "maxSeats": 99,
+            "rooms_lat": 49.26414,
+            "rooms_lon": -123.24959
+        },
+        {
+            "rooms_fullname": "MacLeod",
+            "maxSeats": 136,
+            "rooms_lat": 49.26176,
+            "rooms_lon": -123.24935
+        },
+        {
+            "rooms_fullname": "Aquatic Ecosystems Research Laboratory",
+            "maxSeats": 144,
+            "rooms_lat": 49.26372,
+            "rooms_lon": -123.25099
+        },
+        {
+            "rooms_fullname": "Friedman Building",
+            "maxSeats": 160,
+            "rooms_lat": 49.26541,
+            "rooms_lon": -123.24608
+        },
+        {
+            "rooms_fullname": "West Mall Swing Space",
+            "maxSeats": 190,
+            "rooms_lat": 49.26293,
+            "rooms_lon": -123.25431
+        },
+        {
+            "rooms_fullname": "Chemical and Biological Engineering Building",
+            "maxSeats": 200,
+            "rooms_lat": 49.26228,
+            "rooms_lon": -123.24718
+        },
+        {
+            "rooms_fullname": "MacMillan",
+            "maxSeats": 200,
+            "rooms_lat": 49.26114,
+            "rooms_lon": -123.25027
+        },
+        {
+            "rooms_fullname": "Pharmaceutical Sciences Building",
+            "maxSeats": 236,
+            "rooms_lat": 49.26229,
+            "rooms_lon": -123.24342
+        },
+        {
+            "rooms_fullname": "Forest Sciences Centre",
+            "maxSeats": 250,
+            "rooms_lat": 49.26044,
+            "rooms_lon": -123.24886
+        },
+        {
+            "rooms_fullname": "Henry Angus",
+            "maxSeats": 260,
+            "rooms_lat": 49.26486,
+            "rooms_lon": -123.25364
+        },
+        {
+            "rooms_fullname": "Chemistry",
+            "maxSeats": 265,
+            "rooms_lat": 49.2659,
+            "rooms_lon": -123.25308
+        },
+        {
+            "rooms_fullname": "Neville Scarfe",
+            "maxSeats": 280,
+            "rooms_lat": 49.26398,
+            "rooms_lon": -123.2531
+        },
+        {
+            "rooms_fullname": "Earth Sciences Building",
+            "maxSeats": 350,
+            "rooms_lat": 49.26274,
+            "rooms_lon": -123.25224
+        },
+        {
+            "rooms_fullname": "Life Sciences Centre",
+            "maxSeats": 350,
+            "rooms_lat": 49.26236,
+            "rooms_lon": -123.24494
+        },
+        {
+            "rooms_fullname": "Hebb",
+            "maxSeats": 375,
+            "rooms_lat": 49.2661,
+            "rooms_lon": -123.25165
+        },
+        {
+            "rooms_fullname": "Centre for Interactive  Research on Sustainability",
+            "maxSeats": 426,
+            "rooms_lat": 49.26207,
+            "rooms_lon": -123.25314
+        },
+        {
+            "rooms_fullname": "Woodward (Instructional Resources Centre-IRC)",
+            "maxSeats": 503,
+            "rooms_lat": 49.26478,
+            "rooms_lon": -123.24673
+        }
+    ]
+}

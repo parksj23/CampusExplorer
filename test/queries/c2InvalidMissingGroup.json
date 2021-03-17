@@ -1,0 +1,36 @@
+{
+    "title": "Invalid -- TRANSFORMATIONS missing GROUP",
+    "query": {
+        "WHERE":
+        {
+            "IS": {
+                "courses_dept": "crwr"
+            }
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "courses_avg",
+                "courses_id",
+                "maxavg"
+            ],
+            "ORDER": {
+                "dir": "DOWN",
+                "keys": [
+                    "courses_avg"
+                ]
+            }
+        },
+        "TRANSFORMATIONS": {
+
+            "APPLY": [
+                {
+                    "maxavg": {
+                        "MAX": "courses_avg"
+                    }
+                }
+            ]
+        }
+    },
+    "isQueryValid": false,
+    "result": "InsightError"
+}

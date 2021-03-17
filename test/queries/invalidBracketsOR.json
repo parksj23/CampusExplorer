@@ -1,0 +1,32 @@
+{
+    "title": "Invalid -- wrong brackets for OR -- not an array",
+    "query": {
+        "WHERE": {
+            "AND": [
+                {
+                    "OR": {
+                        "GT": {
+                            "courses_avg": 75
+                        }
+                    }
+                },
+                {
+                    "EQ": {
+                        "courses_avg": 88
+                    }
+                }
+            ]
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "courses_dept",
+                "courses_id",
+                "courses_avg",
+                "courses_instructor"
+            ],
+            "ORDER": "courses_instructor"
+        }
+    },
+    "isQueryValid": false,
+    "result": "InsightError"
+}

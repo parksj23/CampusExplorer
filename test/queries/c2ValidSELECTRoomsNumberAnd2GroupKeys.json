@@ -1,0 +1,65 @@
+{
+    "title": "Valid -- Simple SELECT rooms_fullname",
+    "query": {
+        "WHERE": {
+            "IS": {
+                "rooms_number": "100"
+            }
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "rooms_fullname",
+                "minSeats",
+                "rooms_furniture"
+            ],
+            "ORDER": {
+                "dir": "UP",
+                "keys": [
+                    "minSeats",
+                    "rooms_fullname"
+                ]
+            }
+        },
+        "TRANSFORMATIONS": {
+            "GROUP": [
+                "rooms_fullname",
+                "rooms_furniture"
+            ],
+            "APPLY": [
+                {
+                    "minSeats": {
+                        "MIN": "rooms_seats"
+                    }
+                }
+            ]
+        }
+    },
+    "isQueryValid": true,
+    "result": [
+        {
+            "rooms_fullname": "Mathematics",
+            "minSeats": 224,
+            "rooms_furniture": "Classroom-Fixed Tablets"
+        },
+        {
+            "rooms_fullname": "Geography",
+            "minSeats": 225,
+            "rooms_furniture": "Classroom-Fixed Tablets"
+        },
+        {
+            "rooms_fullname": "Neville Scarfe",
+            "minSeats": 280,
+            "rooms_furniture": "Classroom-Fixed Tablets"
+        },
+        {
+            "rooms_fullname": "Wesbrook",
+            "minSeats": 325,
+            "rooms_furniture": "Classroom-Fixed Tablets"
+        },
+        {
+            "rooms_fullname": "Hebb",
+            "minSeats": 375,
+            "rooms_furniture": "Classroom-Fixed Tables/Fixed Chairs"
+        }
+    ]
+}

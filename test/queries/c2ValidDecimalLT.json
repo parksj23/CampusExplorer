@@ -1,0 +1,56 @@
+{
+    "title": "c2 valid -- double keys in Order obj",
+    "query": {
+        "WHERE": {
+            "AND": [
+                {
+                    "LT": {
+                        "courses_pass": 1.5
+                    }
+                },
+                {
+                    "IS": {
+                        "courses_dept": "engl"
+                    }
+                }
+            ]
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "courses_dept",
+                "courses_id",
+                "courses_avg",
+                "courses_instructor"
+            ],
+            "ORDER": "courses_avg"
+        }
+    },
+    "isQueryValid": true,
+    "result": [
+        {
+            "courses_dept": "engl",
+            "courses_id": "321",
+            "courses_avg": 67,
+            "courses_instructor": "bowers, sarah"
+        },
+        {
+            "courses_dept": "engl",
+            "courses_id": "321",
+            "courses_avg": 72,
+            "courses_instructor": "bowers, fred"
+        },
+        {
+            "courses_dept": "engl",
+            "courses_id": "358",
+            "courses_avg": 73,
+            "courses_instructor": "potter, tiffany"
+        },
+        {
+            "courses_dept": "engl",
+            "courses_id": "358",
+            "courses_avg": 80,
+            "courses_instructor": "potter, tiffany"
+        }
+    ]
+}
+

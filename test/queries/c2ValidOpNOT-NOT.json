@@ -1,0 +1,61 @@
+{
+    "title": "c2 valid -- NOT-NOT",
+    "query": {
+        "WHERE": {
+            "NOT": {
+                "NOT": {
+                    "LT": {
+                        "courses_avg": 10
+                    }
+                }
+            }
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "courses_dept",
+                "avgYear"
+            ],
+            "ORDER": {
+                "dir": "UP",
+                "keys": [
+                    "avgYear"
+                ]
+            }
+        },
+        "TRANSFORMATIONS": {
+            "GROUP": [
+                "courses_dept"
+            ],
+            "APPLY": [
+                {
+                    "avgYear": {
+                        "AVG": "courses_year"
+                    }
+                }
+            ]
+        }
+    },
+    "isQueryValid": true,
+    "result": [
+        {
+            "courses_dept": "frst",
+            "avgYear": 1900
+        },
+        {
+            "courses_dept": "wood",
+            "avgYear": 1900
+        },
+        {
+            "courses_dept": "lfs",
+            "avgYear": 1954.5
+        },
+        {
+            "courses_dept": "busi",
+            "avgYear": 1958
+        },
+        {
+            "courses_dept": "fopr",
+            "avgYear": 2013
+        }
+    ]
+}

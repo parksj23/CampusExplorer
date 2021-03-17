@@ -2,7 +2,6 @@ import {InsightDataset, InsightDatasetKind, InsightError} from "./IInsightFacade
 import Log from "../Util";
 
 export default class FindRoomFields {
-    public datasets: InsightDataset[] = [];
 
     public constructor() {
         Log.trace("InsightFacadeImpl::init()");

@@ -8,9 +8,6 @@ import {
     ResultTooLargeError
 } from "./IInsightFacade";
 import * as JSZip from "jszip";
-import {
-    Course,
-} from "./Course";
 import ValidateQuery from "./ValidateQuery";
 
 import DoQuery from "./DoQuery";
@@ -47,8 +44,8 @@ export default class InsightFacade implements IInsightFacade {
         kind: InsightDatasetKind,
     ): Promise<string[]> {
         return new Promise<string[]>((resolve, reject) => {
-            let promiseArray: Array<Promise<string>> = [];
             // check if id is valid
+            let datasetArray: any[] = [];
             if ((id === null) || (id === undefined) || (!id.trim().length) || (id.includes("_")) || (id.length < 1)) {
                 return reject(new InsightError("Invalid id."));
             }
@@ -56,47 +53,36 @@ export default class InsightFacade implements IInsightFacade {
             if (this.d.memory.includes(id)) {
                 return reject(new InsightError("Dataset already added."));
             }
-
-            // TODO potentially split paths here
             let zip: JSZip = new JSZip();
-            let fileCount: number = 0;
-            return zip.loadAsync(content, {base64: true}).then((root) => {
-                const courses: JSZip = root.folder("courses");
-                courses.forEach((relativePath, course) => {
-                    let asyncPromiseReadFile: Promise<string> = course.async("string");
-                    promiseArray.push(asyncPromiseReadFile);
-                    fileCount++;
-                });
-                if (fileCount < 1) {
-                    reject(new InsightError("Invalid dataset: Empty or non-existent courses root directory."));
+            return zip.loadAsync(content, {base64: true}).then((root: JSZip) => {
+                if (kind === "courses") {
+                    try {
+                        return this.cDataset.getDataset(root).then((array) => {
+                            datasetArray = array;
+                            return datasetArray;
+                        });
+                    } catch (e) {
+                        throw(e);
+                    }
+                } else if (kind === "rooms") {
+                    // const datasetArray: any[] = this.rDataset.getDataset(root);
+                    const placeHolder = 1;
                 }
-                return Promise.all(promiseArray).then((courseJSONs: any) => {
-                    let validSections: any[] = [];
-                    for (let i of courseJSONs) {
-                        let section = JSON.parse(i);
-                        let sectionType: any = typeof section;
-                        if (sectionType === "object") {
-                            let objKeys: string[] = (Object.getOwnPropertyNames(section));
-                            if (objKeys.includes("result")) {
-                                validSections = this.d.getSectionFields(section["result"], validSections);
-                            }
-                        }
-                    }
-                    if (validSections.length < 1) {
-                        return reject(new InsightError("No valid sections."));
-                    } else {
-                        this.d.saveData(id, InsightDatasetKind.Courses, validSections);
-                        return resolve(this.d.memory);
-                    }
-                    return reject(new InsightError());
-                }).catch((err: any) => {
-                    return reject(new InsightError("data invalid, not in JSON format."));
-                });
+            }).then(() => {
+                if (datasetArray.length < 1) {
+                    return reject(new InsightError("No valid sections."));
+                } else {
+                    this.d.saveData(id, InsightDatasetKind.Courses, datasetArray);
+                    return resolve(this.d.memory);
+                }
+                return reject(new InsightError());
             }).catch((err: any) => {
                 return reject(new InsightError("Non-zip folder."));
             });
+            return reject(new InsightError());
         });
     }
+
 
     public removeDataset(id: string):
         Promise<string> {
@@ -168,44 +154,4 @@ export default class InsightFacade implements IInsightFacade {
         return Promise.resolve(this.d.datasets);
     }
 
-    // rooms type methods --> will move them later to another file
-
-    public getBuildingAddress(fileContent: string): Promise<string> {
-        return new Promise((resolve, reject) => {
-            this.getHTMLString(fileContent).then(this.parseHTML).then((parsedHTML) => {
-                let buildingAddress: string = (this.findAddress(parsedHTML)).trim();
-                return buildingAddress;
-            });
-        });
-    }
-
-    private getHTMLString(fileContent: string): Promise<string> {
-        let zip = new JSZip();
-        return new Promise((resolve, reject) => {
-            zip.loadAsync(fileContent, {base64: true}).then((root) => {
-                root.file("rooms/index.htm").async("string").then((stringContent) => {
-                    return resolve(stringContent);
-                });
-            });
-        });
-    }
-
-    private parseHTML(html: string): Promise<any> {
-        return Promise.resolve(parse5.parse(html));
-    }
-
-    private findAddress(element: any): string {
-        if (element.nodeName === "td" && element.attrs[0].value === "views-field views-field-field-building-address") {
-            return element.childNodes[0].value;
-        }
-        if (element.childNodes && element.childNodes.length > 0) {
-            for (let child of element.childNodes) {
-                let possibleAddress: string = this.findAddress(child);
-                if (!(possibleAddress === "")) {
-                    return possibleAddress;
-                }
-            }
-        }
-        return "";
-    }
 }

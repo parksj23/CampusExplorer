@@ -11,6 +11,8 @@ import {
 import InsightFacade from "../src/controller/InsightFacade";
 import Log from "../src/Util";
 import TestUtil from "./TestUtil";
+import RoomsDatasetHelper from "../src/controller/RoomsDatasetHelper";
+import * as JSZip from "jszip";
 
 // This extends chai with assertions that natively support Promises
 chai.use(chaiAsPromised);
@@ -49,6 +51,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     };
     let datasets: { [id: string]: string } = {};
     let insightFacade: InsightFacade;
+    let roomsHelper: RoomsDatasetHelper;
     const cacheDir = __dirname + "/../data";
 
     before(function () {
@@ -65,6 +68,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
         }
         try {
             insightFacade = new InsightFacade();
+            roomsHelper = new RoomsDatasetHelper();
         } catch (err) {
             Log.error(err);
         }
@@ -263,6 +267,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     });
 
     it("Fail to add dataset -- no course sections", function () {
+        this.timeout( 10000);
         const id: string = "noSections";
         const expected: string[] = [id];
         const futureResult: Promise<string[]> = insightFacade.addDataset(
@@ -274,6 +279,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     });
 
     it("Fail to add dataset -- invalid dataset", function () {
+        this.timeout( 10000);
         const id: string = "coursesInvalid";
         const expected: string[] = [id];
         const futureResult: Promise<string[]> = insightFacade.addDataset(
@@ -1041,15 +1047,72 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
             });
     });
 
-    // getAddress tests
-    it("c2- Should get address - ACU Building ", function () {
+    // getAddress test
+    it("c2- Should get addresses", function () {
+        const expected: string = "2211 Wesbrook Mall";
+        const expected2: string = "1822 East Mall";
+        const id: string = "rooms";
+        const fileContent = datasets[id];
+        roomsHelper.getAddress(fileContent).then((futureResult) => {
+            expect(futureResult).to.eventually.deep.equal(expected).then(() => {
+                roomsHelper.getAddress(fileContent).then((futureResult2) => {
+                    return expect(futureResult2).to.eventually.deep.equal(expected2);
+                });
+            });
+        });
+    });
+
+    it("c2- Should get address", function () {
         const expected: string = "2211 Wesbrook Mall";
         const id: string = "rooms";
         const fileContent = datasets[id];
-        insightFacade.getBuildingAddress(fileContent).then((futureResult) => {
+        roomsHelper.getAddress(fileContent).then((futureResult) => {
             return expect(futureResult).to.eventually.deep.equal(expected);
         });
     });
+
+    // getshortName test
+    it("c2- Should get shortNames", function () {
+        const expected: string = "ACU";
+        const expected2: string = "ALRD";
+        const id: string = "rooms";
+        const fileContent = datasets[id];
+        roomsHelper.getShortName(fileContent).then((futureResult) => {
+            expect(futureResult).to.eventually.deep.equal(expected).then(() => {
+                roomsHelper.getShortName(fileContent).then((futureResult2) => {
+                    return expect(futureResult2).to.eventually.deep.equal(expected2);
+                });
+            });
+        });
+    });
+
+    // getlongName test
+    it("c2- Should get longNames", function () {
+        const expected: string = "Acute Care Unit";
+        const expected2: string = "Allard Hall (LAW)";
+        const id: string = "rooms";
+        const fileContent = datasets[id];
+        roomsHelper.getLongName(fileContent).then((futureResult) => {
+            expect(futureResult).to.eventually.deep.equal(expected).then(() => {
+                roomsHelper.getLongName(fileContent).then((futureResult2) => {
+                    return expect(futureResult2).to.eventually.deep.equal(expected2);
+                });
+            });
+        });
+    });
+
+    // getHTML test
+    // it("c2- Should get specific rooms html", function () {
+    //     const fileContent = datasets["rooms"];
+    //     let zip: JSZip = new JSZip();
+    //     zip.loadAsync(fileContent, {base64: true}).then((root) => {
+    //         return roomsHelper.getRoomHTML(root, "ACU");
+    //     }).then((htmlString) => {
+    //         // manual check, HTML string too long
+    //         const check = 1;
+    //         return expect(htmlString);
+    //     });
+    // });
 
     // TODO: uncomment out all the tests above this line
 });

@@ -1,0 +1,48 @@
+{
+    "title": "Valid -- No transformation, order object",
+    "query": {
+        "WHERE": {
+            "EQ": {
+                "courses_avg": 91.3
+            }
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "courses_dept",
+                "minYear"
+            ],
+            "ORDER": "courses_dept"
+        },
+        "TRANSFORMATIONS": {
+            "GROUP": [
+                "courses_dept"
+            ],
+            "APPLY": [
+                {
+                    "minYear": {
+                        "MIN": "courses_year"
+                    }
+                }
+            ]
+        }
+    },
+    "isQueryValid": true,
+    "result": [
+        {
+            "courses_dept": "dhyg",
+            "minYear": 2013
+        },
+        {
+            "courses_dept": "educ",
+            "minYear": 2008
+        },
+        {
+            "courses_dept": "etec",
+            "minYear": 2012
+        },
+        {
+            "courses_dept": "kin",
+            "minYear": 1900
+        }
+    ]
+}

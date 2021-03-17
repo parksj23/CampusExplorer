@@ -1,0 +1,53 @@
+{
+    "title": "Valid -- missing ORDER block entirely",
+    "query": {
+        "WHERE": {
+            "OR": [
+                {
+                    "OR": [
+                        {
+                            "EQ": {
+                                "courses_avg": 100
+                            }
+                        },
+                        {
+                            "GT": {
+                                "courses_pass": 3000
+                            }
+                        }
+                    ]
+                },
+                {
+                    "IS": {
+                        "courses_dept": "educ"
+                    }
+                }
+            ]
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "courses_dept",
+                "countUUID"
+            ]
+        },
+        "TRANSFORMATIONS": {
+            "GROUP": [
+                "courses_dept"
+            ],
+            "APPLY": [
+                {
+                    "countUUID": {
+                        "COUNT": "courses_uuid"
+                    }
+                }
+            ]
+        }
+    },
+    "isQueryValid": true,
+    "result": [
+        {
+            "courses_dept": "educ",
+            "countUUID": 183
+        }
+    ]
+}

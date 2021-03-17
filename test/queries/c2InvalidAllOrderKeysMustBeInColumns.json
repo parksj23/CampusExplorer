@@ -1,0 +1,36 @@
+{
+    "title": "Invalid -- all order keys must be in columns",
+    "query": {
+        "WHERE": {
+            "IS": {
+                "rooms_shortname": "ALRD"
+            }
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "rooms_fullname",
+                "avgSeats"
+            ],
+            "ORDER": {
+                "dir": "DOWN",
+                "keys": [
+                    "maxSeats"
+                ]
+            }
+        },
+        "TRANSFORMATIONS": {
+            "GROUP": [
+                "rooms_fullname"
+            ],
+            "APPLY": [
+                {
+                    "avgSeats": {
+                        "AVG": "rooms_seats"
+                    }
+                }
+            ]
+        }
+    },
+    "isQueryValid": false,
+    "result": "InsightError"
+}

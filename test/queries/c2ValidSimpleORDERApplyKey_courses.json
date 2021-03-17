@@ -1,0 +1,529 @@
+{
+    "title": "Valid -- ORDER only has an APPLYKEY",
+    "query": {
+        "WHERE": {
+            "IS": {
+                "courses_title": "*lit*"
+            }
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "courses_dept",
+                "courses_id",
+                "maxAvg"
+            ],
+            "ORDER": "maxAvg"
+        },
+        "TRANSFORMATIONS": {
+            "GROUP": [
+                "courses_dept",
+                "courses_id"
+            ],
+            "APPLY": [
+                {
+                    "maxAvg": {
+                        "MAX": "courses_avg"
+                    }
+                }
+            ]
+        }
+    },
+    "isQueryValid": true,
+    "result": [
+        {
+            "courses_dept": "ital",
+            "courses_id": "405",
+            "maxAvg": 69
+        },
+        {
+            "courses_dept": "asia",
+            "courses_id": "342",
+            "maxAvg": 71.81
+        },
+        {
+            "courses_dept": "ital",
+            "courses_id": "408",
+            "maxAvg": 72
+        },
+        {
+            "courses_dept": "nest",
+            "courses_id": "401",
+            "maxAvg": 73.75
+        },
+        {
+            "courses_dept": "geog",
+            "courses_id": "220",
+            "maxAvg": 73.89
+        },
+        {
+            "courses_dept": "ital",
+            "courses_id": "404",
+            "maxAvg": 74.5
+        },
+        {
+            "courses_dept": "asia",
+            "courses_id": "453",
+            "maxAvg": 74.61
+        },
+        {
+            "courses_dept": "rmst",
+            "courses_id": "222",
+            "maxAvg": 75.41
+        },
+        {
+            "courses_dept": "asia",
+            "courses_id": "347",
+            "maxAvg": 75.43
+        },
+        {
+            "courses_dept": "fren",
+            "courses_id": "348",
+            "maxAvg": 75.77
+        },
+        {
+            "courses_dept": "stat",
+            "courses_id": "302",
+            "maxAvg": 76.1
+        },
+        {
+            "courses_dept": "fren",
+            "courses_id": "349",
+            "maxAvg": 76.23
+        },
+        {
+            "courses_dept": "relg",
+            "courses_id": "316",
+            "maxAvg": 76.24
+        },
+        {
+            "courses_dept": "fren",
+            "courses_id": "329",
+            "maxAvg": 76.27
+        },
+        {
+            "courses_dept": "fmst",
+            "courses_id": "316",
+            "maxAvg": 76.41
+        },
+        {
+            "courses_dept": "fren",
+            "courses_id": "371",
+            "maxAvg": 77
+        },
+        {
+            "courses_dept": "mdvl",
+            "courses_id": "301",
+            "maxAvg": 77.39
+        },
+        {
+            "courses_dept": "engl",
+            "courses_id": "223",
+            "maxAvg": 77.45
+        },
+        {
+            "courses_dept": "law",
+            "courses_id": "476",
+            "maxAvg": 77.64
+        },
+        {
+            "courses_dept": "engl",
+            "courses_id": "110",
+            "maxAvg": 77.68
+        },
+        {
+            "courses_dept": "poli",
+            "courses_id": "100",
+            "maxAvg": 78.09
+        },
+        {
+            "courses_dept": "math",
+            "courses_id": "302",
+            "maxAvg": 78.11
+        },
+        {
+            "courses_dept": "germ",
+            "courses_id": "402",
+            "maxAvg": 78.14
+        },
+        {
+            "courses_dept": "span",
+            "courses_id": "358",
+            "maxAvg": 78.27
+        },
+        {
+            "courses_dept": "grsj",
+            "courses_id": "326",
+            "maxAvg": 78.55
+        },
+        {
+            "courses_dept": "asia",
+            "courses_id": "398",
+            "maxAvg": 78.6
+        },
+        {
+            "courses_dept": "chin",
+            "courses_id": "484",
+            "maxAvg": 79.03
+        },
+        {
+            "courses_dept": "latn",
+            "courses_id": "350",
+            "maxAvg": 79.05
+        },
+        {
+            "courses_dept": "poli",
+            "courses_id": "110",
+            "maxAvg": 79.12
+        },
+        {
+            "courses_dept": "span",
+            "courses_id": "221",
+            "maxAvg": 79.18
+        },
+        {
+            "courses_dept": "engl",
+            "courses_id": "343",
+            "maxAvg": 79.24
+        },
+        {
+            "courses_dept": "span",
+            "courses_id": "365",
+            "maxAvg": 79.42
+        },
+        {
+            "courses_dept": "asia",
+            "courses_id": "341",
+            "maxAvg": 79.46
+        },
+        {
+            "courses_dept": "span",
+            "courses_id": "357",
+            "maxAvg": 79.56
+        },
+        {
+            "courses_dept": "engl",
+            "courses_id": "231",
+            "maxAvg": 79.57
+        },
+        {
+            "courses_dept": "chin",
+            "courses_id": "481",
+            "maxAvg": 79.6
+        },
+        {
+            "courses_dept": "fren",
+            "courses_id": "221",
+            "maxAvg": 79.85
+        },
+        {
+            "courses_dept": "chin",
+            "courses_id": "483",
+            "maxAvg": 79.86
+        },
+        {
+            "courses_dept": "fhis",
+            "courses_id": "333",
+            "maxAvg": 79.89
+        },
+        {
+            "courses_dept": "fren",
+            "courses_id": "123",
+            "maxAvg": 80.47
+        },
+        {
+            "courses_dept": "rgla",
+            "courses_id": "371",
+            "maxAvg": 80.58
+        },
+        {
+            "courses_dept": "cohr",
+            "courses_id": "404",
+            "maxAvg": 80.74
+        },
+        {
+            "courses_dept": "span",
+            "courses_id": "410",
+            "maxAvg": 80.85
+        },
+        {
+            "courses_dept": "span",
+            "courses_id": "364",
+            "maxAvg": 80.87
+        },
+        {
+            "courses_dept": "fren",
+            "courses_id": "330",
+            "maxAvg": 81.44
+        },
+        {
+            "courses_dept": "libr",
+            "courses_id": "529",
+            "maxAvg": 81.67
+        },
+        {
+            "courses_dept": "itst",
+            "courses_id": "415",
+            "maxAvg": 81.71
+        },
+        {
+            "courses_dept": "fren",
+            "courses_id": "220",
+            "maxAvg": 81.8
+        },
+        {
+            "courses_dept": "itst",
+            "courses_id": "333",
+            "maxAvg": 82.2
+        },
+        {
+            "courses_dept": "engl",
+            "courses_id": "224",
+            "maxAvg": 82.43
+        },
+        {
+            "courses_dept": "engl",
+            "courses_id": "220",
+            "maxAvg": 82.44
+        },
+        {
+            "courses_dept": "engl",
+            "courses_id": "100",
+            "maxAvg": 82.96
+        },
+        {
+            "courses_dept": "latn",
+            "courses_id": "351",
+            "maxAvg": 83
+        },
+        {
+            "courses_dept": "ital",
+            "courses_id": "303",
+            "maxAvg": 83.25
+        },
+        {
+            "courses_dept": "libr",
+            "courses_id": "520",
+            "maxAvg": 83.43
+        },
+        {
+            "courses_dept": "asia",
+            "courses_id": "308",
+            "maxAvg": 83.6
+        },
+        {
+            "courses_dept": "ital",
+            "courses_id": "409",
+            "maxAvg": 83.67
+        },
+        {
+            "courses_dept": "chin",
+            "courses_id": "413",
+            "maxAvg": 83.75
+        },
+        {
+            "courses_dept": "phar",
+            "courses_id": "506",
+            "maxAvg": 83.75
+        },
+        {
+            "courses_dept": "dent",
+            "courses_id": "526",
+            "maxAvg": 84
+        },
+        {
+            "courses_dept": "germ",
+            "courses_id": "301",
+            "maxAvg": 84.13
+        },
+        {
+            "courses_dept": "fren",
+            "courses_id": "122",
+            "maxAvg": 84.2
+        },
+        {
+            "courses_dept": "scan",
+            "courses_id": "333",
+            "maxAvg": 84.3
+        },
+        {
+            "courses_dept": "engl",
+            "courses_id": "222",
+            "maxAvg": 84.32
+        },
+        {
+            "courses_dept": "libr",
+            "courses_id": "523",
+            "maxAvg": 84.38
+        },
+        {
+            "courses_dept": "germ",
+            "courses_id": "303",
+            "maxAvg": 84.68
+        },
+        {
+            "courses_dept": "engl",
+            "courses_id": "221",
+            "maxAvg": 84.86
+        },
+        {
+            "courses_dept": "lled",
+            "courses_id": "452",
+            "maxAvg": 84.9
+        },
+        {
+            "courses_dept": "itst",
+            "courses_id": "110",
+            "maxAvg": 84.94
+        },
+        {
+            "courses_dept": "dent",
+            "courses_id": "572",
+            "maxAvg": 86
+        },
+        {
+            "courses_dept": "chin",
+            "courses_id": "411",
+            "maxAvg": 86.13
+        },
+        {
+            "courses_dept": "germ",
+            "courses_id": "302",
+            "maxAvg": 86.42
+        },
+        {
+            "courses_dept": "punj",
+            "courses_id": "401",
+            "maxAvg": 86.67
+        },
+        {
+            "courses_dept": "libr",
+            "courses_id": "521",
+            "maxAvg": 86.78
+        },
+        {
+            "courses_dept": "engl",
+            "courses_id": "490",
+            "maxAvg": 87
+        },
+        {
+            "courses_dept": "dent",
+            "courses_id": "573",
+            "maxAvg": 87.33
+        },
+        {
+            "courses_dept": "nest",
+            "courses_id": "505",
+            "maxAvg": 87.5
+        },
+        {
+            "courses_dept": "span",
+            "courses_id": "495",
+            "maxAvg": 87.67
+        },
+        {
+            "courses_dept": "plan",
+            "courses_id": "522",
+            "maxAvg": 87.72
+        },
+        {
+            "courses_dept": "cens",
+            "courses_id": "202",
+            "maxAvg": 87.87
+        },
+        {
+            "courses_dept": "pols",
+            "courses_id": "424",
+            "maxAvg": 88.3
+        },
+        {
+            "courses_dept": "lled",
+            "courses_id": "557",
+            "maxAvg": 88.44
+        },
+        {
+            "courses_dept": "anth",
+            "courses_id": "516",
+            "maxAvg": 88.67
+        },
+        {
+            "courses_dept": "surg",
+            "courses_id": "512",
+            "maxAvg": 88.67
+        },
+        {
+            "courses_dept": "cell",
+            "courses_id": "501",
+            "maxAvg": 89.67
+        },
+        {
+            "courses_dept": "math",
+            "courses_id": "418",
+            "maxAvg": 89.89
+        },
+        {
+            "courses_dept": "dent",
+            "courses_id": "525",
+            "maxAvg": 90
+        },
+        {
+            "courses_dept": "nurs",
+            "courses_id": "505",
+            "maxAvg": 90.06
+        },
+        {
+            "courses_dept": "dent",
+            "courses_id": "578",
+            "maxAvg": 90.25
+        },
+        {
+            "courses_dept": "lled",
+            "courses_id": "441",
+            "maxAvg": 90.67
+        },
+        {
+            "courses_dept": "dent",
+            "courses_id": "584",
+            "maxAvg": 91.25
+        },
+        {
+            "courses_dept": "dhyg",
+            "courses_id": "461",
+            "maxAvg": 91.3
+        },
+        {
+            "courses_dept": "chil",
+            "courses_id": "599",
+            "maxAvg": 92
+        },
+        {
+            "courses_dept": "dhyg",
+            "courses_id": "462",
+            "maxAvg": 92.17
+        },
+        {
+            "courses_dept": "itst",
+            "courses_id": "419",
+            "maxAvg": 93
+        },
+        {
+            "courses_dept": "lled",
+            "courses_id": "601",
+            "maxAvg": 93.2
+        },
+        {
+            "courses_dept": "midw",
+            "courses_id": "110",
+            "maxAvg": 93.75
+        },
+        {
+            "courses_dept": "math",
+            "courses_id": "544",
+            "maxAvg": 94.67
+        },
+        {
+            "courses_dept": "math",
+            "courses_id": "545",
+            "maxAvg": 96.83
+        }
+    ]
+}

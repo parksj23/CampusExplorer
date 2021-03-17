@@ -1,0 +1,493 @@
+{
+    "title": "Valid -- Simple SELECT Year",
+    "query": {
+        "WHERE": {
+            "AND": [
+                {
+                    "EQ": {
+                        "courses_year": 2008
+                    }
+                },
+                {
+                    "IS": {
+                        "courses_dept": "engl"
+                    }
+                }
+            ]
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "courses_dept",
+                "courses_id",
+                "courses_avg",
+                "courses_instructor",
+                "courses_title",
+                "courses_pass",
+                "courses_fail",
+                "courses_audit",
+                "courses_uuid",
+                "courses_year"
+            ],
+            "ORDER": "courses_avg"
+        }
+    },
+    "isQueryValid": true,
+    "result": [
+        {
+            "courses_dept": "engl",
+            "courses_id": "358",
+            "courses_avg": 53.5,
+            "courses_instructor": "",
+            "courses_title": "18th cent genre",
+            "courses_pass": 3,
+            "courses_fail": 1,
+            "courses_audit": 0,
+            "courses_uuid": "55864",
+            "courses_year": 2008
+        },
+        {
+            "courses_dept": "engl",
+            "courses_id": "301",
+            "courses_avg": 66.13,
+            "courses_instructor": "",
+            "courses_title": "tech writing",
+            "courses_pass": 13,
+            "courses_fail": 2,
+            "courses_audit": 0,
+            "courses_uuid": "55839",
+            "courses_year": 2008
+        },
+        {
+            "courses_dept": "engl",
+            "courses_id": "321",
+            "courses_avg": 66.33,
+            "courses_instructor": "",
+            "courses_title": "traditnl grammar",
+            "courses_pass": 4,
+            "courses_fail": 2,
+            "courses_audit": 0,
+            "courses_uuid": "55850",
+            "courses_year": 2008
+        },
+        {
+            "courses_dept": "engl",
+            "courses_id": "110",
+            "courses_avg": 66.74,
+            "courses_instructor": "",
+            "courses_title": "intro literature",
+            "courses_pass": 37,
+            "courses_fail": 2,
+            "courses_audit": 0,
+            "courses_uuid": "55806",
+            "courses_year": 2008
+        },
+        {
+            "courses_dept": "engl",
+            "courses_id": "321",
+            "courses_avg": 66.81,
+            "courses_instructor": "",
+            "courses_title": "traditnl grammar",
+            "courses_pass": 45,
+            "courses_fail": 17,
+            "courses_audit": 0,
+            "courses_uuid": "55852",
+            "courses_year": 2008
+        },
+        {
+            "courses_dept": "engl",
+            "courses_id": "221",
+            "courses_avg": 66.94,
+            "courses_instructor": "",
+            "courses_title": "lit brit 18c+",
+            "courses_pass": 33,
+            "courses_fail": 2,
+            "courses_audit": 0,
+            "courses_uuid": "55828",
+            "courses_year": 2008
+        },
+        {
+            "courses_dept": "engl",
+            "courses_id": "110",
+            "courses_avg": 67.93,
+            "courses_instructor": "",
+            "courses_title": "intro literature",
+            "courses_pass": 37,
+            "courses_fail": 3,
+            "courses_audit": 0,
+            "courses_uuid": "55805",
+            "courses_year": 2008
+        },
+        {
+            "courses_dept": "engl",
+            "courses_id": "112",
+            "courses_avg": 68.6,
+            "courses_instructor": "",
+            "courses_title": "strat univ writ",
+            "courses_pass": 33,
+            "courses_fail": 2,
+            "courses_audit": 0,
+            "courses_uuid": "55816",
+            "courses_year": 2008
+        },
+        {
+            "courses_dept": "engl",
+            "courses_id": "110",
+            "courses_avg": 68.74,
+            "courses_instructor": "",
+            "courses_title": "intro literature",
+            "courses_pass": 29,
+            "courses_fail": 2,
+            "courses_audit": 0,
+            "courses_uuid": "55801",
+            "courses_year": 2008
+        },
+        {
+            "courses_dept": "engl",
+            "courses_id": "112",
+            "courses_avg": 69.48,
+            "courses_instructor": "",
+            "courses_title": "strat univ writ",
+            "courses_pass": 30,
+            "courses_fail": 1,
+            "courses_audit": 0,
+            "courses_uuid": "55823",
+            "courses_year": 2008
+        },
+        {
+            "courses_dept": "engl",
+            "courses_id": "110",
+            "courses_avg": 69.79,
+            "courses_instructor": "",
+            "courses_title": "intro literature",
+            "courses_pass": 36,
+            "courses_fail": 2,
+            "courses_audit": 0,
+            "courses_uuid": "55807",
+            "courses_year": 2008
+        },
+        {
+            "courses_dept": "engl",
+            "courses_id": "110",
+            "courses_avg": 70.29,
+            "courses_instructor": "",
+            "courses_title": "intro literature",
+            "courses_pass": 38,
+            "courses_fail": 0,
+            "courses_audit": 0,
+            "courses_uuid": "55803",
+            "courses_year": 2008
+        },
+        {
+            "courses_dept": "engl",
+            "courses_id": "112",
+            "courses_avg": 70.47,
+            "courses_instructor": "",
+            "courses_title": "strat univ writ",
+            "courses_pass": 32,
+            "courses_fail": 0,
+            "courses_audit": 0,
+            "courses_uuid": "55821",
+            "courses_year": 2008
+        },
+        {
+            "courses_dept": "engl",
+            "courses_id": "110",
+            "courses_avg": 70.5,
+            "courses_instructor": "",
+            "courses_title": "intro literature",
+            "courses_pass": 37,
+            "courses_fail": 1,
+            "courses_audit": 0,
+            "courses_uuid": "55804",
+            "courses_year": 2008
+        },
+        {
+            "courses_dept": "engl",
+            "courses_id": "222",
+            "courses_avg": 71.26,
+            "courses_instructor": "",
+            "courses_title": "lit canada",
+            "courses_pass": 33,
+            "courses_fail": 2,
+            "courses_audit": 0,
+            "courses_uuid": "55831",
+            "courses_year": 2008
+        },
+        {
+            "courses_dept": "engl",
+            "courses_id": "112",
+            "courses_avg": 71.68,
+            "courses_instructor": "",
+            "courses_title": "strat univ writ",
+            "courses_pass": 34,
+            "courses_fail": 0,
+            "courses_audit": 0,
+            "courses_uuid": "55812",
+            "courses_year": 2008
+        },
+        {
+            "courses_dept": "engl",
+            "courses_id": "112",
+            "courses_avg": 72.3,
+            "courses_instructor": "",
+            "courses_title": "strat univ writ",
+            "courses_pass": 36,
+            "courses_fail": 1,
+            "courses_audit": 0,
+            "courses_uuid": "55811",
+            "courses_year": 2008
+        },
+        {
+            "courses_dept": "engl",
+            "courses_id": "110",
+            "courses_avg": 72.61,
+            "courses_instructor": "",
+            "courses_title": "intro literature",
+            "courses_pass": 38,
+            "courses_fail": 0,
+            "courses_audit": 0,
+            "courses_uuid": "55802",
+            "courses_year": 2008
+        },
+        {
+            "courses_dept": "engl",
+            "courses_id": "362",
+            "courses_avg": 73,
+            "courses_instructor": "",
+            "courses_title": "st 19th cent gen",
+            "courses_pass": 26,
+            "courses_fail": 0,
+            "courses_audit": 0,
+            "courses_uuid": "55868",
+            "courses_year": 2008
+        },
+        {
+            "courses_dept": "engl",
+            "courses_id": "110",
+            "courses_avg": 73.06,
+            "courses_instructor": "",
+            "courses_title": "intro literature",
+            "courses_pass": 33,
+            "courses_fail": 1,
+            "courses_audit": 0,
+            "courses_uuid": "55808",
+            "courses_year": 2008
+        },
+        {
+            "courses_dept": "engl",
+            "courses_id": "112",
+            "courses_avg": 73.07,
+            "courses_instructor": "",
+            "courses_title": "strat univ writ",
+            "courses_pass": 28,
+            "courses_fail": 1,
+            "courses_audit": 0,
+            "courses_uuid": "55822",
+            "courses_year": 2008
+        },
+        {
+            "courses_dept": "engl",
+            "courses_id": "220",
+            "courses_avg": 73.09,
+            "courses_instructor": "",
+            "courses_title": "lit engl 18c",
+            "courses_pass": 35,
+            "courses_fail": 0,
+            "courses_audit": 0,
+            "courses_uuid": "55826",
+            "courses_year": 2008
+        },
+        {
+            "courses_dept": "engl",
+            "courses_id": "112",
+            "courses_avg": 73.62,
+            "courses_instructor": "",
+            "courses_title": "strat univ writ",
+            "courses_pass": 34,
+            "courses_fail": 0,
+            "courses_audit": 0,
+            "courses_uuid": "55817",
+            "courses_year": 2008
+        },
+        {
+            "courses_dept": "engl",
+            "courses_id": "112",
+            "courses_avg": 73.84,
+            "courses_instructor": "",
+            "courses_title": "strat univ writ",
+            "courses_pass": 31,
+            "courses_fail": 0,
+            "courses_audit": 0,
+            "courses_uuid": "55818",
+            "courses_year": 2008
+        },
+        {
+            "courses_dept": "engl",
+            "courses_id": "222",
+            "courses_avg": 74.04,
+            "courses_instructor": "",
+            "courses_title": "lit canada",
+            "courses_pass": 26,
+            "courses_fail": 1,
+            "courses_audit": 0,
+            "courses_uuid": "55830",
+            "courses_year": 2008
+        },
+        {
+            "courses_dept": "engl",
+            "courses_id": "112",
+            "courses_avg": 74.55,
+            "courses_instructor": "",
+            "courses_title": "strat univ writ",
+            "courses_pass": 31,
+            "courses_fail": 2,
+            "courses_audit": 0,
+            "courses_uuid": "55820",
+            "courses_year": 2008
+        },
+        {
+            "courses_dept": "engl",
+            "courses_id": "112",
+            "courses_avg": 74.6,
+            "courses_instructor": "",
+            "courses_title": "strat univ writ",
+            "courses_pass": 34,
+            "courses_fail": 1,
+            "courses_audit": 0,
+            "courses_uuid": "55814",
+            "courses_year": 2008
+        },
+        {
+            "courses_dept": "engl",
+            "courses_id": "301",
+            "courses_avg": 74.61,
+            "courses_instructor": "",
+            "courses_title": "tech writing",
+            "courses_pass": 18,
+            "courses_fail": 0,
+            "courses_audit": 2,
+            "courses_uuid": "55838",
+            "courses_year": 2008
+        },
+        {
+            "courses_dept": "engl",
+            "courses_id": "220",
+            "courses_avg": 74.94,
+            "courses_instructor": "",
+            "courses_title": "lit engl 18c",
+            "courses_pass": 35,
+            "courses_fail": 0,
+            "courses_audit": 0,
+            "courses_uuid": "55825",
+            "courses_year": 2008
+        },
+        {
+            "courses_dept": "engl",
+            "courses_id": "227",
+            "courses_avg": 76.26,
+            "courses_instructor": "",
+            "courses_title": "prose",
+            "courses_pass": 31,
+            "courses_fail": 0,
+            "courses_audit": 0,
+            "courses_uuid": "55835",
+            "courses_year": 2008
+        },
+        {
+            "courses_dept": "engl",
+            "courses_id": "321",
+            "courses_avg": 76.5,
+            "courses_instructor": "",
+            "courses_title": "traditnl grammar",
+            "courses_pass": 2,
+            "courses_fail": 0,
+            "courses_audit": 0,
+            "courses_uuid": "55851",
+            "courses_year": 2008
+        },
+        {
+            "courses_dept": "engl",
+            "courses_id": "110",
+            "courses_avg": 77.56,
+            "courses_instructor": "",
+            "courses_title": "intro literature",
+            "courses_pass": 32,
+            "courses_fail": 0,
+            "courses_audit": 0,
+            "courses_uuid": "55809",
+            "courses_year": 2008
+        },
+        {
+            "courses_dept": "engl",
+            "courses_id": "112",
+            "courses_avg": 78.35,
+            "courses_instructor": "",
+            "courses_title": "strat univ writ",
+            "courses_pass": 34,
+            "courses_fail": 0,
+            "courses_audit": 0,
+            "courses_uuid": "55815",
+            "courses_year": 2008
+        },
+        {
+            "courses_dept": "engl",
+            "courses_id": "112",
+            "courses_avg": 79.04,
+            "courses_instructor": "",
+            "courses_title": "strat univ writ",
+            "courses_pass": 25,
+            "courses_fail": 0,
+            "courses_audit": 0,
+            "courses_uuid": "55819",
+            "courses_year": 2008
+        },
+        {
+            "courses_dept": "engl",
+            "courses_id": "112",
+            "courses_avg": 80.69,
+            "courses_instructor": "",
+            "courses_title": "strat univ writ",
+            "courses_pass": 35,
+            "courses_fail": 0,
+            "courses_audit": 0,
+            "courses_uuid": "55813",
+            "courses_year": 2008
+        },
+        {
+            "courses_dept": "engl",
+            "courses_id": "490",
+            "courses_avg": 81.15,
+            "courses_instructor": "",
+            "courses_title": "majors seminar",
+            "courses_pass": 13,
+            "courses_fail": 0,
+            "courses_audit": 0,
+            "courses_uuid": "55894",
+            "courses_year": 2008
+        },
+        {
+            "courses_dept": "engl",
+            "courses_id": "321",
+            "courses_avg": 85.36,
+            "courses_instructor": "",
+            "courses_title": "traditnl grammar",
+            "courses_pass": 33,
+            "courses_fail": 0,
+            "courses_audit": 0,
+            "courses_uuid": "55849",
+            "courses_year": 2008
+        },
+        {
+            "courses_dept": "engl",
+            "courses_id": "301",
+            "courses_avg": 85.54,
+            "courses_instructor": "",
+            "courses_title": "tech writing",
+            "courses_pass": 26,
+            "courses_fail": 0,
+            "courses_audit": 2,
+            "courses_uuid": "55837",
+            "courses_year": 2008
+        }
+    ]
+}

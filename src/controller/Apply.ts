@@ -204,7 +204,6 @@ export default class Apply {
             for (let section of group["arr"]) {
                 temp.push(section[mfield]);
             }
-            // figure out avg according to ebnf
             let total = new Decimal(0);
             for (let val of temp) {
                 let newVal = new Decimal(val);

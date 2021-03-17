@@ -1,0 +1,27 @@
+{
+    "title": "Invalid -- empty ORDER block",
+    "query": {
+        "WHERE": {
+            "OR": [
+                {
+                    "GT": {
+                        "courses_avg": 99
+                    }
+                },
+                {
+                    "EQ": {
+                        "courses_pass": 3000
+                    }
+                }
+            ]
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                1
+            ],
+            "ORDER": "courses_avg"
+        }
+    },
+    "isQueryValid": false,
+    "result": "InsightError"
+}

@@ -1,0 +1,53 @@
+{
+    "title": "Valid -- Simple SELECT Audit",
+    "query": {
+        "WHERE": {
+            "EQ": {
+                "courses_audit": 10
+            }
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "courses_title",
+                "minAvg"
+            ],
+            "ORDER": {
+                "dir": "UP",
+                "keys": [
+                    "minAvg"
+                ]
+            }
+        },
+        "TRANSFORMATIONS": {
+            "GROUP": [
+                "courses_title"
+            ],
+            "APPLY": [
+                {
+                    "minAvg": {
+                        "AVG": "courses_avg"
+                    }
+                }
+            ]
+        }
+    },
+    "isQueryValid": true,
+    "result": [
+        {
+            "courses_title": "adv biometrics",
+            "minAvg": 77.36
+        },
+        {
+            "courses_title": "mult regres meth",
+            "minAvg": 85.14
+        },
+        {
+            "courses_title": "rehab learning",
+            "minAvg": 85.73
+        },
+        {
+            "courses_title": "eval src evidenc",
+            "minAvg": 91.4
+        }
+    ]
+}

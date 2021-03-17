@@ -1,0 +1,23 @@
+{
+    "title": "invalid --nested mcomparisons LT GT",
+    "query": {
+        "WHERE": {
+            "GT": {
+                "courses_fail": 100,
+                "LT": {
+                    "courses_pass": 100
+                }
+            }
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "courses_dept",
+                "courses_id",
+                "courses_avg"
+            ],
+            "ORDER": "courses_avg"
+        }
+    },
+    "isQueryValid": false,
+    "result": "InsightError"
+}

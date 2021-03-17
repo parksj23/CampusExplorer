@@ -1,0 +1,1057 @@
+{
+    "title": "c2 valid -- double keys in Order obj",
+    "query": {
+        "WHERE": {
+            "GT": {
+                "courses_pass": 940
+            }
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "courses_id",
+                "courses_dept",
+                "courses_pass",
+                "sumAvg"
+            ],
+            "ORDER": {
+                "dir": "UP",
+                "keys": [
+                    "courses_pass",
+                    "courses_dept",
+                    "sumAvg"
+                ]
+            }
+        },
+        "TRANSFORMATIONS": {
+            "GROUP": [
+                "courses_dept",
+                "courses_id",
+                "courses_pass"
+            ],
+            "APPLY": [
+                {
+                    "sumAvg": {
+                        "SUM": "courses_avg"
+                    }
+                }
+            ]
+        }
+    },
+    "isQueryValid": true,
+    "result": [
+        {
+            "courses_id": "200",
+            "courses_dept": "math",
+            "courses_pass": 944,
+            "sumAvg": 66.13
+        },
+        {
+            "courses_id": "202",
+            "courses_dept": "comm",
+            "courses_pass": 948,
+            "sumAvg": 79.71
+        },
+        {
+            "courses_id": "100",
+            "courses_dept": "math",
+            "courses_pass": 948,
+            "sumAvg": 70.82
+        },
+        {
+            "courses_id": "105",
+            "courses_dept": "math",
+            "courses_pass": 949,
+            "sumAvg": 62.88
+        },
+        {
+            "courses_id": "233",
+            "courses_dept": "chem",
+            "courses_pass": 954,
+            "sumAvg": 67.02
+        },
+        {
+            "courses_id": "233",
+            "courses_dept": "chem",
+            "courses_pass": 955,
+            "sumAvg": 67.89
+        },
+        {
+            "courses_id": "105",
+            "courses_dept": "math",
+            "courses_pass": 956,
+            "sumAvg": 64.63
+        },
+        {
+            "courses_id": "200",
+            "courses_dept": "biol",
+            "courses_pass": 958,
+            "sumAvg": 64.73
+        },
+        {
+            "courses_id": "205",
+            "courses_dept": "chem",
+            "courses_pass": 963,
+            "sumAvg": 73.06
+        },
+        {
+            "courses_id": "100",
+            "courses_dept": "math",
+            "courses_pass": 963,
+            "sumAvg": 69.06
+        },
+        {
+            "courses_id": "110",
+            "courses_dept": "cpsc",
+            "courses_pass": 966,
+            "sumAvg": 73.25
+        },
+        {
+            "courses_id": "105",
+            "courses_dept": "math",
+            "courses_pass": 967,
+            "sumAvg": 64.43
+        },
+        {
+            "courses_id": "100",
+            "courses_dept": "math",
+            "courses_pass": 969,
+            "sumAvg": 70.84
+        },
+        {
+            "courses_id": "105",
+            "courses_dept": "math",
+            "courses_pass": 973,
+            "sumAvg": 69.43
+        },
+        {
+            "courses_id": "101",
+            "courses_dept": "math",
+            "courses_pass": 982,
+            "sumAvg": 66.12
+        },
+        {
+            "courses_id": "205",
+            "courses_dept": "chem",
+            "courses_pass": 989,
+            "sumAvg": 72.44
+        },
+        {
+            "courses_id": "235",
+            "courses_dept": "chem",
+            "courses_pass": 990,
+            "sumAvg": 73.98
+        },
+        {
+            "courses_id": "200",
+            "courses_dept": "biol",
+            "courses_pass": 999,
+            "sumAvg": 68.58
+        },
+        {
+            "courses_id": "233",
+            "courses_dept": "chem",
+            "courses_pass": 1006,
+            "sumAvg": 63.33
+        },
+        {
+            "courses_id": "101",
+            "courses_dept": "math",
+            "courses_pass": 1012,
+            "sumAvg": 64.55
+        },
+        {
+            "courses_id": "101",
+            "courses_dept": "math",
+            "courses_pass": 1018,
+            "sumAvg": 63.51
+        },
+        {
+            "courses_id": "100",
+            "courses_dept": "math",
+            "courses_pass": 1020,
+            "sumAvg": 73.29
+        },
+        {
+            "courses_id": "200",
+            "courses_dept": "biol",
+            "courses_pass": 1026,
+            "sumAvg": 70.48
+        },
+        {
+            "courses_id": "235",
+            "courses_dept": "chem",
+            "courses_pass": 1042,
+            "sumAvg": 72.74
+        },
+        {
+            "courses_id": "100",
+            "courses_dept": "math",
+            "courses_pass": 1044,
+            "sumAvg": 66.8
+        },
+        {
+            "courses_id": "235",
+            "courses_dept": "chem",
+            "courses_pass": 1049,
+            "sumAvg": 74.58
+        },
+        {
+            "courses_id": "101",
+            "courses_dept": "math",
+            "courses_pass": 1050,
+            "sumAvg": 65.21
+        },
+        {
+            "courses_id": "101",
+            "courses_dept": "psyc",
+            "courses_pass": 1053,
+            "sumAvg": 66.69
+        },
+        {
+            "courses_id": "235",
+            "courses_dept": "chem",
+            "courses_pass": 1057,
+            "sumAvg": 72.58
+        },
+        {
+            "courses_id": "100",
+            "courses_dept": "math",
+            "courses_pass": 1058,
+            "sumAvg": 68.63
+        },
+        {
+            "courses_id": "101",
+            "courses_dept": "psyc",
+            "courses_pass": 1058,
+            "sumAvg": 67.82
+        },
+        {
+            "courses_id": "118",
+            "courses_dept": "eosc",
+            "courses_pass": 1059,
+            "sumAvg": 76.29
+        },
+        {
+            "courses_id": "200",
+            "courses_dept": "biol",
+            "courses_pass": 1062,
+            "sumAvg": 68.25
+        },
+        {
+            "courses_id": "114",
+            "courses_dept": "eosc",
+            "courses_pass": 1064,
+            "sumAvg": 71.02
+        },
+        {
+            "courses_id": "100",
+            "courses_dept": "math",
+            "courses_pass": 1064,
+            "sumAvg": 72.56
+        },
+        {
+            "courses_id": "105",
+            "courses_dept": "math",
+            "courses_pass": 1065,
+            "sumAvg": 67.74
+        },
+        {
+            "courses_id": "102",
+            "courses_dept": "psyc",
+            "courses_pass": 1067,
+            "sumAvg": 68.6
+        },
+        {
+            "courses_id": "233",
+            "courses_dept": "chem",
+            "courses_pass": 1073,
+            "sumAvg": 67.7
+        },
+        {
+            "courses_id": "200",
+            "courses_dept": "biol",
+            "courses_pass": 1084,
+            "sumAvg": 69.09
+        },
+        {
+            "courses_id": "235",
+            "courses_dept": "chem",
+            "courses_pass": 1084,
+            "sumAvg": 71.32
+        },
+        {
+            "courses_id": "235",
+            "courses_dept": "chem",
+            "courses_pass": 1086,
+            "sumAvg": 73.94
+        },
+        {
+            "courses_id": "200",
+            "courses_dept": "biol",
+            "courses_pass": 1087,
+            "sumAvg": 70
+        },
+        {
+            "courses_id": "200",
+            "courses_dept": "biol",
+            "courses_pass": 1091,
+            "sumAvg": 69.92
+        },
+        {
+            "courses_id": "200",
+            "courses_dept": "crwr",
+            "courses_pass": 1111,
+            "sumAvg": 79.76
+        },
+        {
+            "courses_id": "101",
+            "courses_dept": "math",
+            "courses_pass": 1114,
+            "sumAvg": 68.65
+        },
+        {
+            "courses_id": "101",
+            "courses_dept": "math",
+            "courses_pass": 1122,
+            "sumAvg": 65.38
+        },
+        {
+            "courses_id": "200",
+            "courses_dept": "biol",
+            "courses_pass": 1126,
+            "sumAvg": 212.9
+        },
+        {
+            "courses_id": "200",
+            "courses_dept": "biol",
+            "courses_pass": 1133,
+            "sumAvg": 68.7
+        },
+        {
+            "courses_id": "101",
+            "courses_dept": "math",
+            "courses_pass": 1137,
+            "sumAvg": 66.31
+        },
+        {
+            "courses_id": "200",
+            "courses_dept": "biol",
+            "courses_pass": 1146,
+            "sumAvg": 69.19
+        },
+        {
+            "courses_id": "200",
+            "courses_dept": "biol",
+            "courses_pass": 1147,
+            "sumAvg": 69.54
+        },
+        {
+            "courses_id": "112",
+            "courses_dept": "biol",
+            "courses_pass": 1153,
+            "sumAvg": 80.53
+        },
+        {
+            "courses_id": "235",
+            "courses_dept": "chem",
+            "courses_pass": 1156,
+            "sumAvg": 74.64
+        },
+        {
+            "courses_id": "200",
+            "courses_dept": "biol",
+            "courses_pass": 1158,
+            "sumAvg": 73.45
+        },
+        {
+            "courses_id": "205",
+            "courses_dept": "chem",
+            "courses_pass": 1159,
+            "sumAvg": 76.95
+        },
+        {
+            "courses_id": "101",
+            "courses_dept": "math",
+            "courses_pass": 1166,
+            "sumAvg": 66.28
+        },
+        {
+            "courses_id": "100",
+            "courses_dept": "math",
+            "courses_pass": 1171,
+            "sumAvg": 68.73
+        },
+        {
+            "courses_id": "200",
+            "courses_dept": "biol",
+            "courses_pass": 1174,
+            "sumAvg": 147.4
+        },
+        {
+            "courses_id": "102",
+            "courses_dept": "psyc",
+            "courses_pass": 1188,
+            "sumAvg": 68.26
+        },
+        {
+            "courses_id": "112",
+            "courses_dept": "biol",
+            "courses_pass": 1215,
+            "sumAvg": 68.77
+        },
+        {
+            "courses_id": "114",
+            "courses_dept": "eosc",
+            "courses_pass": 1227,
+            "sumAvg": 73.53
+        },
+        {
+            "courses_id": "120",
+            "courses_dept": "phil",
+            "courses_pass": 1245,
+            "sumAvg": 71.22
+        },
+        {
+            "courses_id": "101",
+            "courses_dept": "phys",
+            "courses_pass": 1247,
+            "sumAvg": 75.15
+        },
+        {
+            "courses_id": "200",
+            "courses_dept": "biol",
+            "courses_pass": 1257,
+            "sumAvg": 72.56
+        },
+        {
+            "courses_id": "290",
+            "courses_dept": "comm",
+            "courses_pass": 1288,
+            "sumAvg": 72.25
+        },
+        {
+            "courses_id": "112",
+            "courses_dept": "engl",
+            "courses_pass": 1294,
+            "sumAvg": 72.41
+        },
+        {
+            "courses_id": "112",
+            "courses_dept": "biol",
+            "courses_pass": 1307,
+            "sumAvg": 67.77
+        },
+        {
+            "courses_id": "291",
+            "courses_dept": "comm",
+            "courses_pass": 1309,
+            "sumAvg": 72.32
+        },
+        {
+            "courses_id": "140",
+            "courses_dept": "biol",
+            "courses_pass": 1318,
+            "sumAvg": 72.38
+        },
+        {
+            "courses_id": "101",
+            "courses_dept": "phys",
+            "courses_pass": 1342,
+            "sumAvg": 71.85
+        },
+        {
+            "courses_id": "123",
+            "courses_dept": "chem",
+            "courses_pass": 1359,
+            "sumAvg": 70.36
+        },
+        {
+            "courses_id": "204",
+            "courses_dept": "comm",
+            "courses_pass": 1367,
+            "sumAvg": 76.46
+        },
+        {
+            "courses_id": "140",
+            "courses_dept": "biol",
+            "courses_pass": 1377,
+            "sumAvg": 80.99
+        },
+        {
+            "courses_id": "101",
+            "courses_dept": "psyc",
+            "courses_pass": 1383,
+            "sumAvg": 68.18
+        },
+        {
+            "courses_id": "123",
+            "courses_dept": "chem",
+            "courses_pass": 1386,
+            "sumAvg": 68.93
+        },
+        {
+            "courses_id": "101",
+            "courses_dept": "math",
+            "courses_pass": 1390,
+            "sumAvg": 65.99
+        },
+        {
+            "courses_id": "102",
+            "courses_dept": "psyc",
+            "courses_pass": 1391,
+            "sumAvg": 67.84
+        },
+        {
+            "courses_id": "123",
+            "courses_dept": "chem",
+            "courses_pass": 1394,
+            "sumAvg": 70.14
+        },
+        {
+            "courses_id": "101",
+            "courses_dept": "phys",
+            "courses_pass": 1395,
+            "sumAvg": 71.43
+        },
+        {
+            "courses_id": "110",
+            "courses_dept": "engl",
+            "courses_pass": 1398,
+            "sumAvg": 72.3
+        },
+        {
+            "courses_id": "123",
+            "courses_dept": "chem",
+            "courses_pass": 1409,
+            "sumAvg": 73.45
+        },
+        {
+            "courses_id": "112",
+            "courses_dept": "biol",
+            "courses_pass": 1419,
+            "sumAvg": 69.77
+        },
+        {
+            "courses_id": "101",
+            "courses_dept": "phys",
+            "courses_pass": 1423,
+            "sumAvg": 69.62
+        },
+        {
+            "courses_id": "110",
+            "courses_dept": "engl",
+            "courses_pass": 1435,
+            "sumAvg": 72.76
+        },
+        {
+            "courses_id": "101",
+            "courses_dept": "psyc",
+            "courses_pass": 1438,
+            "sumAvg": 68.4
+        },
+        {
+            "courses_id": "123",
+            "courses_dept": "chem",
+            "courses_pass": 1441,
+            "sumAvg": 72.66
+        },
+        {
+            "courses_id": "112",
+            "courses_dept": "biol",
+            "courses_pass": 1442,
+            "sumAvg": 69.89
+        },
+        {
+            "courses_id": "102",
+            "courses_dept": "psyc",
+            "courses_pass": 1442,
+            "sumAvg": 68.62
+        },
+        {
+            "courses_id": "101",
+            "courses_dept": "phys",
+            "courses_pass": 1460,
+            "sumAvg": 71.52
+        },
+        {
+            "courses_id": "114",
+            "courses_dept": "eosc",
+            "courses_pass": 1470,
+            "sumAvg": 76.61
+        },
+        {
+            "courses_id": "110",
+            "courses_dept": "engl",
+            "courses_pass": 1474,
+            "sumAvg": 72.56
+        },
+        {
+            "courses_id": "114",
+            "courses_dept": "eosc",
+            "courses_pass": 1475,
+            "sumAvg": 72.63
+        },
+        {
+            "courses_id": "140",
+            "courses_dept": "biol",
+            "courses_pass": 1476,
+            "sumAvg": 72.26
+        },
+        {
+            "courses_id": "140",
+            "courses_dept": "biol",
+            "courses_pass": 1483,
+            "sumAvg": 72.64
+        },
+        {
+            "courses_id": "101",
+            "courses_dept": "phys",
+            "courses_pass": 1497,
+            "sumAvg": 76.57
+        },
+        {
+            "courses_id": "140",
+            "courses_dept": "biol",
+            "courses_pass": 1501,
+            "sumAvg": 145.63
+        },
+        {
+            "courses_id": "140",
+            "courses_dept": "biol",
+            "courses_pass": 1518,
+            "sumAvg": 72.86
+        },
+        {
+            "courses_id": "101",
+            "courses_dept": "phys",
+            "courses_pass": 1521,
+            "sumAvg": 74.98
+        },
+        {
+            "courses_id": "140",
+            "courses_dept": "biol",
+            "courses_pass": 1525,
+            "sumAvg": 72.55
+        },
+        {
+            "courses_id": "121",
+            "courses_dept": "chem",
+            "courses_pass": 1526,
+            "sumAvg": 67.42
+        },
+        {
+            "courses_id": "123",
+            "courses_dept": "chem",
+            "courses_pass": 1530,
+            "sumAvg": 72.1
+        },
+        {
+            "courses_id": "123",
+            "courses_dept": "chem",
+            "courses_pass": 1545,
+            "sumAvg": 72.83
+        },
+        {
+            "courses_id": "112",
+            "courses_dept": "biol",
+            "courses_pass": 1546,
+            "sumAvg": 69.72
+        },
+        {
+            "courses_id": "121",
+            "courses_dept": "chem",
+            "courses_pass": 1551,
+            "sumAvg": 70.22
+        },
+        {
+            "courses_id": "101",
+            "courses_dept": "phys",
+            "courses_pass": 1558,
+            "sumAvg": 70.63
+        },
+        {
+            "courses_id": "140",
+            "courses_dept": "biol",
+            "courses_pass": 1571,
+            "sumAvg": 72.66
+        },
+        {
+            "courses_id": "112",
+            "courses_dept": "biol",
+            "courses_pass": 1578,
+            "sumAvg": 70.02
+        },
+        {
+            "courses_id": "110",
+            "courses_dept": "engl",
+            "courses_pass": 1579,
+            "sumAvg": 73.44
+        },
+        {
+            "courses_id": "112",
+            "courses_dept": "biol",
+            "courses_pass": 1586,
+            "sumAvg": 74.49
+        },
+        {
+            "courses_id": "121",
+            "courses_dept": "chem",
+            "courses_pass": 1586,
+            "sumAvg": 70.97
+        },
+        {
+            "courses_id": "110",
+            "courses_dept": "engl",
+            "courses_pass": 1590,
+            "sumAvg": 72.94
+        },
+        {
+            "courses_id": "110",
+            "courses_dept": "engl",
+            "courses_pass": 1626,
+            "sumAvg": 73.51
+        },
+        {
+            "courses_id": "112",
+            "courses_dept": "biol",
+            "courses_pass": 1630,
+            "sumAvg": 73.56
+        },
+        {
+            "courses_id": "121",
+            "courses_dept": "chem",
+            "courses_pass": 1634,
+            "sumAvg": 68.77
+        },
+        {
+            "courses_id": "121",
+            "courses_dept": "biol",
+            "courses_pass": 1648,
+            "sumAvg": 66.88
+        },
+        {
+            "courses_id": "121",
+            "courses_dept": "chem",
+            "courses_pass": 1667,
+            "sumAvg": 69.3
+        },
+        {
+            "courses_id": "121",
+            "courses_dept": "biol",
+            "courses_pass": 1670,
+            "sumAvg": 66.69
+        },
+        {
+            "courses_id": "121",
+            "courses_dept": "chem",
+            "courses_pass": 1674,
+            "sumAvg": 68.2
+        },
+        {
+            "courses_id": "121",
+            "courses_dept": "chem",
+            "courses_pass": 1699,
+            "sumAvg": 69.41
+        },
+        {
+            "courses_id": "102",
+            "courses_dept": "econ",
+            "courses_pass": 1705,
+            "sumAvg": 135.72
+        },
+        {
+            "courses_id": "112",
+            "courses_dept": "biol",
+            "courses_pass": 1710,
+            "sumAvg": 76.47
+        },
+        {
+            "courses_id": "150",
+            "courses_dept": "wrds",
+            "courses_pass": 1721,
+            "sumAvg": 70.76
+        },
+        {
+            "courses_id": "114",
+            "courses_dept": "eosc",
+            "courses_pass": 1738,
+            "sumAvg": 74.53
+        },
+        {
+            "courses_id": "121",
+            "courses_dept": "biol",
+            "courses_pass": 1758,
+            "sumAvg": 67.69
+        },
+        {
+            "courses_id": "121",
+            "courses_dept": "biol",
+            "courses_pass": 1760,
+            "sumAvg": 71.98
+        },
+        {
+            "courses_id": "121",
+            "courses_dept": "biol",
+            "courses_pass": 1761,
+            "sumAvg": 72.91
+        },
+        {
+            "courses_id": "121",
+            "courses_dept": "chem",
+            "courses_pass": 1762,
+            "sumAvg": 68.72
+        },
+        {
+            "courses_id": "121",
+            "courses_dept": "biol",
+            "courses_pass": 1768,
+            "sumAvg": 66.78
+        },
+        {
+            "courses_id": "121",
+            "courses_dept": "biol",
+            "courses_pass": 1780,
+            "sumAvg": 68.22
+        },
+        {
+            "courses_id": "102",
+            "courses_dept": "psyc",
+            "courses_pass": 1785,
+            "sumAvg": 68.72
+        },
+        {
+            "courses_id": "102",
+            "courses_dept": "econ",
+            "courses_pass": 1787,
+            "sumAvg": 69.62
+        },
+        {
+            "courses_id": "121",
+            "courses_dept": "biol",
+            "courses_pass": 1795,
+            "sumAvg": 70.95
+        },
+        {
+            "courses_id": "121",
+            "courses_dept": "biol",
+            "courses_pass": 1817,
+            "sumAvg": 67.49
+        },
+        {
+            "courses_id": "102",
+            "courses_dept": "econ",
+            "courses_pass": 1827,
+            "sumAvg": 68.98
+        },
+        {
+            "courses_id": "114",
+            "courses_dept": "eosc",
+            "courses_pass": 1830,
+            "sumAvg": 74.36
+        },
+        {
+            "courses_id": "150",
+            "courses_dept": "wrds",
+            "courses_pass": 1856,
+            "sumAvg": 70.15
+        },
+        {
+            "courses_id": "102",
+            "courses_dept": "econ",
+            "courses_pass": 1866,
+            "sumAvg": 67.7
+        },
+        {
+            "courses_id": "101",
+            "courses_dept": "econ",
+            "courses_pass": 1948,
+            "sumAvg": 70.08
+        },
+        {
+            "courses_id": "110",
+            "courses_dept": "engl",
+            "courses_pass": 1948,
+            "sumAvg": 72.3
+        },
+        {
+            "courses_id": "114",
+            "courses_dept": "eosc",
+            "courses_pass": 1950,
+            "sumAvg": 72.59
+        },
+        {
+            "courses_id": "101",
+            "courses_dept": "psyc",
+            "courses_pass": 1953,
+            "sumAvg": 69.15
+        },
+        {
+            "courses_id": "101",
+            "courses_dept": "econ",
+            "courses_pass": 1962,
+            "sumAvg": 68.48
+        },
+        {
+            "courses_id": "101",
+            "courses_dept": "psyc",
+            "courses_pass": 1966,
+            "sumAvg": 68.41
+        },
+        {
+            "courses_id": "110",
+            "courses_dept": "engl",
+            "courses_pass": 1990,
+            "sumAvg": 72.75
+        },
+        {
+            "courses_id": "114",
+            "courses_dept": "eosc",
+            "courses_pass": 2015,
+            "sumAvg": 73.39
+        },
+        {
+            "courses_id": "114",
+            "courses_dept": "eosc",
+            "courses_pass": 2016,
+            "sumAvg": 72.46
+        },
+        {
+            "courses_id": "102",
+            "courses_dept": "econ",
+            "courses_pass": 2019,
+            "sumAvg": 68.98
+        },
+        {
+            "courses_id": "101",
+            "courses_dept": "econ",
+            "courses_pass": 2023,
+            "sumAvg": 68.41
+        },
+        {
+            "courses_id": "101",
+            "courses_dept": "econ",
+            "courses_pass": 2063,
+            "sumAvg": 66.86
+        },
+        {
+            "courses_id": "102",
+            "courses_dept": "econ",
+            "courses_pass": 2083,
+            "sumAvg": 69.5
+        },
+        {
+            "courses_id": "102",
+            "courses_dept": "psyc",
+            "courses_pass": 2095,
+            "sumAvg": 69.45
+        },
+        {
+            "courses_id": "101",
+            "courses_dept": "econ",
+            "courses_pass": 2099,
+            "sumAvg": 69.43
+        },
+        {
+            "courses_id": "101",
+            "courses_dept": "econ",
+            "courses_pass": 2124,
+            "sumAvg": 67.24
+        },
+        {
+            "courses_id": "102",
+            "courses_dept": "econ",
+            "courses_pass": 2134,
+            "sumAvg": 68.72
+        },
+        {
+            "courses_id": "102",
+            "courses_dept": "econ",
+            "courses_pass": 2169,
+            "sumAvg": 68.27
+        },
+        {
+            "courses_id": "101",
+            "courses_dept": "psyc",
+            "courses_pass": 2201,
+            "sumAvg": 69.14
+        },
+        {
+            "courses_id": "101",
+            "courses_dept": "econ",
+            "courses_pass": 2278,
+            "sumAvg": 69.25
+        },
+        {
+            "courses_id": "101",
+            "courses_dept": "econ",
+            "courses_pass": 2286,
+            "sumAvg": 68.75
+        },
+        {
+            "courses_id": "102",
+            "courses_dept": "psyc",
+            "courses_pass": 2289,
+            "sumAvg": 69.51
+        },
+        {
+            "courses_id": "101",
+            "courses_dept": "econ",
+            "courses_pass": 2378,
+            "sumAvg": 68.4
+        },
+        {
+            "courses_id": "101",
+            "courses_dept": "econ",
+            "courses_pass": 2438,
+            "sumAvg": 69.82
+        },
+        {
+            "courses_id": "112",
+            "courses_dept": "engl",
+            "courses_pass": 2466,
+            "sumAvg": 71.49
+        },
+        {
+            "courses_id": "112",
+            "courses_dept": "engl",
+            "courses_pass": 2491,
+            "sumAvg": 72.02
+        },
+        {
+            "courses_id": "112",
+            "courses_dept": "engl",
+            "courses_pass": 2498,
+            "sumAvg": 72.59
+        },
+        {
+            "courses_id": "112",
+            "courses_dept": "engl",
+            "courses_pass": 2502,
+            "sumAvg": 71.51
+        },
+        {
+            "courses_id": "112",
+            "courses_dept": "engl",
+            "courses_pass": 2557,
+            "sumAvg": 71.71
+        },
+        {
+            "courses_id": "112",
+            "courses_dept": "engl",
+            "courses_pass": 2655,
+            "sumAvg": 73.17
+        },
+        {
+            "courses_id": "112",
+            "courses_dept": "engl",
+            "courses_pass": 2698,
+            "sumAvg": 72.91
+        },
+        {
+            "courses_id": "112",
+            "courses_dept": "engl",
+            "courses_pass": 2994,
+            "sumAvg": 71.91
+        }
+    ]
+}

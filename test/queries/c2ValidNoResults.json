@@ -1,0 +1,43 @@
+{
+    "title": "c2 valid -- no results",
+    "query": {
+        "WHERE": {
+            "IS": {
+                "rooms_href": "*CHEM"
+            }
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "rooms_shortname",
+                "rooms_seats",
+                "rooms_href",
+                "maxSeats"
+            ],
+            "ORDER": {
+                "dir": "UP",
+                "keys": [
+                    "rooms_shortname"
+                ]
+            }
+        },
+        "TRANSFORMATIONS": {
+            "GROUP": [
+                "rooms_shortname",
+                "rooms_seats",
+                "rooms_furniture",
+                "rooms_type",
+                "rooms_name",
+                "rooms_href"
+            ],
+            "APPLY": [
+                {
+                    "maxSeats": {
+                        "MAX": "rooms_seats"
+                    }
+                }
+            ]
+        }
+    },
+    "isQueryValid": true,
+    "result": []
+}

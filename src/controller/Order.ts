@@ -132,22 +132,66 @@ export default class Order {
 
     private doAscendingMultipleKey(order: any, sections: any[]) {
         let keys = order.keys;
-        let firstSort = this.doAscendingSingleKey(keys[0], sections);
-        for (let i = 1; i < keys.length; i++) {
-            let ascending = firstSort.sort((a: any, b: any) => {
-                if (a[keys[i - 1]] === b[keys[i - 1]]) {
-                    if (a[keys[i]] < b[keys[i]]) {
+        let seenKeys: any[] = [];
+        for (let i = 0; i < keys.length; i++) {
+            if (i === 0) {
+                sections = this.doAscendingSingleKey(keys[0], sections);
+                seenKeys.push(keys[0]);
+            } else {
+                sections = this.doAscendingRecursive(keys[i], seenKeys, sections);
+                seenKeys.push(keys[i]);
+            }
+        }
+        return sections;
+    }
+
+    private doAscendingRecursive(key: any, seenKeys: any[], sections: any[]): any[] {
+        let ascending: any[] = [];
+        let recursiveSortingObjects: any[] = [];
+
+        for (let section of sections) { // get all seenKey values for each section
+            let obj: any = {};
+            let values: any[] = [];
+            let seenKeyLabel: string = "";
+            for (let seenKey of seenKeys) {
+                values.push(section[seenKey]);
+            }
+            seenKeyLabel = values.toString();
+            obj["seenKeys"] = seenKeyLabel;
+            obj["section"] = section;
+            recursiveSortingObjects.push(obj);
+        }
+
+        let seenSeenKeys: any[] = [];
+        for (let groupingObj of recursiveSortingObjects) {
+            if (!seenSeenKeys.includes(groupingObj["seenKeys"])) {// gather all same seenKeys and sort
+                let temp: any[] = [];
+                for (let object of recursiveSortingObjects) {
+                    if (groupingObj["seenKeys"] === object["seenKeys"]) {
+                        temp.push(object);
+                    }
+                }
+                let tempSorted = temp.sort((a: any, b: any) => {
+                    if (a["section"][key] < b["section"][key]) {
                         return -1;
                     }
-                    if (a[keys[i]] > b[keys[i]]) {
+                    if (a["section"][key] > b["section"][key]) {
                         return 1;
                     } else {
                         return 0;
                     }
-                }
-            });
-            return ascending;
+                });
+                ascending.push(tempSorted);
+                ascending = ascending.reduce((acc, val) => acc.concat(val), []);
+                seenSeenKeys.push(groupingObj["seenKeys"]);
+            }
         }
+        let result: any = [];
+        for (let sectionObj of ascending) {
+            let s = sectionObj["section"];
+            result.push(s);
+        }
+        return result;
     }
 
     private doDescendingMultipleKey(order: any, sections: any[]): any[] {

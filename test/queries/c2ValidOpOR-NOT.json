@@ -1,0 +1,76 @@
+{
+    "title": "Valid -- OR-NOT",
+    "query": {
+        "WHERE": {
+            "OR": [
+                {
+                    "NOT": {
+                        "LT": {
+                            "courses_avg": 98
+                        }
+                    }
+                },
+                {
+                    "GT": {
+                        "courses_avg": 100
+                    }
+                }
+            ]
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "courses_dept",
+                "countID"
+            ],
+            "ORDER": {
+                "dir": "DOWN",
+                "keys": [
+                    "countID"
+                ]
+            }
+        },
+        "TRANSFORMATIONS": {
+            "GROUP": [
+                "courses_dept"
+            ],
+            "APPLY": [
+                {
+                    "countID": {
+                        "COUNT": "courses_id"
+                    }
+                }
+            ]
+        }
+    },
+    "isQueryValid": true,
+    "result": [
+        {
+            "courses_dept": "epse",
+            "countID": 3
+        },
+        {
+            "courses_dept": "nurs",
+            "countID": 2
+        },
+        {
+            "courses_dept": "cnps",
+            "countID": 1
+        },
+        {
+            "courses_dept": "crwr",
+            "countID": 1
+        },
+        {
+            "courses_dept": "eece",
+            "countID": 1
+        },
+        {
+            "courses_dept": "math",
+            "countID": 1
+        },
+        {
+            "courses_dept": "spph",
+            "countID": 1
+        }
+    ]
+}

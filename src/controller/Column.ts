@@ -54,8 +54,9 @@ export default class Column {
                 columnedSections.push(columnedSection);
             }
         }
-        for (let i = 0; i < columnedSections.length - 1; i++) {
-            let value = Object.values(columnedSections[i])[0];
+        for (let s of columnedSections) {
+            let value = Object.values(s)[0];
+
             if (!groupValues.includes(value)) {
                 groupValues.push(value);
                 groupedColumnedArr.push(columnedSections[i]);

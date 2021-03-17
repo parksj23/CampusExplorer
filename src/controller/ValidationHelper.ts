@@ -41,6 +41,11 @@ export default class ValidationHelper {
         if (transformations === undefined || transformations === null) {
             return false;
         }
+
+        if (typeof transformations !== "object") {
+            return false;
+        }
+
         if (transformations !== undefined || transformations !== null) {
             let transProp = Object.getOwnPropertyNames(transformations);
             if (transProp.length !== 2) {
@@ -106,24 +111,39 @@ export default class ValidationHelper {
         if (apply === undefined || apply === null) {
             return false;
         }
+
         if (!Array.isArray(apply)) {
             return false;
         }
+
         for (let applyOuterObj of apply) {
             if (typeof applyOuterObj !== "object") {
                 return false;
             }
-            let applyKeyString = Object.getOwnPropertyNames(applyOuterObj);
-            let applyKey = applyKeyString[0];
-            if (applyKeys.includes(applyKey)) {
+
+            if (applyOuterObj === undefined || applyOuterObj === null) {
                 return false;
             }
+
+            let applyKeyString = Object.getOwnPropertyNames(applyOuterObj);
+            let applyKey = applyKeyString[0];
+
+            if (applyKeys.includes(applyKey)) { // check if duplicate applykeys
+                return false;
+            }
+
             if (typeof applyKey !== "string") {
                 return false;
             }
+
             if (applyKey.includes("_")) {
                 return false;
             }
+
+            if (applyKey.length === 0) {
+                return false;
+            }
+
             if (this.applyInnerObjValidation(applyKeyString, applyOuterObj, performQueryDatasetIds)) {
                 applyKeys.push(applyKey);
             } else {
@@ -138,6 +158,12 @@ export default class ValidationHelper {
                                     performQueryDatasetIds: string[]): boolean {
         for (let applyInnerObjKey of applyKeyString) {
             let applyInnerObj = applyOuterObj[applyInnerObjKey];
+            if (typeof applyInnerObj !== "object") {
+                return false;
+            }
+            if (applyInnerObj === undefined || applyInnerObj === null) {
+                return false;
+            }
             let applyTokenString = Object.getOwnPropertyNames(applyInnerObj);
             let applyToken = applyTokenString[0];
             if (applyTokenString.length !== 1) {
@@ -154,12 +180,7 @@ export default class ValidationHelper {
             if (applyTargetKeyArr.length !== 2) {
                 return false;
             }
-
-            if (typeof applyTargetKey !== "string") {
-                return false;
-            }
-
-            if (applyTargetKey === undefined || applyTargetKey === null) {
+            if (typeof applyTargetKey !== "string" || applyTargetKey === undefined || applyTargetKey === null) {
                 return false;
             }
 

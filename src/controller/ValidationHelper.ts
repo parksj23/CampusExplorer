@@ -3,13 +3,19 @@ import {
     InsightError,
     ResultTooLargeError
 } from "./IInsightFacade";
-import {Course} from "./Course";
+// import {Course} from "./Course";
 import InsightFacade from "./InsightFacade";
 import {split} from "ts-node";
 import Log from "../Util";
 import ValidateQuery from "./ValidateQuery";
 
 export default class ValidationHelper {
+    private static WHERE: string = "WHERE";
+    private static OPTIONS: string = "OPTIONS";
+    private static COLUMNS: string = "COLUMNS";
+    private static ORDER: string = "ORDER";
+    private static SORT: string = "SORT";
+    private static TRANSFORMATIONS: string = "TRANSFORMATIONS";
     private static GROUP: string = "GROUP";
     private static APPLY: string = "APPLY";
 
@@ -23,7 +29,6 @@ export default class ValidationHelper {
     public mfields: string[] = ["avg", "pass", "fail", "audit", "year", "lat", "lon", "seats"];
 
     public applyTokens: string[] = ["MAX", "MIN", "AVG", "COUNT", "SUM"];
-    public mApplyTokens: string[] = ["MAX", "MIN", "AVG", "SUM"];
 
     constructor() {
         Log.trace("InsightFacadeImpl::init()");
@@ -46,10 +51,10 @@ export default class ValidationHelper {
             if (transProp.length !== 2) {
                 return false;
             }
-            if (typeof transProp[0] !== "string" || transProp[0] !== "GROUP") {
+            if (transProp[0] !== "GROUP") {
                 return false;
             }
-            if (typeof transProp[1] !== "string" || transProp[1] !== "APPLY") {
+            if (transProp[1] !== "APPLY") {
                 return false;
             }
             if (!this.validateGroup(transformations.GROUP, performQueryDatasetIds, groupKeys)) {
@@ -67,9 +72,6 @@ export default class ValidationHelper {
             return false;
         }
         if (!Array.isArray(group)) {
-            return false;
-        }
-        if (group.length === 0) {
             return false;
         }
         for (let key of group) {
@@ -167,9 +169,11 @@ export default class ValidationHelper {
             if (applyTokenString.length !== 1) {
                 return false;
             }
+
             if (!this.applyTokens.includes(applyToken)) {
                 return false;
             }
+
             let applyTargetKeyStrArray = Object.entries(applyInnerObj);
             let applyTargetKeyArr = applyTargetKeyStrArray[0];
             let applyTargetKey = applyTargetKeyArr[1];
@@ -179,23 +183,22 @@ export default class ValidationHelper {
             if (typeof applyTargetKey !== "string" || applyTargetKey === undefined || applyTargetKey === null) {
                 return false;
             }
+
             if (!applyTargetKey.includes("_")) {
                 return false;
             }
+
             let splitKey = applyTargetKey.split("_");
             let id = splitKey[0];
             let smfield = splitKey[1];
             if (splitKey.length !== 2) {
                 return false;
             }
+
             if (!this.sfields.includes(smfield) && (!this.mfields.includes(smfield))) {
                 return false;
             }
-            if (this.mApplyTokens.includes(applyToken)) {
-                if (!this.mfields.includes(smfield)) {
-                    return false;
-                }
-            }
+
             if (!performQueryDatasetIds.includes(id)) {
                 performQueryDatasetIds.push(id);
             }

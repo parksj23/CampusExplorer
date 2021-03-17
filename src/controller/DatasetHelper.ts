@@ -1,6 +1,3 @@
-import {
-    Course,
-} from "./Course";
 import {InsightDataset, InsightDatasetKind, InsightError} from "./IInsightFacade";
 import Log from "../Util";
 import Dataset from "./Dataset";
@@ -111,5 +108,4 @@ export default class DatasetHelper {
         }
         return sections;
     }
-
 }

@@ -42,7 +42,7 @@ export default class DatasetHelper {
                 let diskData = JSON.parse(buffer);
                 if (diskData !== null || diskData !== undefined) {
                     // if (this.memory.length === 0) {
-                        return data = diskData.coursesArray;
+                    return data = diskData.coursesArray;
                     // }
                 }
 

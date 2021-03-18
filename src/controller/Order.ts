@@ -1,10 +1,3 @@
-import {
-    InsightDataset,
-    InsightError,
-    ResultTooLargeError
-} from "./IInsightFacade";
-// import {Course} from "./Course";
-import InsightFacade from "./InsightFacade";
 import {split} from "ts-node";
 
 export default class Order {
@@ -23,17 +16,8 @@ export default class Order {
         let optionsKeys = Object.getOwnPropertyNames(query);
         if (optionsKeys.includes(Order.ORDER)) {
             let order = query[Order.ORDER];
-            if (typeof order === "string") { // if there is only 1 key in order, then we sort by that
-                let ascending = sections.sort((a: any, b: any) => {
-                    if (a[order] < b[order]) {
-                        return -1;
-                    }
-                    if (a[order] > b[order]) {
-                        return 1;
-                    } else {
-                        return 0;
-                    }
-                });
+            if (typeof order === "string") { // c1 sort
+                let ascending = this.doStringOrder(order, sections);
                 sections = ascending;
             }
 

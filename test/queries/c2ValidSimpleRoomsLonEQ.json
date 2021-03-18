@@ -1,0 +1,45 @@
+{
+    "title": "Valid -- Simple SELECT rooms_lon EQ",
+    "query": {
+        "WHERE": {
+            "EQ": {
+                "rooms_lon": -123.24494
+            }
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "rooms_fullname",
+                "countSeats",
+                "rooms_lon"
+            ],
+            "ORDER": {
+                "dir": "UP",
+                "keys": [
+                    "countSeats",
+                    "rooms_fullname"
+                ]
+            }
+        },
+        "TRANSFORMATIONS": {
+            "GROUP": [
+                "rooms_fullname",
+                "rooms_lon"
+            ],
+            "APPLY": [
+                {
+                    "countSeats": {
+                        "COUNT": "rooms_seats"
+                    }
+                }
+            ]
+        }
+    },
+    "isQueryValid": true,
+    "result": [
+        {
+            "rooms_fullname": "Life Sciences Centre",
+            "countSeats": 2,
+            "rooms_lon": -123.24494
+        }
+    ]
+}

@@ -1,3 +1,6 @@
+import {
+    Course,
+} from "./Course";
 import {InsightDataset, InsightDatasetKind, InsightError} from "./IInsightFacade";
 import Log from "../Util";
 import Dataset from "./Dataset";
@@ -41,9 +44,9 @@ export default class DatasetHelper {
                 let buffer = fs.readFileSync(filePath);
                 let diskData = JSON.parse(buffer);
                 if (diskData !== null || diskData !== undefined) {
-                    // if (this.memory.length === 0) {
-                    return data = diskData.coursesArray;
-                    // }
+                    if (this.memory.length === 0) {
+                        return data = diskData.coursesArray;
+                    }
                 }
 
                 if (diskData === null || diskData === undefined) {
@@ -51,20 +54,16 @@ export default class DatasetHelper {
                         throw new InsightError("There are no datasets added.");
                     }
                 }
-            } catch (e) {
-                throw new InsightError("No datasets added to disk or memory.");
-            }
-        }
 
-        if (!fs.existsSync(directory)) {
-            if (this.memory.length > 0 && this.memory.includes(queryingDatasetId)) {
-                for (let d of this.addedDatasetContent) {
-                    if (d.getDatasetId() === queryingDatasetId) {
-                        return data = d.getCoursesArray();
+                if (this.memory.length > 0 && this.memory.includes(queryingDatasetId)) {
+                    for (let d of this.addedDatasetContent) {
+                        if (d.getDatasetId() === queryingDatasetId) {
+                            return data = d.getCoursesArray();
+                        }
                     }
                 }
-            } else {
-                throw new InsightError("Nothing on disk, nothing in local memory.");
+            } catch (e) {
+                throw new InsightError("Cannot find directory or dataset.");
             }
         }
     }
@@ -79,6 +78,7 @@ export default class DatasetHelper {
                 let validSectionFields: any[] = [];
                 let initialSectionFields = Object.keys(i);
                 for (let key of initialDesiredFields) {
+                    let iKey = typeof i[key];
                     if (initialSectionFields.includes(key)) {
                         validSectionFields.push(i[key]);
                     }
@@ -108,4 +108,5 @@ export default class DatasetHelper {
         }
         return sections;
     }
+
 }

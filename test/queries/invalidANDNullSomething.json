@@ -1,0 +1,29 @@
+{
+    "title": "invalid --null and something intersection",
+    "query": {
+        "WHERE": {
+            "AND": [
+                {
+                    "EQ": {
+                            "courses_year": null
+                        }
+                },
+                {
+                    "EQ": {
+                        "courses_year": 2018
+                    }
+                }
+            ]
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "courses_dept",
+                "courses_id",
+                "courses_avg"
+            ],
+            "ORDER": "courses_avg"
+        }
+    },
+    "isQueryValid": false,
+    "result": "InsightError"
+}

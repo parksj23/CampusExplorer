@@ -1,0 +1,19 @@
+{
+    "title": "invalid --ORDER block with boolean",
+    "query": {
+        "WHERE": {
+            "IS": {
+                "courses_id": "101"
+            }
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "courses_dept",
+                "courses_avg"
+            ],
+            "ORDER": true
+        }
+    },
+    "isQueryValid": false,
+    "result": "InsightError"
+}

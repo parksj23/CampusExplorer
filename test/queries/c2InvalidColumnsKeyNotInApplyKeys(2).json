@@ -1,0 +1,37 @@
+{
+    "title": "Invalid -- Keys in COLUMNS must be in GROUP or APPLY when TRANSFORMATIONS is present",
+    "query": {
+        "WHERE": {
+            "GT": {
+                "courses_avg": 30
+            }
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "courses_dept",
+                "minAvg",
+                "courses_avg"
+            ],
+            "ORDER": {
+                "dir": "UP",
+                "keys": [
+                    "minAvg"
+                ]
+            }
+        },
+        "TRANSFORMATIONS": {
+            "GROUP": [
+                "courses_dept"
+            ],
+            "APPLY": [
+                {
+                    "minAvg": {
+                        "MIN": "courses_avg"
+                    }
+                }
+            ]
+        }
+    },
+    "isQueryValid": false,
+    "result": "InsightError"
+}

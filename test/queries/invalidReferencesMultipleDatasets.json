@@ -1,0 +1,38 @@
+{
+    "title": "Invalid -- references multiple datasets",
+    "query": {
+        "WHERE": {
+            "AND": [
+                {
+                    "AND": [
+                        {
+                            "GT": {
+                                "courses_avg": 75
+                            }
+                        },
+                        {
+                            "IS": {
+                                "courses_dept": "cpsc"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "GT": {
+                        "courses2_pass": 3000
+                    }
+                }
+            ]
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "courses_dept",
+                "courses_avg",
+                "courses_instructor"
+            ],
+            "ORDER": "courses_avg"
+        }
+    },
+    "isQueryValid": false,
+    "result":"InsightError"
+}

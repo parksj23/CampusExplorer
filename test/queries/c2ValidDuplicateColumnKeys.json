@@ -1,0 +1,133 @@
+{
+    "title": "c2 valid -- double keys in Order obj",
+    "query": {
+        "WHERE": {
+            "GT": {
+                "courses_fail": 200
+            }
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "courses_id",
+                "courses_dept",
+                "courses_fail",
+                "sumAvg",
+                "sumAvg"
+            ],
+            "ORDER": {
+                "dir": "UP",
+                "keys": [
+                    "courses_fail",
+                    "sumAvg"
+                ]
+            }
+        },
+        "TRANSFORMATIONS": {
+            "GROUP": [
+                "courses_dept",
+                "courses_id",
+                "courses_fail"
+            ],
+            "APPLY": [
+                {
+                    "sumAvg": {
+                        "SUM": "courses_avg"
+                    }
+                }
+            ]
+        }
+    },
+    "isQueryValid": true,
+    "result": [
+        {
+            "courses_id": "101",
+            "courses_dept": "math",
+            "courses_fail": 203,
+            "sumAvg": 64.55
+        },
+        {
+            "courses_id": "200",
+            "courses_dept": "biol",
+            "courses_fail": 204,
+            "sumAvg": 64.73
+        },
+        {
+            "courses_id": "101",
+            "courses_dept": "math",
+            "courses_fail": 205,
+            "sumAvg": 65.99
+        },
+        {
+            "courses_id": "233",
+            "courses_dept": "chem",
+            "courses_fail": 213,
+            "sumAvg": 63.33
+        },
+        {
+            "courses_id": "101",
+            "courses_dept": "econ",
+            "courses_fail": 221,
+            "sumAvg": 67.24
+        },
+        {
+            "courses_id": "101",
+            "courses_dept": "math",
+            "courses_fail": 222,
+            "sumAvg": 65.38
+        },
+        {
+            "courses_id": "233",
+            "courses_dept": "chem",
+            "courses_fail": 226,
+            "sumAvg": 64.94
+        },
+        {
+            "courses_id": "112",
+            "courses_dept": "biol",
+            "courses_fail": 230,
+            "sumAvg": 68.77
+        },
+        {
+            "courses_id": "121",
+            "courses_dept": "chem",
+            "courses_fail": 235,
+            "sumAvg": 70.22
+        },
+        {
+            "courses_id": "121",
+            "courses_dept": "chem",
+            "courses_fail": 250,
+            "sumAvg": 69.3
+        },
+        {
+            "courses_id": "121",
+            "courses_dept": "chem",
+            "courses_fail": 251,
+            "sumAvg": 69.41
+        },
+        {
+            "courses_id": "121",
+            "courses_dept": "chem",
+            "courses_fail": 260,
+            "sumAvg": 68.77
+        },
+        {
+            "courses_id": "121",
+            "courses_dept": "chem",
+            "courses_fail": 264,
+            "sumAvg": 68.72
+        },
+        {
+            "courses_id": "121",
+            "courses_dept": "chem",
+            "courses_fail": 266,
+            "sumAvg": 67.42
+        },
+        {
+            "courses_id": "121",
+            "courses_dept": "chem",
+            "courses_fail": 287,
+            "sumAvg": 68.2
+        }
+    ]
+}

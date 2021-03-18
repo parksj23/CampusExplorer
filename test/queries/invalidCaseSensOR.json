@@ -1,0 +1,29 @@
+{
+    "title": "Invalid case sensitivity -- OR",
+    "query": {
+        "WHERE": {
+            "Or": [
+                {
+                    "GT": {
+                        "courses_avg": 99
+                    }
+                },
+                {
+                    "EQ": {
+                        "courses_pass": 3000
+                    }
+                }
+            ]
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "courses_dept",
+                "courses_avg",
+                "courses_instructor"
+            ],
+            "ORDER": "courses_avg"
+        }
+    },
+    "isQueryValid": false,
+    "result": "InsightError"
+}

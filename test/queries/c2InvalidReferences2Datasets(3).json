@@ -1,0 +1,36 @@
+{
+    "title": "Invalid -- cannot query more than one dataset",
+    "query": {
+        "WHERE": {
+            "IS": {
+                "rooms_id": "600"
+            }
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "courses_uuid",
+                "sumAvg"
+            ],
+            "ORDER": {
+                "dir": "UP",
+                "keys": [
+                    "sumAvg"
+                ]
+            }
+        },
+        "TRANSFORMATIONS": {
+            "GROUP": [
+                "courses_uuid"
+            ],
+            "APPLY": [
+                {
+                    "sumAvg": {
+                        "SUM": "courses_avg"
+                    }
+                }
+            ]
+        }
+    },
+    "isQueryValid": false,
+    "result": "InsightError"
+}

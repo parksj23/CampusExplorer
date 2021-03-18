@@ -3,20 +3,12 @@ import {
     InsightError,
     ResultTooLargeError
 } from "./IInsightFacade";
-// import {Course} from "./Course";
 import InsightFacade from "./InsightFacade";
 import {split} from "ts-node";
 import Log from "../Util";
-import ValidateQuery from "./ValidateQuery";
+import Decimal from "decimal.js";
 
 export default class Apply {
-    private static WHERE: string = "WHERE";
-    private static OPTIONS: string = "OPTIONS";
-    private static COLUMNS: string = "COLUMNS";
-    private static ORDER: string = "ORDER";
-    private static SORT: string = "SORT";
-    private static TRANSFORMATIONS: string = "TRANSFORMATIONS";
-    private static GROUP: string = "GROUP";
     private static APPLY: string = "APPLY";
 
     public transformations: any;
@@ -37,8 +29,10 @@ export default class Apply {
     }
 
     public doApply(query: any, data: any[]): any[] {
-        let b = query[Apply.APPLY];
-        if (query[Apply.APPLY].length === 0) {
+        let apply = query[Apply.APPLY];
+        let columnName: string = "";
+
+        if (apply.length === 0) {
             return data;
         }
 

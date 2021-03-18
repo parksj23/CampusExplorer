@@ -1,7 +1,3 @@
-import {
-    InsightError,
-    ResultTooLargeError
-} from "./IInsightFacade";
 import SCOMP from "./SCOMP";
 import ValidationHelper from "./ValidationHelper";
 import {type} from "os";

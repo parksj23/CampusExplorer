@@ -1,94 +1,175 @@
-import {
-    Course,
-} from "./Course";
 import {InsightDataset, InsightDatasetKind, InsightError} from "./IInsightFacade";
 import Log from "../Util";
-import Dataset from "./Dataset";
 import * as JSZip from "jszip";
 import GeoResponse from "./GeoResponse";
+import FindRoomFields from "./FindRoomFields";
+import {JSZipObject} from "jszip";
 
 const parse5 = require("parse5");
 
 export default class RoomsDatasetHelper {
     public datasets: InsightDataset[] = [];
-    public memory: string[] = [];
-    public addedDatasetContent: Dataset[] = [];
+    public fields = new FindRoomFields();
 
     public constructor() {
         Log.trace("InsightFacadeImpl::init()");
     }
 
-    // public saveData(id: string, kind: InsightDatasetKind, validSections: any[]) {
-    //     let fs = require("fs");
-    //     let insightDataset: InsightDataset = {id, kind, numRows: validSections.length};
-    //     this.datasets.push(insightDataset);
-    //     this.memory.push(id);
-    //     let datasetContent = new Dataset(id, validSections);
-    //     this.addedDatasetContent.push(datasetContent);
-    //     const directory = "./src/data/";
-    //     try {
-    //         if (!fs.existsSync(directory)) {
-    //             fs.mkdirSync(directory);
-    //         }
-    //         const filePath: string = directory + id;
-    //         fs.writeFileSync(filePath, JSON.stringify(datasetContent));
-    //     } catch (e) {
-    //         throw new InsightError("Data was parsed correctly but not saved");
-    //     }
+    public getDataset(root: JSZip): Promise<any[]> {
+        return new Promise((resolve, reject) => {
+            let allRooms: any[] = [];
+            // TODO parse index
+            let zip: JSZip = new JSZip();
+            root.file("rooms/index.htm").async("string").then(this.parseHTML).then((parsedHTML) => {
+                let roomShortName = "x";
+                // do {
+                let room: any = {};
+                roomShortName = (this.fields.findShortName(parsedHTML)).trim();
+                room["shortName"] = roomShortName;
+                room["longName"] = (this.fields.findLongName(parsedHTML)).trim();
+                room["address"] = (this.fields.findAddress(parsedHTML)).trim();
+                room["geoLocation"] = this.getLatLong(room["address"]);
+                this.fetchRoomInfo(root, roomShortName).then((roomSpecifics) => {
+                    // let roomNumAvailable = 0;
+                    // do {
+                    // roomNumAvailable = newRoom["number"];
+                    room["number"] = roomSpecifics["number"];
+                    room["seats"] = roomSpecifics["seats"];
+                    room["type"] = roomSpecifics["type"];
+                    room["furniture"] = roomSpecifics["furniture"];
+                    room["name"] = room["shortName"] + " " + room["number"];
+                    // if (this.checkFieldTypeRoom(room)) {
+                    allRooms.push(room);
+                    // }
+                    // }
+                    // while (roomNumAvailable !== -1);
+                }).then(() => {
+                    return resolve(allRooms);
+                });
+                // }
+                // while (roomShortName.length > 0);
+            }).catch(() => {
+                throw (new InsightError("broken HTML file"));
+            });
+        });
+    }
+
+    public fetchRoomInfo(root: JSZip, shortName: string): Promise<any> {
+        return new Promise((resolve, reject) => {
+            this.getRoomHTML(root, shortName).then(this.parseHTML).then((parsedHTML) => {
+                let roomSpecifics: any = {};
+                roomSpecifics["number"] = this.fields.findNumber(parsedHTML);
+                roomSpecifics["seats"] = (this.fields.findSeats(parsedHTML));
+                roomSpecifics["type"] = (this.fields.findType(parsedHTML)).trim();
+                roomSpecifics["furniture"] = (this.fields.findFurniture(parsedHTML)).trim();
+                return resolve(roomSpecifics);
+            });
+        });
+    }
+
+    // public getAddress(fileContent: string): Promise<string> {
+    //     // let address: string = "nothing found";
+    //     return new Promise((resolve, reject) => {
+    //         this.getHTMLString(fileContent).then(this.parseHTML).then((parsedHTML) => {
+    //             let address: string = (this.fields.findAddress(parsedHTML)).trim();
+    //             return resolve(address);
+    //         });
+    //     });
+    // }
+    //
+    // public getShortName(fileContent: string) {
+    //     return new Promise((resolve, reject) => {
+    //         this.getHTMLString(fileContent).then(this.parseHTML).then((parsedHTML) => {
+    //             let shortName: string = (this.fields.findShortName(parsedHTML)).trim();
+    //             return resolve(shortName);
+    //         });
+    //     });
+    // }
+    //
+    // public getLongName(fileContent: string) {
+    //     return new Promise((resolve, reject) => {
+    //         this.getHTMLString(fileContent).then(this.parseHTML).then((parsedHTML) => {
+    //             let longName: string = (this.fields.findLongName(parsedHTML)).trim();
+    //             return resolve(longName);
+    //         });
+    //     });
+    // }
+    //
+    // public getNumber(root: JSZip, shortName: string) {
+    //     return new Promise((resolve, reject) => {
+    //         this.getRoomHTML(root, shortName).then(this.parseHTML).then((parsedHTML) => {
+    //             let rNumber: string = this.fields.findNumber(parsedHTML);
+    //             return resolve(rNumber);
+    //         });
+    //     });
+    // }
+    //
+    // public getSeats(root: JSZip, shortName: string): Promise<number> {
+    //     return new Promise((resolve, reject) => {
+    //         this.getRoomHTML(root, shortName).then(this.parseHTML).then((parsedHTML) => {
+    //             let seats: number = (this.fields.findSeats(parsedHTML));
+    //             return resolve(seats);
+    //         });
+    //     });
+    // }
+    //
+    // public getType(root: JSZip, shortName: string) {
+    //     return new Promise((resolve, reject) => {
+    //         this.getRoomHTML(root, shortName).then(this.parseHTML).then((parsedHTML) => {
+    //             let type: string = (this.fields.findType(parsedHTML)).trim();
+    //             return resolve(type);
+    //         });
+    //     });
+    // }
+    //
+    // public getFurniture(root: JSZip, shortName: string) {
+    //     return new Promise((resolve, reject) => {
+    //         this.getRoomHTML(root, shortName).then(this.parseHTML).then((parsedHTML) => {
+    //             let furniture: string = (this.fields.findFurniture(parsedHTML)).trim();
+    //             return resolve(furniture);
+    //         });
+    //     });
     // }
 
-    public getBuildingAddress(fileContent: string): Promise<string> {
-        // let address: string = "nothing found";
+    // public getHref(root: JSZip, shortName: string) {
+    //     return new Promise((resolve, reject) => {
+    //         this.getRoomHTML(root, shortName).then(this.parseHTML).then((parsedHTML) => {
+    //             let href: string = (this.fields.findHref(parsedHTML)).trim();
+    //             return resolve(href);
+    //         });
+    //     });
+    // }
+
+    public getRoomHTML(root: JSZip, shortName: string): Promise<string> {
+        const fs = require("fs");
         return new Promise((resolve, reject) => {
-            this.getHTMLString(fileContent).then(this.parseHTML).then((parsedHTML) => {
-                let buildingAddress: string = (this.findAddress(parsedHTML)).trim();
-                return buildingAddress;
+            const room: JSZipObject = root.folder("rooms").folder("campus").folder("discover")
+                .folder("buildings-and-classrooms").file(shortName);
+            room.async("string").then((htmlContent) => {
+                return resolve(htmlContent);
             });
         });
     }
 
-    private getHTMLString(file: string): Promise<string> {
-        let zip = new JSZip();
-        return new Promise((resolve, reject) => {
-            zip.loadAsync(file, {base64: true}).then((root) => {
-                root.file("rooms/index.htm").async("string").then((stringContent) => {
-                    return resolve(stringContent);
-                });
-            });
-        });
-    }
+    // private getHTMLString(file: string): Promise<string> {
+    //     let zip = new JSZip();
+    //     return new Promise((resolve, reject) => {
+    //         zip.loadAsync(file, {base64: true}).then((root) => {
+    //             root.file("rooms/index.htm").async("string").then((stringContent) => {
+    //                 return resolve(stringContent);
+    //             });
+    //         });
+    //     });
+    // }
 
     private parseHTML(html: string): Promise<any> {
         return Promise.resolve(parse5.parse(html));
     }
 
-    private findAddress(element: any): string {
-        if (element.nodeName === "td" && element.attrs[0].value === "views-field views-field-field-building-address") {
-            return element.childNodes[0].value;
-        }
-        if (element.childNodes && element.childNodes.length > 0) {
-            for (let child of element.childNodes) {
-                let possibleAddress = this.findAddress(child);
-                if (!(possibleAddress === "")) {
-                    return possibleAddress;
-                }
-            }
-        }
-        return "";
-    }
-
-    public getLatLong(address: string): GeoResponse {
-        return {
-            lat: 0,
-            lon: 0,
-            error: null,
-        };
+    private getLatLong(address: string): GeoResponse {
+        return { lat: 0, lon: 0, error: null, };
         if (Error) {
-            return {
-                lat: null,
-                lon: null,
-                error: "error- geoLocation not found",
-            };
+            return { lat: null, lon: null, error: "error- geoLocation not found", };
         }
     }
 
@@ -102,5 +183,4 @@ export default class RoomsDatasetHelper {
         }
         return false;
     }
-
 }

@@ -3,7 +3,6 @@ import {
     InsightError,
     ResultTooLargeError
 } from "./IInsightFacade";
-import {Course} from "./Course";
 import InsightFacade from "./InsightFacade";
 import {split} from "ts-node";
 
@@ -80,7 +79,6 @@ export default class Column {
                 columnedSections.push(columnedSection);
             }
         }
-        // for (let i = 0; i < columnedSections.length; i++) {
         for (let s of columnedSections) {
             let value = Object.values(s)[0];
             if (!groupValues.includes(value)) {

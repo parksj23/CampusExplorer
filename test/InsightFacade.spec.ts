@@ -11,6 +11,8 @@ import {
 import InsightFacade from "../src/controller/InsightFacade";
 import Log from "../src/Util";
 import TestUtil from "./TestUtil";
+import RoomsDatasetHelper from "../src/controller/RoomsDatasetHelper";
+import * as JSZip from "jszip";
 
 // This extends chai with assertions that natively support Promises
 chai.use(chaiAsPromised);
@@ -49,6 +51,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     };
     let datasets: { [id: string]: string } = {};
     let insightFacade: InsightFacade;
+    let roomsHelper: RoomsDatasetHelper;
     const cacheDir = __dirname + "/../data";
 
     before(function () {
@@ -65,6 +68,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
         }
         try {
             insightFacade = new InsightFacade();
+            roomsHelper = new RoomsDatasetHelper();
         } catch (err) {
             Log.error(err);
         }
@@ -263,6 +267,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     });
 
     it("Fail to add dataset -- no course sections", function () {
+        this.timeout( 10000);
         const id: string = "noSections";
         const expected: string[] = [id];
         const futureResult: Promise<string[]> = insightFacade.addDataset(
@@ -274,6 +279,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     });
 
     it("Fail to add dataset -- invalid dataset", function () {
+        this.timeout( 10000);
         const id: string = "coursesInvalid";
         const expected: string[] = [id];
         const futureResult: Promise<string[]> = insightFacade.addDataset(
@@ -666,7 +672,6 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
         const removeResult: Promise<string> = insightFacade.removeDataset(id);
         return expect(removeResult).to.be.rejectedWith(NotFoundError);
     });
-
     it("c2- should remove a valid dataset that exists -- rooms type", function () {
         // this.timeout(10000);
         const id = "rooms";
@@ -678,7 +683,6 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
             return expect(removeResult).to.eventually.deep.equal(removeExpected);
         });
     });
-
     it("c2- Should remove a dataset with id that starts with whitespaces -- rooms type", function () {
         const id = "   rooms";
         const expected = [id];
@@ -691,7 +695,6 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
                 return expect(removeResult).to.eventually.deep.equal(removeExpected);
             });
     });
-
     it("c2- Should remove a dataset with id of whitespaces in the middle -- rooms type", function () {
         const id = "r    oo    m     s";
         const expected = [id];
@@ -704,7 +707,6 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
                 return expect(removeResult).to.eventually.deep.equal(removeExpected);
             });
     });
-
     it("c2- Should remove a dataset with id that ends with whitespace -- rooms type", function () {
         const id = "rooms    ";
         const expected = [id];
@@ -717,13 +719,11 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
                 return expect(removeResult).to.eventually.deep.equal(removeExpected);
             });
     });
-
     it("c2- Fail to remove a dataset that does not exist -- rooms type", function () {
         const id = "rooms";
         const futureResult = insightFacade.removeDataset(id);
         return expect(futureResult).to.be.rejectedWith(NotFoundError);
     });
-
     it("c2- Fail to remove a dataset -- add and remove diff id's -- rooms type", function () {
         this.timeout(10000);
         const id1 = "rooms";
@@ -737,7 +737,6 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
                 return expect(future2).to.be.rejectedWith(NotFoundError);
             });
     });
-
     it("c2- Fail to remove a dataset -- underscore id -- rooms type", function () {
         const validID = "rooms";
         const invalidID = "rooms_underscore";
@@ -750,7 +749,6 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
                 return expect(future2).to.be.rejectedWith(InsightError);
             });
     });
-
     it("c2- Fail to remove a dataset -- whitespace id -- rooms type", function () {
         const validID = "rooms";
         const invalidID = "     ";
@@ -763,7 +761,6 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
                 return expect(future2).to.be.rejectedWith(InsightError);
             });
     });
-
     it("c2- Fail to remove a dataset null id -- rooms type", function () {
         const validID = "rooms";
         const invalidID: string = null;
@@ -776,7 +773,6 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
                 return expect(future2).to.be.rejectedWith(InsightError);
             });
     });
-
     it("c2- Fail to remove a dataset empty string id -- rooms type", function () {
         const validID = "rooms";
         const invalidID = "";
@@ -914,14 +910,12 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
                     });
             });
     });
-    // TODO: SP -- comment out above
 
     it("c2- Should return empty array -- no datasets added -- rooms type", function () {
         const expected: InsightDataset[] = [];
         const futureResult = insightFacade.listDatasets();
         return expect(futureResult).to.eventually.deep.equal(expected);
     });
-
     it("c2- Should return empty array after removing the last dataset -- rooms type", function () {
         let id = "rooms";
         const expected = [];
@@ -938,7 +932,6 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
             });
         });
     });
-
     it("c2- Should return array of 1 dataset -- 1 add -- rooms type", function () {
         this.timeout(10000);
         let id = "rooms";
@@ -954,7 +947,6 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
             });
         });
     });
-
     it("c2- Should return array of 1 dataset -- 2 add, 1 remove", function () {
         let id1 = "rooms";
         let id2 = "oneValidRoom";
@@ -990,7 +982,6 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
                     });
             });
     });
-
     it("c2- Should return array of 1 dataset with 1 section -- rooms type", function () {
         let id = "oneValidRoom";
         const expectedString = [id];
@@ -1004,7 +995,6 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
             });
         });
     });
-
     it("c2- Should return array of 2 datasets -- 2 rooms", function () {
         this.timeout(10000);
         let id1 = "rooms";
@@ -1031,7 +1021,6 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
                     });
             });
     });
-
     it("c2- Should return array of 2 datasets -- 1 room, 1 course", function () {
         this.timeout(10000);
         let id1 = "rooms";
@@ -1059,15 +1048,150 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
             });
     });
 
-    // getAddress tests
-    it("c2- Should get address - ACU Building ", function () {
-        const expected: string = "2211 Wesbrook Mall";
-        const id: string = "rooms";
-        const fileContent = datasets[id];
-        insightFacade.getBuildingAddress(fileContent).then((futureResult) => {
-            return expect(futureResult).to.eventually.deep.equal(expected);
-        });
-    });
+    // getAddress test
+    // it("c2- Should get addresses", function () {
+    //     const expected: string = "2211 Wesbrook Mall";
+    //     const expected2: string = "1822 East Mall";
+    //     const id: string = "rooms";
+    //     const fileContent = datasets[id];
+    //     return roomsHelper.getAddress(fileContent).then((futureResult) => {
+    //         expect(futureResult).deep.equal(expected);
+    //         return roomsHelper.getAddress(fileContent).then((futureResult2) => {
+    //             return expect(futureResult2).deep.equal(expected2);
+    //         });
+    //     });
+    // });
+    //
+    // it("c2- Should get address - ACU Building ", function () {
+    //     const expected: string = "2211 Wesbrook Mall";
+    //     const id: string = "rooms";
+    //     const fileContent = datasets[id];
+    //     roomsHelper.getAddress(fileContent).then((futureResult) => {
+    //         return expect(futureResult).to.eventually.deep.equal(expected);
+    //     });
+    // });
+    //
+    // // getshortName test
+    // it("c2- Should get shortNames", function () {
+    //     const expected: string = "ACU";
+    //     const expected2: string = "ALRD";
+    //     const id: string = "rooms";
+    //     const fileContent = datasets[id];
+    //     roomsHelper.getShortName(fileContent).then((futureResult) => {
+    //         expect(futureResult).to.eventually.deep.equal(expected).then(() => {
+    //             roomsHelper.getShortName(fileContent).then((futureResult2) => {
+    //                 return expect(futureResult2).to.eventually.deep.equal(expected2);
+    //             });
+    //         });
+    //     });
+    // });
+    //
+    // it("c2- Should get shortName - ACU Building ", function () {
+    //     const expected: string = "ACU";
+    //     const id: string = "rooms";
+    //     const fileContent = datasets[id];
+    //     roomsHelper.getShortName(fileContent).then((futureResult) => {
+    //         return expect(futureResult).to.eventually.deep.equal(expected);
+    //     });
+    // });
+    //
+    // // getlongName test
+    // it("c2- Should get longNames", function () {
+    //     const expected: string = "Acute Care Unit";
+    //     const expected2: string = "Allard Hall (LAW)";
+    //     const id: string = "rooms";
+    //     const fileContent = datasets[id];
+    //     roomsHelper.getLongName(fileContent).then((futureResult) => {
+    //         expect(futureResult).to.eventually.deep.equal(expected).then(() => {
+    //             roomsHelper.getLongName(fileContent).then((futureResult2) => {
+    //                 return expect(futureResult2).to.eventually.deep.equal(expected2);
+    //             });
+    //         });
+    //     });
+    // });
+    //
+    // it("c2- Should get longName - ACU Building ", function () {
+    //     const expected: string = "Acute Care Unit";
+    //     const id: string = "rooms";
+    //     const fileContent = datasets[id];
+    //     roomsHelper.getLongName(fileContent).then((futureResult) => {
+    //         return expect(futureResult).to.eventually.deep.equal(expected);
+    //     });
+    // });
+    //
+    // it("c2- Should get roomNumber - ANGU Building ", function () {
+    //     let zip = new JSZip();
+    //     const expected: string = "037";
+    //     const shortName: string = "ANGU";
+    //     const id: string = "rooms";
+    //     const fileContent = datasets[id];
+    //     return zip.loadAsync(fileContent, {base64: true}).then((root) => {
+    //         return roomsHelper.getNumber(root, "ANGU").then((futureResult) => {
+    //             return expect(futureResult).to.deep.equal(expected);
+    //         });
+    //     });
+    // });
+    //
+    // it("c2- Should get roomSeats - ANGU Building ", function () {
+    //     let zip = new JSZip();
+    //     const expected: number = 52222224;
+    //     const id: string = "rooms";
+    //     const fileContent = datasets[id];
+    //     zip.loadAsync(fileContent, {base64: true}).then((root) => {
+    //         roomsHelper.getSeats(root, "ANGU").then((futureResult) => {
+    //             return expect(futureResult).to.deep.equal(expected);
+    //         });
+    //     });
+    // });
+    //
+    // it("c2- Should get roomType - ANGU Building ", function () {
+    //     let zip = new JSZip();
+    //     const expected: string = "Case Style";
+    //     const id: string = "rooms";
+    //     const fileContent = datasets[id];
+    //     zip.loadAsync(fileContent, {base64: true}).then((root) => {
+    //         roomsHelper.getType(root, "ANGU").then((futureResult) => {
+    //             return expect(futureResult).to.eventually.deep.equal(expected);
+    //         });
+    //     });
+    // });
+    //
+    // it("c2- Should get furnutire - ANGU Building ", function () {
+    //     let zip = new JSZip();
+    //     const expected: string = "Classroom-Fixed Tables/Movable Chairs";
+    //     const id: string = "rooms";
+    //     const fileContent = datasets[id];
+    //     zip.loadAsync(fileContent, {base64: true}).then((root) => {
+    //         roomsHelper.getFurniture(root, "ANGU").then((futureResult) => {
+    //             return expect(futureResult).to.eventually.deep.equal(expected);
+    //         });
+    //     });
+    // });
+    //
+    // // getHTML test
+    // it("c2- Should get specific rooms html", function () {
+    //     const fileContent = datasets["rooms"];
+    //     let zip: JSZip = new JSZip();
+    //     zip.loadAsync(fileContent, {base64: true}).then((root) => {
+    //         return roomsHelper.getRoomHTML(root, "ACU");
+    //     }).then((htmlString) => {
+    //         // manual check, HTML string too long
+    //         const check = 1;
+    //         return expect(htmlString);
+    //     });
+    // });
+    //
+    // // getRoomsDataset test
+    // it("c2- Should get specific rooms html", function () {
+    //     const fileContent = datasets["rooms"];
+    //     let zip: JSZip = new JSZip();
+    //     zip.loadAsync(fileContent, {base64: true}).then((root) => {
+    //         const toyDataset = roomsHelper.getDataset(root);
+    //     });
+    // });
+
+
+    // TODO: uncomment out all the tests above this line
 });
 /*
  * This test suite dynamically generates tests from the JSON files in test/queries.

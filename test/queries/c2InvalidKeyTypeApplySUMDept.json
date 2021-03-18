@@ -1,0 +1,52 @@
+{
+    "title": "Invalid -- Invalid key type in SUM",
+    "query": {
+        "WHERE": {
+            "AND": [
+                {
+                    "NOT": {
+                        "GT": {
+                            "courses_avg": 70
+                        }
+                    }
+                },
+                {
+                    "IS": {
+                        "courses_dept": "engl"
+                    }
+                }
+            ]
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "courses_id",
+                "sumDept",
+                "courses_year"
+            ],
+            "ORDER": {
+                "dir": "UP",
+                "keys": [
+                    "courses_id",
+                    "sumDept",
+                    "courses_year"
+                ]
+            }
+        },
+        "TRANSFORMATIONS": {
+            "GROUP": [
+                "courses_dept",
+                "courses_id",
+                "courses_year"
+            ],
+            "APPLY": [
+                {
+                    "sumDept": {
+                        "SUM": "courses_dept"
+                    }
+                }
+            ]
+        }
+    },
+    "isQueryValid": false,
+    "result": "InsightError"
+}

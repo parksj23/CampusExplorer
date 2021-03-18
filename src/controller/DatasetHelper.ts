@@ -44,9 +44,9 @@ export default class DatasetHelper {
                 let buffer = fs.readFileSync(filePath);
                 let diskData = JSON.parse(buffer);
                 if (diskData !== null || diskData !== undefined) {
-                    if (this.memory.length === 0) {
+                    // if (this.memory.length === 0) {
                         return data = diskData.coursesArray;
-                    }
+                    // }
                 }
 
                 if (diskData === null || diskData === undefined) {
@@ -54,16 +54,20 @@ export default class DatasetHelper {
                         throw new InsightError("There are no datasets added.");
                     }
                 }
+            } catch (e) {
+                throw new InsightError("No datasets added to disk or memory.");
+            }
+        }
 
-                if (this.memory.length > 0 && this.memory.includes(queryingDatasetId)) {
-                    for (let d of this.addedDatasetContent) {
-                        if (d.getDatasetId() === queryingDatasetId) {
-                            return data = d.getCoursesArray();
-                        }
+        if (!fs.existsSync(directory)) {
+            if (this.memory.length > 0 && this.memory.includes(queryingDatasetId)) {
+                for (let d of this.addedDatasetContent) {
+                    if (d.getDatasetId() === queryingDatasetId) {
+                        return data = d.getCoursesArray();
                     }
                 }
-            } catch (e) {
-                throw new InsightError("Cannot find directory or dataset.");
+            } else {
+                throw new InsightError("Nothing on disk, nothing in local memory.");
             }
         }
     }
@@ -78,7 +82,6 @@ export default class DatasetHelper {
                 let validSectionFields: any[] = [];
                 let initialSectionFields = Object.keys(i);
                 for (let key of initialDesiredFields) {
-                    let iKey = typeof i[key];
                     if (initialSectionFields.includes(key)) {
                         validSectionFields.push(i[key]);
                     }

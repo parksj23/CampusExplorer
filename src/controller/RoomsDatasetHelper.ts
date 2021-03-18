@@ -22,35 +22,35 @@ export default class RoomsDatasetHelper {
             let zip: JSZip = new JSZip();
             root.file("rooms/index.htm").async("string").then(this.parseHTML).then((parsedHTML) => {
                 let roomShortName = "x";
-                do {
-                    let room: any = {};
-                    roomShortName = (this.fields.findShortName(parsedHTML)).trim();
-                    room["shortName"] = roomShortName;
-                    room["longName"] = (this.fields.findLongName(parsedHTML)).trim();
-                    room["address"] = (this.fields.findAddress(parsedHTML)).trim();
-                    room["geoLocation"] = -1;
-                    this.fetchRoomInfo(root, roomShortName).then((roomSpecifics) => {
-                        let roomNumAvailable = 0;
-                        do {
-                            const newRoom = roomSpecifics;
-                            roomNumAvailable = newRoom["number"];
-                            room["number"] = newRoom["number"];
-                            room["seats"] = newRoom["seats"];
-                            room["type"] = newRoom["type"];
-                            room["furniture"] = newRoom["furniture"];
-                            room["name"] = "roomShortName + roomNumAvailable ";
-                            if (this.checkFieldTypeRoom(room)) {
-                                allRooms.push(room);
-                            }
-                        }
-                        while (roomNumAvailable !== -1);
-                    });
-                }
-                while (roomShortName.length > 0);
+                // do {
+                let room: any = {};
+                roomShortName = (this.fields.findShortName(parsedHTML)).trim();
+                room["shortName"] = roomShortName;
+                room["longName"] = (this.fields.findLongName(parsedHTML)).trim();
+                room["address"] = (this.fields.findAddress(parsedHTML)).trim();
+                room["geoLocation"] = this.getLatLong(room["address"]);
+                this.fetchRoomInfo(root, roomShortName).then((roomSpecifics) => {
+                    // let roomNumAvailable = 0;
+                    // do {
+                    // roomNumAvailable = newRoom["number"];
+                    room["number"] = roomSpecifics["number"];
+                    room["seats"] = roomSpecifics["seats"];
+                    room["type"] = roomSpecifics["type"];
+                    room["furniture"] = roomSpecifics["furniture"];
+                    room["name"] = room["shortName"] + " " + room["number"];
+                    // if (this.checkFieldTypeRoom(room)) {
+                    allRooms.push(room);
+                    // }
+                    // }
+                    // while (roomNumAvailable !== -1);
+                }).then(() => {
+                    return resolve(allRooms);
+                });
+                // }
+                // while (roomShortName.length > 0);
             }).catch(() => {
                 throw (new InsightError("broken HTML file"));
             });
-            return resolve(allRooms);
         });
     }
 

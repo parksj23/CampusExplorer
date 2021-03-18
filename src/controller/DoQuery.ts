@@ -1,9 +1,6 @@
 import {
-    InsightDataset,
-    InsightError,
     ResultTooLargeError
 } from "./IInsightFacade";
-import InsightFacade from "./InsightFacade";
 import {split} from "ts-node";
 import Column from "./Column";
 import Order from "./Order";
@@ -52,10 +49,9 @@ export default class DoQuery {
 
             let apply = new Apply(query[DoQuery.TRANSFORMATIONS], groupedSections);
             let applySections = apply.doApply(query[DoQuery.TRANSFORMATIONS], groupedSections);
-            // TODO: How do I add the applyKey columns to COLUMNS? Maybe if applySections has another column???
 
             let column = new Column(query[DoQuery.OPTIONS], applySections);
-            columnedSections = column.doC2Columns(query[DoQuery.OPTIONS], applySections);
+            columnedSections = column.c2ColumnsLauncher(query, applySections);
 
             let order = new Order(query[DoQuery.OPTIONS], columnedSections);
             orderedSections = order.doOrder(query[DoQuery.OPTIONS], columnedSections);

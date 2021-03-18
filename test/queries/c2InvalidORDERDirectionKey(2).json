@@ -1,0 +1,32 @@
+{
+    "title": "Invalid -- Invalid ORDER direction -- version 2",
+    "query": {
+        "WHERE": {},
+        "OPTIONS": {
+            "COLUMNS": [
+                "courses_year",
+                "avgAvg"
+            ],
+            "ORDER": {
+                "dir": "uP",
+                "keys": [
+                    "courses_year"
+                ]
+            }
+        },
+        "TRANSFORMATIONS": {
+            "GROUP": [
+                "courses_year"
+            ],
+            "APPLY": [
+                {
+                    "avgAvg": {
+                        "AVG": "courses_avg"
+                    }
+                }
+            ]
+        }
+    },
+    "isQueryValid": false,
+    "result": "InsightError"
+}

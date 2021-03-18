@@ -1,0 +1,63 @@
+{
+    "title": "c2 valid -- NOT",
+    "query": {
+        "WHERE": {
+            "NOT": {
+                "LT": {
+                    "courses_avg": 98.5
+                }
+            }
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "courses_dept",
+                "countFail"
+            ],
+            "ORDER": {
+                "dir": "UP",
+                "keys": [
+                    "countFail"
+                ]
+            }
+        },
+        "TRANSFORMATIONS": {
+            "GROUP": [
+                "courses_dept"
+            ],
+            "APPLY": [
+                {
+                    "countFail": {
+                        "COUNT": "courses_fail"
+                    }
+                }
+            ]
+        }
+    },
+    "isQueryValid": true,
+    "result": [
+        {
+            "courses_dept": "cnps",
+            "countFail": 1
+        },
+        {
+            "courses_dept": "eece",
+            "countFail": 1
+        },
+        {
+            "courses_dept": "epse",
+            "countFail": 1
+        },
+        {
+            "courses_dept": "math",
+            "countFail": 1
+        },
+        {
+            "courses_dept": "nurs",
+            "countFail": 1
+        },
+        {
+            "courses_dept": "spph",
+            "countFail": 1
+        }
+    ]
+}

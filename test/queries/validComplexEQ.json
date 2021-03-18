@@ -1,0 +1,46 @@
+{
+    "title": "Valid -- complex EQ",
+    "query": {
+        "WHERE": {
+            "AND": [
+                {
+                    "EQ": {
+                        "courses_avg": 76
+                    }
+                },
+                {
+                    "AND": [
+                        {
+                            "IS": {
+                                "courses_dept": "engl"
+                            }
+                        },
+                        {
+                            "EQ": {
+                                "courses_year": 2011
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "courses_dept",
+                "courses_id",
+                "courses_instructor",
+                "courses_avg"
+            ],
+            "ORDER": "courses_id"
+        }
+    },
+    "isQueryValid": true,
+    "result": [
+        {
+            "courses_dept": "engl",
+            "courses_id": "220",
+            "courses_instructor": "fox, lorcan francis",
+            "courses_avg": 76
+        }
+    ]
+}

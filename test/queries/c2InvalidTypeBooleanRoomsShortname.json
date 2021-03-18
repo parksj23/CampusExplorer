@@ -1,0 +1,44 @@
+{
+    "title": "invalid type query with boolean --rooms_shortname",
+    "query": {
+        "WHERE": {
+            "IS": {
+                "rooms_shortname": false
+            }
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "rooms_shortname",
+                "rooms_seats",
+                "rooms_name",
+                "rooms_type",
+                "minSeats"
+            ],
+            "ORDER": {
+                "dir": "UP",
+                "keys": [
+                    "minSeats"
+                ]
+            }
+        },
+        "TRANSFORMATIONS": {
+            "GROUP": [
+                "rooms_shortname",
+                "rooms_seats",
+                "rooms_furniture",
+                "rooms_type",
+                "rooms_name",
+                "rooms_href"
+            ],
+            "APPLY": [
+                {
+                    "minSeats": {
+                        "MIN": "rooms_seats"
+                    }
+                }
+            ]
+        }
+    },
+    "isQueryValid": false,
+    "result": "InsightError"
+}

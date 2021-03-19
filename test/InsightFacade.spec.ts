@@ -336,12 +336,12 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     //     );
     //     return expect(futureResult).to.be.rejectedWith(InsightError);
     // });
-    // it("c2- Should add a valid dataset of type rooms", function () {
-    //     const id = "rooms";
-    //     const expected = [id];
-    //     const futureResult = insightFacade.addDataset(id, datasets[id], InsightDatasetKind.Rooms);
-    //     return expect(futureResult).to.eventually.deep.equal(expected);
-    // });
+    it("c2- Should add a valid dataset of type rooms", function () {
+        const id = "rooms";
+        const expected = [id];
+        const futureResult = insightFacade.addDataset(id, datasets[id], InsightDatasetKind.Rooms);
+        return expect(futureResult).to.eventually.deep.equal(expected);
+    });
     // it("c2- Should add a valid dataset of type rooms with two tables in index- first invalid", function () {
     //     const id = "twoTablesInIndex";
     //     const expected = [id];

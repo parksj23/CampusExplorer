@@ -42,25 +42,25 @@ export default class DoQuery {
             return orderedSections;
         }
 
-        if (queryKeys.includes(DoQuery.TRANSFORMATIONS)) {
-            let group = new Group(query[DoQuery.TRANSFORMATIONS], queriedSections);
-            let groupedSections = group.doGroup(query[DoQuery.TRANSFORMATIONS], queriedSections);
-
-            if (groupedSections.length > 5000) {
-                throw new ResultTooLargeError("Result is >5000 hits.");
-            }
-
-            let apply = new Apply(query[DoQuery.TRANSFORMATIONS], groupedSections);
-            let applySections = apply.doApply(query[DoQuery.TRANSFORMATIONS], groupedSections);
-
-            let column = new Column(query[DoQuery.OPTIONS], applySections);
-            columnedSections = column.c2ColumnsLauncher(query, applySections);
-
-            let order = new Order(query[DoQuery.OPTIONS], columnedSections);
-            orderedSections = order.doOrder(query[DoQuery.OPTIONS], columnedSections);
-
-            return orderedSections;
-        }
+        // if (queryKeys.includes(DoQuery.TRANSFORMATIONS)) {
+        //     let group = new Group(query[DoQuery.TRANSFORMATIONS], queriedSections);
+        //     let groupedSections = group.doGroup(query[DoQuery.TRANSFORMATIONS], queriedSections);
+        //
+        //     if (groupedSections.length > 5000) {
+        //         throw new ResultTooLargeError("Result is >5000 hits.");
+        //     }
+        //
+        //     let apply = new Apply(query[DoQuery.TRANSFORMATIONS], groupedSections);
+        //     let applySections = apply.doApply(query[DoQuery.TRANSFORMATIONS], groupedSections);
+        //
+        //     let column = new Column(query[DoQuery.OPTIONS], applySections);
+        //     columnedSections = column.c2ColumnsLauncher(query, applySections);
+        //
+        //     let order = new Order(query[DoQuery.OPTIONS], columnedSections);
+        //     orderedSections = order.doOrder(query[DoQuery.OPTIONS], columnedSections);
+        //
+        //     return orderedSections;
+        // }
     }
 
     public doQuery(filter: any, sections: any[]): any[] {

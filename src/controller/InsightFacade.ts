@@ -138,6 +138,8 @@ export default class InsightFacade implements IInsightFacade {
 
     public performQuery(query: any): Promise<any[]> {
         return new Promise((resolve, reject) => {
+            return reject(new InsightError("Commenting out all performQuery"));
+
             this.performQueryDatasetIds = [];
             try {
                 let validQuery = new ValidateQuery(query);

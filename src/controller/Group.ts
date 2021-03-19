@@ -39,7 +39,7 @@ export default class Group {
                 let splitKey = groupKey.split("_");
                 let smfield = splitKey[1];
 
-                mapKey.concat(section[smfield]);
+                mapKey = mapKey.concat(section[smfield].toString());
             }
 
             if (groupMap.has(mapKey)) {
@@ -53,13 +53,13 @@ export default class Group {
 
         let result: any[] = [];
 
-        let getArr = Array.from(groupMap, ([key, value]) => {
-            result.push([key, value]);
-        });
-
         // groupMap.forEach((value) => {
         //     result.push(value);
         // });
+        //
+        let getArr = Array.from(groupMap, ([key, value]) => {
+            result.push([key, value]);
+        });
 
         result = result[0][1];
 

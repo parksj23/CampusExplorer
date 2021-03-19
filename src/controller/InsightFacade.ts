@@ -146,7 +146,6 @@ export default class InsightFacade implements IInsightFacade {
                         throw new ResultTooLargeError("Result has >5000 sections.");
                     }
                     return resolve(resultArray);
-                    // return resolve([]);
                 } else {
                     throw new InsightError("Invalid query.");
                 }

@@ -34,9 +34,9 @@ export default class Group {
             return this.doSingleGroup(group, data);
         }
 
-        if (group.length > 1) {
-            return this.doMultipleGroup(group, data);
-        }
+        // if (group.length > 1) {
+        //     return this.doMultipleGroup(group, data);
+        // }
     }
 
     private doSingleGroup(group: any, data: any[]) {
@@ -64,56 +64,56 @@ export default class Group {
         return result;
     }
 
-    private doMultipleGroup(group: any, data: any[]) {
-        let groupResultArr: any[] = [];
-
-        let compositeKey = this.makeCompositeKey(group);
-
-        let dataCopy = JSON.parse(JSON.stringify(data));
-        let seenCompositeKeyValues: any = [];
-
-        for (let i = 0; i < data.length; i) {
-            let firstSectionValues: any[] = [];
-            let sectionArrays: any[] = [];
-
-            for (let cKey of compositeKey) {
-                firstSectionValues.push(data[i][cKey]);
-            }
-
-            if (seenCompositeKeyValues.map(String).includes(firstSectionValues.toString())) {
-                continue;
-            }
-
-            if (!seenCompositeKeyValues.map(String).includes(firstSectionValues.toString())) {
-                seenCompositeKeyValues.push(firstSectionValues);
-            }
-
-            for (let section of dataCopy) {
-                let otherSectionValues: any[] = [];
-
-                for (let cKey of compositeKey) {
-                    otherSectionValues.push(section[cKey]);
-                }
-
-                if (firstSectionValues.toString() === otherSectionValues.toString()) {
-                    sectionArrays.push(section);
-                    let index = data.findIndex((s) => {
-                        let values = [];
-                        for (let c of compositeKey) {
-                            values.push(s[c]);
-                        }
-                        return values.toString() === otherSectionValues.toString();
-                    });
-                    data.splice(index, 1);
-                }
-            }
-            let obj: any = {};
-            obj["key"] = firstSectionValues;
-            obj["arr"] = sectionArrays;
-            groupResultArr.push(obj);
-        }
-        return groupResultArr;
-    }
+    // private doMultipleGroup(group: any, data: any[]) {
+    //     let groupResultArr: any[] = [];
+    //
+    //     let compositeKey = this.makeCompositeKey(group);
+    //
+    //     let dataCopy = JSON.parse(JSON.stringify(data));
+    //     let seenCompositeKeyValues: any = [];
+    //
+    //     for (let i = 0; i < data.length; i) {
+    //         let firstSectionValues: any[] = [];
+    //         let sectionArrays: any[] = [];
+    //
+    //         for (let cKey of compositeKey) {
+    //             firstSectionValues.push(data[i][cKey]);
+    //         }
+    //
+    //         if (seenCompositeKeyValues.map(String).includes(firstSectionValues.toString())) {
+    //             continue;
+    //         }
+    //
+    //         if (!seenCompositeKeyValues.map(String).includes(firstSectionValues.toString())) {
+    //             seenCompositeKeyValues.push(firstSectionValues);
+    //         }
+    //
+    //         for (let section of dataCopy) {
+    //             let otherSectionValues: any[] = [];
+    //
+    //             for (let cKey of compositeKey) {
+    //                 otherSectionValues.push(section[cKey]);
+    //             }
+    //
+    //             if (firstSectionValues.toString() === otherSectionValues.toString()) {
+    //                 sectionArrays.push(section);
+    //                 let index = data.findIndex((s) => {
+    //                     let values = [];
+    //                     for (let c of compositeKey) {
+    //                         values.push(s[c]);
+    //                     }
+    //                     return values.toString() === otherSectionValues.toString();
+    //                 });
+    //                 data.splice(index, 1);
+    //             }
+    //         }
+    //         let obj: any = {};
+    //         obj["key"] = firstSectionValues;
+    //         obj["arr"] = sectionArrays;
+    //         groupResultArr.push(obj);
+    //     }
+    //     return groupResultArr;
+    // }
 
     private makeCompositeKey(group: any): string[] {
         let compositeKey: string[] = [];

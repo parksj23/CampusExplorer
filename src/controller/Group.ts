@@ -30,40 +30,67 @@ export default class Group {
     public doGroup(query: any, data: any[]): any[] {
         let group = query[Group.GROUP];
 
-        if (group.length === 1) {
-            return this.doSingleGroup(group, data);
+        const groupMap: Map<string, any[]> = new Map<string, any[]>();
+
+        for (let section of data) {
+            let mapKey: string = "";
+
+            for (let groupKey of group) {
+                let splitKey = groupKey.split("_");
+                let smfield = splitKey[1];
+
+                mapKey.concat(section[smfield]);
+            }
+
+            if (groupMap.has(mapKey)) {
+                const value: any[] = groupMap.get(mapKey);
+                value.push(section);
+                groupMap.set(mapKey, value);
+            } else {
+                groupMap.set(mapKey, [section]);
+            }
         }
 
-        // if (group.length > 1) {
-        //     return this.doMultipleGroup(group, data);
-        // }
-    }
-
-    private doSingleGroup(group: any, data: any[]) {
-        let groupResult: any = {};
-        let groupResultArr: any[] = [];
         let result: any[] = [];
 
-        for (let key of group) {
-            let splitKey = key.split("_");
-            let smfield = splitKey[1];
-            // https://stackoverflow.com/questions/40774697/how-to-group-an-array-of-objects-by-key
-            groupResult = data.reduce((groupedSections, section) => {
-                groupedSections[section[smfield]] = groupedSections[section[smfield]] || [];
-                groupedSections[section[smfield]].push(section);
-                return groupedSections;
-            }, Object.create(null));
-        }
-        groupResultArr = Object.entries(groupResult);
-        for (let g of groupResultArr) {
-            let obj: any = {};
-            obj["key"] = g[0];
-            obj["arr"] = g[1];
-            result.push(obj);
-        }
+        let getArr = Array.from(groupMap, ([key, value]) => {
+            result.push([key, value]);
+        });
+
+        // groupMap.forEach((value) => {
+        //     result.push(value);
+        // });
+
+        result = result[0][1];
+
         return result;
     }
 
+    // private doSingleGroup(group: any, data: any[]) {
+    //     let groupResult: any = {};
+    //     let groupResultArr: any[] = [];
+    //     let result: any[] = [];
+    //
+    //     for (let key of group) {
+    //         let splitKey = key.split("_");
+    //         let smfield = splitKey[1];
+    //         // https://stackoverflow.com/questions/40774697/how-to-group-an-array-of-objects-by-key
+    //         groupResult = data.reduce((groupedSections, section) => {
+    //             groupedSections[section[smfield]] = groupedSections[section[smfield]] || [];
+    //             groupedSections[section[smfield]].push(section);
+    //             return groupedSections;
+    //         }, Object.create(null));
+    //     }
+    //     groupResultArr = Object.entries(groupResult);
+    //     for (let g of groupResultArr) {
+    //         let obj: any = {};
+    //         obj["key"] = g[0];
+    //         obj["arr"] = g[1];
+    //         result.push(obj);
+    //     }
+    //     return result;
+    // }
+    //
     // private doMultipleGroup(group: any, data: any[]) {
     //     let groupResultArr: any[] = [];
     //
@@ -114,15 +141,15 @@ export default class Group {
     //     }
     //     return groupResultArr;
     // }
-
-    private makeCompositeKey(group: any): string[] {
-        let compositeKey: string[] = [];
-
-        for (let key of group) { // make composite key from multiple group keys
-            let splitKey = key.split("_");
-            let smfield = splitKey[1];
-            compositeKey.push(smfield);
-        }
-        return compositeKey;
-    }
+    //
+    // private makeCompositeKey(group: any): string[] {
+    //     let compositeKey: string[] = [];
+    //
+    //     for (let key of group) { // make composite key from multiple group keys
+    //         let splitKey = key.split("_");
+    //         let smfield = splitKey[1];
+    //         compositeKey.push(smfield);
+    //     }
+    //     return compositeKey;
+    // }
 }

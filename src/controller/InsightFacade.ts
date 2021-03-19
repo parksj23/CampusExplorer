@@ -129,8 +129,6 @@ export default class InsightFacade implements IInsightFacade {
 
     public performQuery(query: any): Promise<any[]> {
         return new Promise((resolve, reject) => {
-            return reject(new InsightError("Commenting out all performQuery"));
-
             this.performQueryDatasetIds = [];
             try {
                 let validQuery = new ValidateQuery(query);
@@ -142,12 +140,13 @@ export default class InsightFacade implements IInsightFacade {
                     let queryingDatasetId = this.performQueryDatasetIds[0];
                     let data = this.d.getData(queryingDatasetId);
 
-                    let doQuery = new DoQuery(query, data);
-                    let resultArray = doQuery.doInitialQuery(query);
-                    if (resultArray.length > 5000) {
-                        throw new ResultTooLargeError("Result has >5000 sections.");
-                    }
-                    return resolve(resultArray);
+                    // let doQuery = new DoQuery(query, data);
+                    // let resultArray = doQuery.doInitialQuery(query);
+                    // if (resultArray.length > 5000) {
+                    //     throw new ResultTooLargeError("Result has >5000 sections.");
+                    // }
+                    // return resolve(resultArray);
+                    return resolve([]);
                 } else {
                     throw new InsightError("Invalid query.");
                 }

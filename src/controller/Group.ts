@@ -53,15 +53,15 @@ export default class Group {
 
         let result: any[] = [];
 
-        // groupMap.forEach((value) => {
-        //     result.push(value);
-        // });
-        //
-        let getArr = Array.from(groupMap, ([key, value]) => {
-            result.push([key, value]);
+        groupMap.forEach((value) => {
+            result.push(value);
         });
 
-        result = result[0][1];
+        // let getArr = Array.from(groupMap, ([key, value]) => {
+        //     result.push([key, value]);
+        // });
+        //
+        // result = result[0][1];
 
         return result;
     }

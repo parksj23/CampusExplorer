@@ -29,6 +29,13 @@ export default class Apply {
         this.data = data;
     }
 
+    // public doApply(query: any, data: any[]): any[] {
+    //     let apply = query[Apply.APPLY];
+    //     for (let group of data) {
+    //         let groupApplyResult = this.startApply(query, group);
+    //     }
+    // }
+
     public doApply(query: any, data: any[]): any[] {
         let apply = query[Apply.APPLY];
         let columnName: string = "";
@@ -115,7 +122,7 @@ export default class Apply {
         return applyResult;
     }
 
-    private makeFinalSection(temp: any[], ): any[] {
+    private makeFinalSection(temp: any[]): any[] {
         let applyResult: any[] = [];
         let applyColLabels: any[] = [];
         for (let array of temp) {

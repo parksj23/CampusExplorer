@@ -50,16 +50,18 @@ export default class DoQuery {
                 throw new ResultTooLargeError("Result is >5000 hits.");
             }
 
+            return groupedSections;
+
             let apply = new Apply(query[DoQuery.TRANSFORMATIONS], groupedSections);
             let applySections = apply.doApply(query[DoQuery.TRANSFORMATIONS], groupedSections);
 
-            let column = new Column(query[DoQuery.OPTIONS], applySections);
-            columnedSections = column.c2ColumnsLauncher(query, applySections);
-
-            let order = new Order(query[DoQuery.OPTIONS], columnedSections);
-            orderedSections = order.doOrder(query[DoQuery.OPTIONS], columnedSections);
-
-            return orderedSections;
+            // let column = new Column(query[DoQuery.OPTIONS], applySections);
+            // columnedSections = column.c2ColumnsLauncher(query, applySections);
+            //
+            // let order = new Order(query[DoQuery.OPTIONS], columnedSections);
+            // orderedSections = order.doOrder(query[DoQuery.OPTIONS], columnedSections);
+            //
+            // return orderedSections;
         }
     }
 

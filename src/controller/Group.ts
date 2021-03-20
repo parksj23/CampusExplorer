@@ -27,7 +27,7 @@ export default class Group {
         this.data = data;
     }
 
-    public doGroup(query: any, data: any[]): any[] {
+    public doGroup(query: any, data: any[]): Map<string, any[]> {
         let group = query[Group.GROUP];
 
         const groupMap: Map<string, any[]> = new Map<string, any[]>();
@@ -53,17 +53,20 @@ export default class Group {
 
         let result: any[] = [];
 
-        groupMap.forEach((value) => {
-            result.push(value);
-        });
+        // groupMap.forEach((value) => {
+        //     result.push(value);
+        // });
+
+        // for (let entry of Array.from(group.entries())) {
+        //     let key = entry[0];
+        //     let value = entry[1];
+        // }
 
         // let getArr = Array.from(groupMap, ([key, value]) => {
         //     result.push([key, value]);
         // });
-        //
-        // result = result[0][1];
 
-        return result;
+        return groupMap;
     }
 
     // private doSingleGroup(group: any, data: any[]) {

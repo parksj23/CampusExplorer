@@ -44,16 +44,15 @@ export default class DoQuery {
 
         if (queryKeys.includes(DoQuery.TRANSFORMATIONS)) {
             let group = new Group(query[DoQuery.TRANSFORMATIONS], queriedSections);
-            let groupedSections = group.doGroup(query[DoQuery.TRANSFORMATIONS], queriedSections);
+            let groupMap = group.doGroup(query[DoQuery.TRANSFORMATIONS], queriedSections);
 
-            if (groupedSections.length > 5000) {
-                throw new ResultTooLargeError("Result is >5000 hits.");
-            }
+            // if (groupedSections.length > 5000) {
+            //     throw new ResultTooLargeError("Result is >5000 hits.");
+            // }
 
-            return groupedSections;
-
-            let apply = new Apply(query[DoQuery.TRANSFORMATIONS], groupedSections);
-            let applySections = apply.doApply(query[DoQuery.TRANSFORMATIONS], groupedSections);
+            let apply = new Apply();
+            let applySections = apply.getGroupedData(query[DoQuery.TRANSFORMATIONS], groupMap);
+            return applySections;
 
             // let column = new Column(query[DoQuery.OPTIONS], applySections);
             // columnedSections = column.c2ColumnsLauncher(query, applySections);

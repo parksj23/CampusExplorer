@@ -28,14 +28,11 @@ export default class Apply {
 
         let apply = query[Apply.APPLY];
 
-        let result: any[] = [];
-        return result;
-
         if (apply.length === 0) {
             groupMap.forEach((value) => {
-                result.push(value);
+                applyResult.push(value);
             });
-            return result;
+            return applyResult;
         }
 
         groupMap.forEach((groupedData) => {

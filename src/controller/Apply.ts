@@ -109,7 +109,7 @@ export default class Apply {
     }
 
     private doMIN(applyInnerObj: any, applyTargetKey: string, columnName: string, sections: any[]): any[] {
-        return sections;
+        return [];
         let splitKey = (applyTargetKey as string).split("_");
         let mfield = splitKey[1];
 
@@ -128,7 +128,7 @@ export default class Apply {
     }
 
     private doAVG(applyInnerObj: any, applyTargetKey: string, columnName: string, sections: any[]): any[] {
-        return sections;
+        return [];
         let splitKey = (applyTargetKey as string).split("_");
         let mfield = splitKey[1];
 
@@ -153,7 +153,7 @@ export default class Apply {
     }
 
     private doSUM(applyInnerObj: any, applyTargetKey: string, columnName: string, sections: any[]): any[] {
-        return sections;
+        return [];
         let splitKey = (applyTargetKey as string).split("_");
         let mfield = splitKey[1];
 
@@ -175,7 +175,7 @@ export default class Apply {
     }
 
     private doCOUNT(applyInnerObj: any, applyTargetKey: string, columnName: string, sections: any[]): any[] {
-        return sections;
+        return [];
         let splitKey = (applyTargetKey as string).split("_");
         let smfield = splitKey[1];
 

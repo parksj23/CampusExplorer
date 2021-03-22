@@ -42,7 +42,7 @@ export default class RoomsDatasetHelper {
                                 room["longname"] = bLongName;
                                 room["address"] = bAddress;
                                 room["number"] = this.fields.findNumber(singleRoom);
-                                room["name"] = room["shortName"] + "_" + room["number"];
+                                room["name"] = room["shortname"] + "_" + room["number"];
                                 room["seats"] = this.fields.findSeats(singleRoom);
                                 if (room["seats"] === -1 ) {
                                     room["seats"] = 0;

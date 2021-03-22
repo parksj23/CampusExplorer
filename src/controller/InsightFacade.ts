@@ -59,7 +59,7 @@ export default class InsightFacade implements IInsightFacade {
                     return this.cDataset.getDataset(root).then((array) => {
                         insightKind = InsightDatasetKind.Courses;
                         datasetArray = array;
-                        return datasetArray;
+                        return array;
                     }).catch((e) => {
                         return reject(new InsightError("Course getDataset didn't work"));
                     });
@@ -69,7 +69,7 @@ export default class InsightFacade implements IInsightFacade {
                     return this.rDataset.getDataset(root).then((array) => {
                         insightKind = InsightDatasetKind.Rooms;
                         datasetArray = array;
-                        return datasetArray;
+                        return array;
                     }).catch ((e) => {
                         return reject(new InsightError("Rooms getDataset didn't work"));
                     });

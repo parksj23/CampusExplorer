@@ -62,9 +62,9 @@ export default class Order {
             }
         }
 
-        // if (order.keys.length > 1) {
-        //     sections = this.doSortMultipleKey(order, sections);
-        // }
+        if (order.keys.length > 1) {
+            sections = this.doSortMultipleKey(order, sections);
+        }
         return sections;
     }
 
@@ -135,24 +135,37 @@ export default class Order {
 
     private doAscendingMultipleKey(order: any, sections: any[]) {
         let keys = order.keys;
-        let seenKeys: any[] = [];
-        for (let i = 0; i < keys.length; i++) {
-            if (i === 0) {
-                sections = this.doAscendingSingleKey(keys[0], sections);
-                seenKeys.push(keys[0]);
-            } else {
-                sections = this.doAscendingRecursive(keys[i], seenKeys, sections);
-                seenKeys.push(keys[i]);
+        let ascending = sections.sort((a: any, b: any) => {
+            for (let key of keys) {
+                if (a[key] < b[key]) {
+                    return -1;
+                }
+                if (a[key] > b[key]) {
+                    return 1;
+                } else {
+                    return 0;
+                }
             }
-        }
-        return sections;
+        });
+        return ascending;
+        // let keys = order.keys;
+        // let seenKeys: any[] = [];
+        // for (let i = 0; i < keys.length; i++) {
+        //     if (i === 0) {
+        //         sections = this.doAscendingSingleKey(keys[0], sections);
+        //         seenKeys.push(keys[0]);
+        //     } else {
+        //         sections = this.doAscendingRecursive(keys[i], seenKeys, sections);
+        //         seenKeys.push(keys[i]);
+        //     }
+        // }
+        // return sections;
     }
 
     private doAscendingRecursive(key: any, seenKeys: any[], sections: any[]): any[] {
         let ascending: any[] = [];
         let recursiveSortingObjects: any[] = [];
 
-        // TODO: refactor this?
         for (let section of sections) { // get all seenKey values for each section
             let obj: any = {};
             let values: any[] = [];
@@ -200,17 +213,31 @@ export default class Order {
 
     private doDescendingMultipleKey(order: any, sections: any[]) {
         let keys = order.keys;
-        let seenKeys: any[] = [];
-        for (let i = 0; i < keys.length; i++) {
-            if (i === 0) {
-                sections = this.doDescendingSingleKey(keys[0], sections);
-                seenKeys.push(keys[0]);
-            } else {
-                sections = this.doDescendingRecursive(keys[i], seenKeys, sections);
-                seenKeys.push(keys[i]);
+        let descending = sections.sort((a: any, b: any) => {
+            for (let key of keys) {
+                if (a[key] > b[key]) {
+                    return -1;
+                }
+                if (a[key] < b[key]) {
+                    return 1;
+                } else {
+                    return 0;
+                }
             }
-        }
-        return sections;
+        });
+        return descending;
+        // let keys = order.keys;
+        // let seenKeys: any[] = [];
+        // for (let i = 0; i < keys.length; i++) {
+        //     if (i === 0) {
+        //         sections = this.doDescendingSingleKey(keys[0], sections);
+        //         seenKeys.push(keys[0]);
+        //     } else {
+        //         sections = this.doDescendingRecursive(keys[i], seenKeys, sections);
+        //         seenKeys.push(keys[i]);
+        //     }
+        // }
+        // return sections;
     }
 
     private doDescendingRecursive(key: any, seenKeys: any[], sections: any[]): any[] {

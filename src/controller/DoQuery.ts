@@ -192,42 +192,42 @@ export default class DoQuery {
         }
     }
 
-    private flattenANDResult(andResult: any[]): any[] {
-        let flattenedAndResult: any[] = [];
-        for (let result of andResult) {
-            let flatten = result.reduce((acc: any, val: any) => acc.concat(val), []);
-            flattenedAndResult.push(flatten);
-        }
-        return flattenedAndResult;
-    }
-
-    private intersectionHelper(andResult: any[]): any[] {
-        let intersection: any[] = [];
-        if (andResult.length === 2) { // if there are 2 AND keys
-            for (let section of andResult[0]) {
-                for (let section2 of andResult[1]) {
-                    if (section === section2) {
-                        intersection.push(section);
-                    }
-                }
-            }
-        } else if (andResult.length > 2) { // TODO: if there are more than 2 AND keys...this should be recursive
-            let temp: any[] = [];
-            for (let section of andResult[0]) {
-                for (let section2 of andResult[1]) {
-                    if (section === section2) {
-                        temp.push(section); // temp = AND of first two arrays
-                    }
-                }
-            }
-            for (let section of temp) {
-                for (let section2 of andResult[2]) {
-                    if (section === section2) {
-                        intersection.push(section);
-                    }
-                }
-            }
-        }
-        return intersection;
-    }
+    // private flattenANDResult(andResult: any[]): any[] {
+    //     let flattenedAndResult: any[] = [];
+    //     for (let result of andResult) {
+    //         let flatten = result.reduce((acc: any, val: any) => acc.concat(val), []);
+    //         flattenedAndResult.push(flatten);
+    //     }
+    //     return flattenedAndResult;
+    // }
+    //
+    // private intersectionHelper(andResult: any[]): any[] {
+    //     let intersection: any[] = [];
+    //     if (andResult.length === 2) { // if there are 2 AND keys
+    //         for (let section of andResult[0]) {
+    //             for (let section2 of andResult[1]) {
+    //                 if (section === section2) {
+    //                     intersection.push(section);
+    //                 }
+    //             }
+    //         }
+    //     } else if (andResult.length > 2) { // TODO: if there are more than 2 AND keys...this should be recursive
+    //         let temp: any[] = [];
+    //         for (let section of andResult[0]) {
+    //             for (let section2 of andResult[1]) {
+    //                 if (section === section2) {
+    //                     temp.push(section); // temp = AND of first two arrays
+    //                 }
+    //             }
+    //         }
+    //         for (let section of temp) {
+    //             for (let section2 of andResult[2]) {
+    //                 if (section === section2) {
+    //                     intersection.push(section);
+    //                 }
+    //             }
+    //         }
+    //     }
+    //     return intersection;
+    // }
 }

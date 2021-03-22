@@ -44,24 +44,18 @@ export default class DoQuery {
 
         if (queryKeys.includes(DoQuery.TRANSFORMATIONS)) {
             let group = new Group(query[DoQuery.TRANSFORMATIONS], queriedSections);
-            let groupedSections = group.doGroup(query[DoQuery.TRANSFORMATIONS], queriedSections);
+            let groupMap = group.doGroup(query[DoQuery.TRANSFORMATIONS], queriedSections);
 
-            if (groupedSections.length > 5000) {
-                throw new ResultTooLargeError("Result is >5000 hits.");
-            }
+            let apply = new Apply();
+            let applySections = apply.getGroupedData(query[DoQuery.TRANSFORMATIONS], groupMap);
 
-            return groupedSections;
+            let column = new Column(query[DoQuery.OPTIONS], applySections);
+            columnedSections = column.c2ColumnsLauncher(query, applySections);
 
-            let apply = new Apply(query[DoQuery.TRANSFORMATIONS], groupedSections);
-            let applySections = apply.doApply(query[DoQuery.TRANSFORMATIONS], groupedSections);
+            let order = new Order(query[DoQuery.OPTIONS], columnedSections);
+            orderedSections = order.doOrder(query[DoQuery.OPTIONS], columnedSections);
 
-            // let column = new Column(query[DoQuery.OPTIONS], applySections);
-            // columnedSections = column.c2ColumnsLauncher(query, applySections);
-            //
-            // let order = new Order(query[DoQuery.OPTIONS], columnedSections);
-            // orderedSections = order.doOrder(query[DoQuery.OPTIONS], columnedSections);
-            //
-            // return orderedSections;
+            return orderedSections;
         }
     }
 
@@ -133,31 +127,54 @@ export default class DoQuery {
     }
 
     private doNegation(next: any, operator: string, sections: any[]): any[] {
-        let notResult: any[] = [];
-        let notTemp: any[] = [];
-        notTemp.push(this.doQuery(next, sections));
-        notResult.push(notTemp);
-        let notArr = notResult[0];
         // Filter goes through the array and if the callback function is true, then it adds the element to a new array
-        let not = sections.filter((section: any) => !notArr[0].includes(section));
-        return not;
+        let notResult: any[] = this.doQuery(next, sections);
+        let filtered: any[] = [];
+        for (let section of sections) {
+            if (!notResult.includes(section)) {
+                filtered.push(section);
+            }
+            sections = filtered;
+        }
+        return sections;
+
+        // let notResult: any[] = [];
+        // let notTemp: any[] = [];
+        // notTemp.push(this.doQuery(next, sections));
+        // notResult.push(notTemp);
+        // let notArr = notResult[0];
+        // Filter goes through the array and if the callback function is true, then it adds the element to a new array
+        // let not = sections.filter((section: any) => !notArr[0].includes(section));
+        // return not;
     }
 
     private doLogic(next: any, operator: string, sections: any[]): any[] {
         switch (operator) {
             case "AND":
-                let andResult: any[] = [];
+                // let andResult: any[] = [];
+                // for (let filter of next) {
+                //     let andTemp: any[] = [];
+                //     andTemp.push(this.doQuery(filter, sections));
+                //     andResult.push(andTemp);
+                // }
+                // let flattenedAndResult = this.flattenANDResult(andResult);
+                // andResult = flattenedAndResult;
+                // let intersection: any[] = [];
+                // let intersectionHelper = this.intersectionHelper(andResult);
+                // intersection = intersectionHelper;
+                // return intersection;
+
                 for (let filter of next) {
-                    let andTemp: any[] = [];
-                    andTemp.push(this.doQuery(filter, sections));
-                    andResult.push(andTemp);
+                    let andResult: any[] = this.doQuery(filter, sections);
+                    let filtered: any[] = [];
+                    for (let section of sections) {
+                        if (andResult.includes(section)) {
+                            filtered.push(section);
+                        }
+                    }
+                    sections = filtered;
                 }
-                let flattenedAndResult = this.flattenANDResult(andResult);
-                andResult = flattenedAndResult;
-                let intersection: any[] = [];
-                let intersectionHelper = this.intersectionHelper(andResult);
-                intersection = intersectionHelper;
-                return intersection;
+                return sections;
                 break;
             case "OR":
                 let orResult: any[] = [];
@@ -185,43 +202,42 @@ export default class DoQuery {
         }
     }
 
-    private flattenANDResult(andResult: any[]): any[] {
-        let flattenedAndResult: any[] = [];
-        for (let result of andResult) {
-            let flatten = result.reduce((acc: any, val: any) => acc.concat(val), []);
-            flattenedAndResult.push(flatten);
-        }
-        return flattenedAndResult;
-    }
-
-    private intersectionHelper(andResult: any[]): any[] {
-        let intersection: any[] = [];
-        if (andResult.length === 2) { // if there are 2 AND keys
-            for (let section of andResult[0]) {
-                for (let section2 of andResult[1]) {
-                    if (section === section2) {
-                        intersection.push(section);
-                    }
-                }
-            }
-        } else if (andResult.length > 2) { // TODO: if there are more than 2 AND keys...this should be recursive
-            let temp: any[] = [];
-            for (let section of andResult[0]) {
-                for (let section2 of andResult[1]) {
-                    if (section === section2) {
-                        temp.push(section); // temp = AND of first two arrays
-                    }
-                }
-            }
-            for (let section of temp) {
-                for (let section2 of andResult[2]) {
-                    if (section === section2) {
-                        intersection.push(section);
-                    }
-                }
-            }
-        }
-        return intersection;
-    }
+    // private flattenANDResult(andResult: any[]): any[] {
+    //     let flattenedAndResult: any[] = [];
+    //     for (let result of andResult) {
+    //         let flatten = result.reduce((acc: any, val: any) => acc.concat(val), []);
+    //         flattenedAndResult.push(flatten);
+    //     }
+    //     return flattenedAndResult;
+    // }
+    //
+    // private intersectionHelper(andResult: any[]): any[] {
+    //     let intersection: any[] = [];
+    //     if (andResult.length === 2) { // if there are 2 AND keys
+    //         for (let section of andResult[0]) {
+    //             for (let section2 of andResult[1]) {
+    //                 if (section === section2) {
+    //                     intersection.push(section);
+    //                 }
+    //             }
+    //         }
+    //     } else if (andResult.length > 2) { // TODO: if there are more than 2 AND keys...this should be recursive
+    //         let temp: any[] = [];
+    //         for (let section of andResult[0]) {
+    //             for (let section2 of andResult[1]) {
+    //                 if (section === section2) {
+    //                     temp.push(section); // temp = AND of first two arrays
+    //                 }
+    //             }
+    //         }
+    //         for (let section of temp) {
+    //             for (let section2 of andResult[2]) {
+    //                 if (section === section2) {
+    //                     intersection.push(section);
+    //                 }
+    //             }
+    //         }
+    //     }
+    //     return intersection;
+    // }
 }
-

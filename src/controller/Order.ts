@@ -97,6 +97,8 @@ export default class Order {
     }
 
     private doSortMultipleKey(order: any, sections: any[]): any[] {
+        return sections;
+
         let direction = order.dir;
         if (direction === "UP") {
             sections = this.doAscendingMultipleKey(order, sections);

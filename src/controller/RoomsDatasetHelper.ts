@@ -32,14 +32,14 @@ export default class RoomsDatasetHelper {
                     } else {
                         const bShortName = this.fields.findShortName(buildingElement);
                         const buildingInfo = this.fields.findBuildingInfo(buildingElement);
-                        const bLongName = this.fields.findLongName(buildingInfo);
+                        const bFullName = this.fields.findFullName(buildingInfo);
                         const bAddress = this.fields.findAddress(buildingInfo);
                         // const bGeoLocation = this.fields.getLatLong(bAddress);
                         for (let singleRoom of table) {
                             if (singleRoom.nodeName === "tr") {
                                 let room: any = {};
                                 room["shortname"] = bShortName;
-                                room["longname"] = bLongName;
+                                room["fullname"] = bFullName;
                                 room["address"] = bAddress;
                                 room["number"] = this.fields.findNumber(singleRoom);
                                 room["name"] = room["shortname"] + "_" + room["number"];

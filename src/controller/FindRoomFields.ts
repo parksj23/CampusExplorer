@@ -65,10 +65,10 @@ export default class FindRoomFields {
         return "";
     }
 
-    public findLongName(element: any): string {
-        let longName = "";
-        longName = element.childNodes[1].childNodes[0].childNodes[0].value;
-        return longName;
+    public findFullName(element: any): string {
+        let fullName = "";
+        fullName = element.childNodes[1].childNodes[0].childNodes[0].value;
+        return fullName;
     }
 
     public findNumber(element: any): string {

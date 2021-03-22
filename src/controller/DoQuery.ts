@@ -46,10 +46,6 @@ export default class DoQuery {
             let group = new Group(query[DoQuery.TRANSFORMATIONS], queriedSections);
             let groupMap = group.doGroup(query[DoQuery.TRANSFORMATIONS], queriedSections);
 
-            // if (groupedSections.length > 5000) {
-            //     throw new ResultTooLargeError("Result is >5000 hits.");
-            // }
-
             let apply = new Apply();
             let applySections = apply.getGroupedData(query[DoQuery.TRANSFORMATIONS], groupMap);
             return applySections;
@@ -145,18 +141,30 @@ export default class DoQuery {
     private doLogic(next: any, operator: string, sections: any[]): any[] {
         switch (operator) {
             case "AND":
-                let andResult: any[] = [];
+                // let andResult: any[] = [];
+                // for (let filter of next) {
+                //     let andTemp: any[] = [];
+                //     andTemp.push(this.doQuery(filter, sections));
+                //     andResult.push(andTemp);
+                // }
+                // let flattenedAndResult = this.flattenANDResult(andResult);
+                // andResult = flattenedAndResult;
+                // let intersection: any[] = [];
+                // let intersectionHelper = this.intersectionHelper(andResult);
+                // intersection = intersectionHelper;
+                // return intersection;
+
                 for (let filter of next) {
-                    let andTemp: any[] = [];
-                    andTemp.push(this.doQuery(filter, sections));
-                    andResult.push(andTemp);
+                    let andResult: any[] = this.doQuery(filter, sections);
+                    let filtered: any[] = [];
+                    for (let section of sections) {
+                        if (andResult.includes(section)) {
+                            filtered.push(section);
+                        }
+                    }
+                    sections = filtered;
                 }
-                let flattenedAndResult = this.flattenANDResult(andResult);
-                andResult = flattenedAndResult;
-                let intersection: any[] = [];
-                let intersectionHelper = this.intersectionHelper(andResult);
-                intersection = intersectionHelper;
-                return intersection;
+                return sections;
                 break;
             case "OR":
                 let orResult: any[] = [];

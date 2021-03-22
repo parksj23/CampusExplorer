@@ -8,7 +8,7 @@ export default class FindRoomFields {
         Log.trace("InsightFacadeImpl::init()");
     }
 
-    public findBuildingLink(element: any): string {
+    public findBuildingPath(element: any): string {
         if (element.nodeName === "td"
             && element.attrs[0].value === "views-field views-field-field-building-image"
             && element.childNodes.length > 0
@@ -17,13 +17,30 @@ export default class FindRoomFields {
         }
         if (element.childNodes && element.childNodes.length > 0) {
             for (let child of element.childNodes) {
-                let possiblePath = this.findBuildingLink(child);
+                let possiblePath = this.findBuildingPath(child);
                 if (!(possiblePath === "")) {
                     return possiblePath;
                 }
             }
         }
         return "";
+    }
+
+    public findBuildingInfo(element: any): any {
+        if (element.nodeName === "div"
+            && element.attrs[0].value === "building-info"
+            && element.childNodes.length > 1) {
+            return element;
+        }
+        if (element.childNodes && element.childNodes.length > 0) {
+            for (let child of element.childNodes) {
+                let possibleNode = this.findBuildingInfo(child);
+                if (possibleNode !== -1) {
+                    return possibleNode;
+                }
+            }
+        }
+        return -1;
     }
 
     public findAddress(element: any): string {
@@ -131,30 +148,6 @@ export default class FindRoomFields {
             }
         }
         return "";
-    }
-
-    public findBuildingInfo(element: any): any {
-        if (element.nodeName === "div"
-            && element.attrs[0].value === "building-info"
-            && element.childNodes.length > 1) {
-            return element;
-        }
-        if (element.childNodes && element.childNodes.length > 0) {
-            for (let child of element.childNodes) {
-                let possibleNode = this.findBuildingInfo(child);
-                if (possibleNode !== -1) {
-                    return possibleNode;
-                }
-            }
-        }
-        return -1;
-    }
-
-    public getLatLong(address: string): GeoResponse {
-        return { lat: 0, lon: 0, error: null, };
-        if (Error) {
-            return { lat: null, lon: null, error: "error- geoLocation not found", };
-        }
     }
 
 }

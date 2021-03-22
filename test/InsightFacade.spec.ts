@@ -97,6 +97,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
 
     // addDataset tests
     it("Should add a valid dataset", function () {
+        this.timeout(10000);
         const id: string = "courses";
         const expected: string[] = [id];
         const futureResult: Promise<string[]> = insightFacade.addDataset(

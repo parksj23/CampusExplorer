@@ -48,15 +48,14 @@ export default class DoQuery {
 
             let apply = new Apply();
             let applySections = apply.getGroupedData(query[DoQuery.TRANSFORMATIONS], groupMap);
-            return applySections;
 
-            // let column = new Column(query[DoQuery.OPTIONS], applySections);
-            // columnedSections = column.c2ColumnsLauncher(query, applySections);
-            //
-            // let order = new Order(query[DoQuery.OPTIONS], columnedSections);
-            // orderedSections = order.doOrder(query[DoQuery.OPTIONS], columnedSections);
-            //
-            // return orderedSections;
+            let column = new Column(query[DoQuery.OPTIONS], applySections);
+            columnedSections = column.c2ColumnsLauncher(query, applySections);
+
+            let order = new Order(query[DoQuery.OPTIONS], columnedSections);
+            orderedSections = order.doOrder(query[DoQuery.OPTIONS], columnedSections);
+
+            return orderedSections;
         }
     }
 

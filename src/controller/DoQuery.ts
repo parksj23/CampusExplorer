@@ -51,12 +51,12 @@ export default class DoQuery {
 
             let column = new Column(query[DoQuery.OPTIONS], applySections);
             columnedSections = column.c2ColumnsLauncher(query, applySections);
-            return columnedSections;
+            // return columnedSections;
 
-            // let order = new Order(query[DoQuery.OPTIONS], columnedSections);
-            // orderedSections = order.doOrder(query[DoQuery.OPTIONS], columnedSections);
-            //
-            // return orderedSections;
+            let order = new Order(query[DoQuery.OPTIONS], columnedSections);
+            orderedSections = order.doOrder(query[DoQuery.OPTIONS], columnedSections);
+
+            return orderedSections;
         }
     }
 
@@ -128,14 +128,25 @@ export default class DoQuery {
     }
 
     private doNegation(next: any, operator: string, sections: any[]): any[] {
-        let notResult: any[] = [];
-        let notTemp: any[] = [];
-        notTemp.push(this.doQuery(next, sections));
-        notResult.push(notTemp);
-        let notArr = notResult[0];
         // Filter goes through the array and if the callback function is true, then it adds the element to a new array
-        let not = sections.filter((section: any) => !notArr[0].includes(section));
-        return not;
+        let notResult: any[] = this.doQuery(next, sections);
+        let filtered: any[] = [];
+        for (let section of sections) {
+            if (!notResult.includes(section)) {
+                filtered.push(section);
+            }
+            sections = filtered;
+        }
+        return sections;
+
+        // let notResult: any[] = [];
+        // let notTemp: any[] = [];
+        // notTemp.push(this.doQuery(next, sections));
+        // notResult.push(notTemp);
+        // let notArr = notResult[0];
+        // Filter goes through the array and if the callback function is true, then it adds the element to a new array
+        // let not = sections.filter((section: any) => !notArr[0].includes(section));
+        // return not;
     }
 
     private doLogic(next: any, operator: string, sections: any[]): any[] {

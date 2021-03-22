@@ -51,7 +51,6 @@ export default class DoQuery {
 
             let column = new Column(query[DoQuery.OPTIONS], applySections);
             columnedSections = column.c2ColumnsLauncher(query, applySections);
-            // return columnedSections;
 
             let order = new Order(query[DoQuery.OPTIONS], columnedSections);
             orderedSections = order.doOrder(query[DoQuery.OPTIONS], columnedSections);

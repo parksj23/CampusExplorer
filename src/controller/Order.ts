@@ -62,9 +62,9 @@ export default class Order {
             }
         }
 
-        if (order.keys.length > 1) {
-            sections = this.doSortMultipleKey(order, sections);
-        }
+        // if (order.keys.length > 1) {
+        //     sections = this.doSortMultipleKey(order, sections);
+        // }
         return sections;
     }
 
@@ -97,9 +97,33 @@ export default class Order {
     }
 
     private doSortMultipleKey(order: any, sections: any[]): any[] {
-        return sections;
-
         let direction = order.dir;
+
+        // const sortMap: Map<string, any[]> = new Map<string, any[]>();
+        //
+        // for (let section of sections) {
+        //     let mapKey: string = "";
+        //
+        //     for (let orderKey of keys) {
+        //         mapKey = mapKey.concat(section[orderKey].toString());
+        //     }
+        //
+        //     if (sortMap.has(mapKey)) {
+        //         const value: any[] = sortMap.get(mapKey);
+        //         value.push(section);
+        //         sortMap.set(mapKey, value);
+        //     } else {
+        //         sortMap.set(mapKey, [section]);
+        //     }
+        // }
+        // const a = 1;
+        // let b = sortMap;
+        // let result: any[] = [];
+        // let getArr = Array.from(sortMap, ([key, value]) => {
+        //     result.push([key, value]);
+        // });
+        // let n = result;
+
         if (direction === "UP") {
             sections = this.doAscendingMultipleKey(order, sections);
         }
@@ -144,7 +168,7 @@ export default class Order {
 
         let seenSeenKeys: any[] = [];
         for (let groupingObj of recursiveSortingObjects) {
-            if (!seenSeenKeys.includes(groupingObj["seenKeys"])) {// gather all same seenKeys and sort
+            if (!seenSeenKeys.includes(groupingObj["seenKeys"])) { // gather all same seenKeys and sort
                 let temp: any[] = [];
                 for (let object of recursiveSortingObjects) {
                     if (groupingObj["seenKeys"] === object["seenKeys"]) {

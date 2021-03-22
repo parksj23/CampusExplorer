@@ -47,22 +47,14 @@ export default class Column {
         let group = transformations[Column.GROUP];
         let columnedSections: any[] = [];
 
-        // if (group.length === 1) {
-        columnedSections = this.doC2ColumnsSingleGroup(query[Column.OPTIONS], sections);
-        // }
-        // if (group.length > 1) {
-        //     columnedSections = this.doC2ColumnsMultipleGroup(query[Column.OPTIONS], sections);
-        // }
+        columnedSections = this.doC2Columns(query[Column.OPTIONS], sections);
 
         return columnedSections;
     }
 
-    private doC2ColumnsSingleGroup(query: any, sections: any[]): any[] {
+    private doC2Columns(query: any, sections: any[]): any[] {
         let columns = query[Column.COLUMNS];
         let columnedSections: any[] = [];
-
-        // let groupValues: any[] = [];
-        // let groupedColumnedArr: any[] = [];
 
         for (let groupedArray of sections) {
             let representativeSection = groupedArray[0];
@@ -80,42 +72,5 @@ export default class Column {
             columnedSections.push(columnedSection);
         }
         return columnedSections;
-        // for (let s of columnedSections) {
-        //     let value = Object.values(s)[0];
-        //     if (!groupValues.includes(value)) {
-        //         groupValues.push(value);
-        //         groupedColumnedArr.push(s);
-        //     }
-        // }
-        // return groupedColumnedArr;
     }
-
-    // private doC2ColumnsMultipleGroup(query: any, sections: any[]): any[] {
-    //     let columns = query[Column.COLUMNS];
-    //     let columnedSections: any[] = [];
-    //
-    //     let seen: any[] = [];
-    //
-    //     for (let groupedArray of sections) {
-    //         for (let section of groupedArray["arr"]) {
-    //             if (seen.map(String).includes(groupedArray["key"].toString())) {
-    //                 continue;
-    //             }
-    //             let columnedSection: any = {};
-    //             for (let key of columns) {
-    //                 if (key.includes("_")) {
-    //                     let splitKey = key.split("_");
-    //                     let smfield = splitKey[1];
-    //                     columnedSection[key] = section[smfield];
-    //                 }
-    //                 if (!key.includes("_")) {
-    //                     columnedSection[key] = groupedArray[key];
-    //                 }
-    //             }
-    //             columnedSections.push(columnedSection);
-    //             seen.push(groupedArray["key"]);
-    //         }
-    //     }
-    //     return columnedSections;
-    // }
 }

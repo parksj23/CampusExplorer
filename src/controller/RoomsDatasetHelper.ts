@@ -23,7 +23,7 @@ export default class RoomsDatasetHelper {
         let validRooms: any[] = [];
         return new Promise((resolve, reject) => {
             // added a return here
-            return this.getBuildingHTML(root).then((buildingsHTML) => {
+            return this.getAllBuildingsHTML(root).then((buildingsHTML) => {
                 for (let buildingHTML of buildingsHTML) {
                     const buildingElement = this.parseBuildingHTML(buildingHTML);
                     let table = this.findRoomTable(buildingElement);
@@ -32,17 +32,17 @@ export default class RoomsDatasetHelper {
                     } else {
                         const bShortName = this.fields.findShortName(buildingElement);
                         const buildingInfo = this.fields.findBuildingInfo(buildingElement);
-                        const bLongName = this.fields.findLongName(buildingInfo);
+                        const bFullName = this.fields.findFullName(buildingInfo);
                         const bAddress = this.fields.findAddress(buildingInfo);
                         // const bGeoLocation = this.fields.getLatLong(bAddress);
                         for (let singleRoom of table) {
                             if (singleRoom.nodeName === "tr") {
                                 let room: any = {};
                                 room["shortname"] = bShortName;
-                                room["longname"] = bLongName;
+                                room["fullname"] = bFullName;
                                 room["address"] = bAddress;
                                 room["number"] = this.fields.findNumber(singleRoom);
-                                room["name"] = room["shortName"] + "_" + room["number"];
+                                room["name"] = room["shortname"] + "_" + room["number"];
                                 room["seats"] = this.fields.findSeats(singleRoom);
                                 if (room["seats"] === -1 ) {
                                     room["seats"] = 0;
@@ -66,32 +66,22 @@ export default class RoomsDatasetHelper {
         });
     }
 
-    private parseBuildingHTML(html: string): any {
-        return parse5.parse(html);
-    }
-
-    private parseHTML(html: string): Promise<any> {
-        return Promise.resolve(parse5.parse(html));
-    }
-
-    public getBuildingHTML(root: JSZip): Promise<any[]> {
+    public getAllBuildingsHTML(root: JSZip): Promise<any[]> {
         return new Promise((resolve, reject) => {
             let asyncPromise = root.file("rooms/index.htm").async("string");
             return asyncPromise.then(this.parseHTML).then((parsedHTML) => {
-                // root.file("rooms/index.htm").async("string").then(this.parseHTML).then((parsedHTML) => {
                 const buildingPathArray: string[] = [];
                 const tableRows = this.findTable(parsedHTML);
                 for (let tableRow of tableRows) {
                     if (tableRow.nodeName === "tr") {
-                        let buildingLink: string = this.fields.findBuildingLink(tableRow);
-                        if (!(buildingLink === "")) {
-                            buildingPathArray.push(buildingLink);
+                        let buildingPath: string = this.fields.findBuildingPath(tableRow);
+                        if (!(buildingPath === "")) {
+                            buildingPathArray.push(buildingPath);
                         }
                     }
                 }
-                // added a return here
-                return this.getBuildingHTMLArray(root, buildingPathArray).then((roomHTMLArray) => {
-                    return resolve(roomHTMLArray);
+                return this.getBuildingHTMLArray(root, buildingPathArray).then((allBuildingsHTMLArray) => {
+                    return resolve(allBuildingsHTMLArray);
                 }).catch((e) => {
                     return reject(new InsightError("No rooms."));
                 });
@@ -99,6 +89,14 @@ export default class RoomsDatasetHelper {
                 return reject(new InsightError("Parsing error."));
             });
         });
+    }
+
+    private parseHTML(html: string): Promise<any> {
+        return Promise.resolve(parse5.parse(html));
+    }
+
+    private parseBuildingHTML(html: string): any {
+        return parse5.parse(html);
     }
 
     public findTable(element: any): any {
@@ -121,6 +119,7 @@ export default class RoomsDatasetHelper {
     }
 
     public findRoomTable(element: any): any {
+        // TODO return multiple?
         if (element.nodeName === "table"
             && element.attrs[0].value === "views-table cols-5 table"
             && element.childNodes.length > 2
@@ -139,29 +138,10 @@ export default class RoomsDatasetHelper {
         return -1;
     }
 
-    private getHTMLString(file: string): Promise<string> {
-        let zip = new JSZip();
-        let promiseArray: Array<Promise<string>> = [];
-        return new Promise((resolve, reject) => {
-            return zip.loadAsync(file, {base64: true}).then((root) => {
-                let asyncPromise = root.file("rooms/index.htm").async("string");
-                return asyncPromise.then((stringContent) => {
-                    return resolve(stringContent);
-                }).catch((e) => {
-                    return reject(new InsightError("Empty index."));
-                });
-                // root.file("rooms/index.htm").async("string").then((stringContent) => {
-                //     return resolve(stringContent);
-                // }).catch((e) => {
-                //     return reject(new InsightError("Empty index."));
-                // });
-            }).catch((e) => {
-                return reject(new InsightError("Not a zip folder."));
-            });
-        });
-    }
-
+    // TODO implemenmt
     public getLatLong(address: string): GeoResponse {
+        const addressInHTML: string = address.replace(new RegExp(" ", "g"), "%20");
+        const url: string = "https://cs310.students.cs.ubc.ca:11316/api/v1/project_team198/" + addressInHTML;
         return {
             lat: 0,
             lon: 0,

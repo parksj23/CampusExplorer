@@ -8,6 +8,7 @@ import * as JSZip from "jszip";
 import GeoResponse from "./GeoResponse";
 import FindRoomFields from "./FindRoomFields";
 import {JSZipObject} from "jszip";
+import * as http from "http";
 
 const parse5 = require("parse5");
 
@@ -24,44 +25,68 @@ export default class RoomsDatasetHelper {
         return new Promise((resolve, reject) => {
             // added a return here
             return this.getAllBuildingsHTML(root).then((buildingsHTML) => {
+                let promiseArray: Array<Promise<any[]>> = [];
                 for (let buildingHTML of buildingsHTML) {
                     const buildingElement = this.parseBuildingHTML(buildingHTML);
                     let table = this.findRoomTable(buildingElement);
                     if (table === -1) {
                         continue;
                     } else {
-                        const bShortName = this.fields.findShortName(buildingElement);
-                        const buildingInfo = this.fields.findBuildingInfo(buildingElement);
-                        const bFullName = this.fields.findFullName(buildingInfo);
-                        const bAddress = this.fields.findAddress(buildingInfo);
-                        // const bGeoLocation = this.fields.getLatLong(bAddress);
-                        for (let singleRoom of table) {
-                            if (singleRoom.nodeName === "tr") {
-                                let room: any = {};
-                                room["shortname"] = bShortName;
-                                room["fullname"] = bFullName;
-                                room["address"] = bAddress;
-                                room["number"] = this.fields.findNumber(singleRoom);
-                                room["name"] = room["shortname"] + "_" + room["number"];
-                                room["seats"] = this.fields.findSeats(singleRoom);
-                                if (room["seats"] === -1 ) {
-                                    room["seats"] = 0;
-                                }
-                                room["type"] = this.fields.findType(singleRoom);
-                                room["furniture"] = this.fields.findFurniture(singleRoom);
-                                room["href"] = this.fields.findHref(singleRoom);
-                                validRooms.push(room);
-                            }
-                        }
+                        let promiseGetFieldsBuilding: Promise<any[]> = this.getFieldsBuilding(buildingElement, table);
+                        promiseArray.push(promiseGetFieldsBuilding);
                     }
                 }
-                if (validRooms.length < 1) {
-                    return reject(new InsightError("No valid rooms."));
-                } else {
-                    return resolve(validRooms);
-                }
+                return Promise.all(promiseArray).then((validRoomsArray: any[]) => {
+                    for (let iValidRooms of validRoomsArray) {
+                        for (let validRoom of iValidRooms) {
+                            validRooms.push(validRoom);
+                        }
+                    }
+                }).then(() => {
+                    if (validRooms.length < 1) {
+                        return reject(new InsightError("No valid rooms."));
+                    } else {
+                        return resolve(validRooms);
+                    }
+                });
             }).catch((e) => {
                 return reject(new InsightError());
+            });
+        });
+    }
+
+    public getFieldsBuilding(buildingElement: any, table: any): Promise<any[]> {
+        let validRooms: any[] = [];
+        return new Promise((resolve, reject) => {
+            const bShortName = this.fields.findShortName(buildingElement);
+            const buildingInfo = this.fields.findBuildingInfo(buildingElement);
+            const bFullName = this.fields.findFullName(buildingInfo);
+            const bAddress = this.fields.findAddress(buildingInfo);
+            this.fields.getLatLon(bAddress).then((geoResponse) => {
+                if (geoResponse.error) {
+                    return reject("geoResponse Error");
+                }
+                for (let singleRoom of table) {
+                    if (singleRoom.nodeName === "tr") {
+                        let room: any = {};
+                        room["shortname"] = bShortName;
+                        room["fullname"] = bFullName;
+                        room["address"] = bAddress;
+                        room["lat"] = geoResponse.lat;
+                        room["lon"] = geoResponse.lon;
+                        room["number"] = this.fields.findNumber(singleRoom);
+                        room["name"] = room["shortname"] + "_" + room["number"];
+                        room["seats"] = this.fields.findSeats(singleRoom);
+                        if (room["seats"] === -1 ) {
+                            room["seats"] = 0;
+                        }
+                        room["type"] = this.fields.findType(singleRoom);
+                        room["furniture"] = this.fields.findFurniture(singleRoom);
+                        room["href"] = this.fields.findHref(singleRoom);
+                        validRooms.push(room);
+                    }
+                }
+                return resolve(validRooms);
             });
         });
     }
@@ -138,24 +163,6 @@ export default class RoomsDatasetHelper {
         return -1;
     }
 
-    // TODO implemenmt
-    public getLatLong(address: string): GeoResponse {
-        const addressInHTML: string = address.replace(new RegExp(" ", "g"), "%20");
-        const url: string = "https://cs310.students.cs.ubc.ca:11316/api/v1/project_team198/" + addressInHTML;
-        return {
-            lat: 0,
-            lon: 0,
-            error: null,
-        };
-        if (Error) {
-            return {
-                lat: null,
-                lon: null,
-                error: "error- geoLocation not found",
-            };
-        }
-    }
-
     public getBuildingHTMLArray(root: JSZip, pathArray: string[]): Promise<string[]> {
         const fs = require("fs");
         let promiseArray: Array<Promise<string>> = [];
@@ -180,3 +187,4 @@ export default class RoomsDatasetHelper {
         });
     }
 }
+

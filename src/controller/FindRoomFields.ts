@@ -1,11 +1,63 @@
 import {InsightDataset, InsightDatasetKind, InsightError} from "./IInsightFacade";
 import Log from "../Util";
 import GeoResponse from "./GeoResponse";
+import * as http from "http";
 
 export default class FindRoomFields {
 
     public constructor() {
         Log.trace("InsightFacadeImpl::init()");
+    }
+
+    // citation-- https://nodejs.org/api/http.html#http_http_get_options_callback
+    public fetchLatLon(address: string): any {
+        const addressInHTML: string = address.replace(new RegExp(" ", "g"), "%20");
+        const url: string = "http://cs310.students.cs.ubc.ca:11316/api/v1/project_team198/" + addressInHTML;
+        return new Promise<any>((resolve, reject) => {
+            let result: any;
+            return http.get(url, (res) => {
+                res.setEncoding("utf8");
+                let rawData = "";
+                res.on("data", (chunk) => {
+                    rawData += chunk;
+                });
+                res.on("end", () => {
+                    try {
+                        const parsedData = JSON.parse(rawData);
+                        return resolve(parsedData);
+                    } catch (e) {
+                        return reject("geoResponse Error");
+                    }
+                });
+
+            });
+        });
+    }
+
+    // public getLatLonHelp(address: string): GeoResponse {
+    //     this.getLatLon(address).then((res) => {
+    //         const result = res;
+    //         return result;
+    //     });
+    // }
+
+    public getLatLon(address: string): Promise<GeoResponse> {
+        return this.fetchLatLon(address).then((res: any) => {
+            if (typeof(res.lat) === "number" && typeof(res.lon) === "number") {
+                return {
+                    lat: res.lat,
+                    lon: res.lon
+                };
+            } else {
+                return {
+                    error: "geoResponse Error -- type error"
+                };
+            }
+        }).catch(() => {
+            return {
+                error: "geoResponse Error -- could not fetch"
+            };
+        });
     }
 
     public findBuildingPath(element: any): string {

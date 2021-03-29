@@ -34,13 +34,6 @@ export default class FindRoomFields {
         });
     }
 
-    // public getLatLonHelp(address: string): GeoResponse {
-    //     this.getLatLon(address).then((res) => {
-    //         const result = res;
-    //         return result;
-    //     });
-    // }
-
     public getLatLon(address: string): Promise<GeoResponse> {
         return this.fetchLatLon(address).then((res: any) => {
             if (typeof(res.lat) === "number" && typeof(res.lon) === "number") {
@@ -60,10 +53,28 @@ export default class FindRoomFields {
         });
     }
 
-    public findBuildingPath(element: any): string {
+    public findBuildingPathB4(element: any): string {
         if (element.nodeName === "td"
             && element.attrs[0].value === "views-field views-field-field-building-image"
             && element.childNodes.length > 0
+            && element.childNodes[1].nodeName === "a") {
+            return element.childNodes[1].attrs[0].value;
+        }
+        if (element.childNodes && element.childNodes.length > 0) {
+            for (let child of element.childNodes) {
+                let possiblePath = this.findBuildingPathB4(child);
+                if (!(possiblePath === "")) {
+                    return possiblePath;
+                }
+            }
+        }
+        return "";
+    }
+
+    public findBuildingPath(element: any): string {
+        if (element.nodeName === "td"
+            && element.attrs[0].value === "views-field views-field-title"
+            && element.childNodes.length > 1
             && element.childNodes[1].nodeName === "a") {
             return element.childNodes[1].attrs[0].value;
         }

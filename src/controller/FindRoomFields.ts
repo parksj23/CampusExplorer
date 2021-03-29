@@ -53,24 +53,6 @@ export default class FindRoomFields {
         });
     }
 
-    public findBuildingPathB4(element: any): string {
-        if (element.nodeName === "td"
-            && element.attrs[0].value === "views-field views-field-field-building-image"
-            && element.childNodes.length > 0
-            && element.childNodes[1].nodeName === "a") {
-            return element.childNodes[1].attrs[0].value;
-        }
-        if (element.childNodes && element.childNodes.length > 0) {
-            for (let child of element.childNodes) {
-                let possiblePath = this.findBuildingPathB4(child);
-                if (!(possiblePath === "")) {
-                    return possiblePath;
-                }
-            }
-        }
-        return "";
-    }
-
     public findBuildingPath(element: any): string {
         if (element.nodeName === "td"
             && element.attrs[0].value === "views-field views-field-title"

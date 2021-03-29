@@ -9,5 +9,7 @@ CampusExplorer.buildQuery = () => {
     let query = {};
     // TODO: implement!
     console.log("CampusExplorer.buildQuery not implemented yet.");
+    console.log("Let's goooo");
+    let a = document.getElementsByClassName("tab-panel active")[0];
     return query;
 };

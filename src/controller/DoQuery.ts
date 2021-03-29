@@ -137,33 +137,11 @@ export default class DoQuery {
             sections = filtered;
         }
         return sections;
-
-        // let notResult: any[] = [];
-        // let notTemp: any[] = [];
-        // notTemp.push(this.doQuery(next, sections));
-        // notResult.push(notTemp);
-        // let notArr = notResult[0];
-        // Filter goes through the array and if the callback function is true, then it adds the element to a new array
-        // let not = sections.filter((section: any) => !notArr[0].includes(section));
-        // return not;
     }
 
     private doLogic(next: any, operator: string, sections: any[]): any[] {
         switch (operator) {
             case "AND":
-                // let andResult: any[] = [];
-                // for (let filter of next) {
-                //     let andTemp: any[] = [];
-                //     andTemp.push(this.doQuery(filter, sections));
-                //     andResult.push(andTemp);
-                // }
-                // let flattenedAndResult = this.flattenANDResult(andResult);
-                // andResult = flattenedAndResult;
-                // let intersection: any[] = [];
-                // let intersectionHelper = this.intersectionHelper(andResult);
-                // intersection = intersectionHelper;
-                // return intersection;
-
                 for (let filter of next) {
                     let andResult: any[] = this.doQuery(filter, sections);
                     let filtered: any[] = [];
@@ -197,47 +175,17 @@ export default class DoQuery {
                     let flatAgain = flat.reduce((acc: any, val: any) => acc.concat(val), []);
                     union = flatAgain;
                 }
+
+                let removeDupes = this.removeDupes(union);
+                union = removeDupes;
                 return union;
                 break;
         }
     }
 
-    // private flattenANDResult(andResult: any[]): any[] {
-    //     let flattenedAndResult: any[] = [];
-    //     for (let result of andResult) {
-    //         let flatten = result.reduce((acc: any, val: any) => acc.concat(val), []);
-    //         flattenedAndResult.push(flatten);
-    //     }
-    //     return flattenedAndResult;
-    // }
-    //
-    // private intersectionHelper(andResult: any[]): any[] {
-    //     let intersection: any[] = [];
-    //     if (andResult.length === 2) { // if there are 2 AND keys
-    //         for (let section of andResult[0]) {
-    //             for (let section2 of andResult[1]) {
-    //                 if (section === section2) {
-    //                     intersection.push(section);
-    //                 }
-    //             }
-    //         }
-    //     } else if (andResult.length > 2) { // TODO: if there are more than 2 AND keys...this should be recursive
-    //         let temp: any[] = [];
-    //         for (let section of andResult[0]) {
-    //             for (let section2 of andResult[1]) {
-    //                 if (section === section2) {
-    //                     temp.push(section); // temp = AND of first two arrays
-    //                 }
-    //             }
-    //         }
-    //         for (let section of temp) {
-    //             for (let section2 of andResult[2]) {
-    //                 if (section === section2) {
-    //                     intersection.push(section);
-    //                 }
-    //             }
-    //         }
-    //     }
-    //     return intersection;
-    // }
+    private removeDupes(union: any[]): any[] {
+        let set = new Set(union);
+        let newUnion = Array.from(set.values());
+        return newUnion;
+    }
 }

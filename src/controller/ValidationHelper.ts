@@ -134,7 +134,7 @@ export default class ValidationHelper {
                 return false;
             }
 
-            if (applyKey.includes("_")) {
+            if (applyKey.includes("_")) { // check if applykey includes "_"
                 return false;
             }
 

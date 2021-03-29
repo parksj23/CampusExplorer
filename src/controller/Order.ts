@@ -24,7 +24,7 @@ export default class Order {
         if (optionsKeys.includes(Order.ORDER)) {
             let order = query[Order.ORDER];
             if (typeof order === "string") { // c1 sort
-                let ascending = this.doStringOrder(order, sections);
+                let ascending = this.doAscendingSingleKey(order, sections);
                 sections = ascending;
             }
 
@@ -36,19 +36,19 @@ export default class Order {
         return sections;
     }
 
-    private doStringOrder(order: string, sections: any[]): any[] {
-        let ascending = sections.sort((a: any, b: any) => {
-            if (a[order] < b[order]) {
-                return -1;
-            }
-            if (a[order] > b[order]) {
-                return 1;
-            } else {
-                return 0;
-            }
-        });
-        return ascending;
-    }
+    // private doStringOrder(order: string, sections: any[]): any[] {
+    //     let ascending = sections.sort((a: any, b: any) => {
+    //         if (a[order] < b[order]) {
+    //             return -1;
+    //         }
+    //         if (a[order] > b[order]) {
+    //             return 1;
+    //         } else {
+    //             return 0;
+    //         }
+    //     });
+    //     return ascending;
+    // }
 
     private doOrderObj(order: any, sections: any[]): any[] {
         let direction = order.dir;

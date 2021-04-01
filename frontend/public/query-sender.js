@@ -6,8 +6,6 @@
  */
 CampusExplorer.sendQuery = (query) => {
     return new Promise((resolve, reject) => {
-        // TODO: implement!
-        // console.log("CampusExplorer.sendQuery not implemented yet.");
         try {
             let request = new XMLHttpRequest();
             request.open("POST", "/query", true);

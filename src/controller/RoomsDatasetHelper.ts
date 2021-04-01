@@ -48,7 +48,7 @@ export default class RoomsDatasetHelper {
                     } else {
                         return resolve(validRooms);
                     }
-                });
+                }); // TODO: need a catch here
             }).catch((e) => {
                 return reject(new InsightError());
             });
@@ -87,7 +87,7 @@ export default class RoomsDatasetHelper {
                     }
                 }
                 return resolve(validRooms);
-            });
+            }); // TODO: need a catch here
         });
     }
 

@@ -163,15 +163,15 @@ function buildColumns(datasetKind) {
     let finalColumns = [];
     let active = document.getElementsByClassName("tab-panel active")[0];
     let columnsPanel = active.getElementsByClassName("form-group columns")[0];
-    let columns = columnsPanel.getElementsByClassName("control-group")[0].getElementsByTagName("input");
+    let columnInputs = columnsPanel.getElementsByClassName("control-group")[0].getElementsByTagName("input");
 
-    for (let field of columns) {
-        if (field.checked) {
-            if (fields.includes(field.value)) { // regular key
-                let finalField = datasetKind + "_" + field.value;
+    for (let input of columnInputs) {
+        if (input.checked) {
+            if (fields.includes(input.value)) { // regular key
+                let finalField = datasetKind + "_" + input.value;
                 finalColumns.push(finalField);
             } else { // applykey
-                finalColumns.push(field.value);
+                finalColumns.push(input.value);
             }
         }
     }

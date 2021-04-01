@@ -5,6 +5,8 @@
 import fs = require("fs");
 import restify = require("restify");
 import Log from "../Util";
+import InsightFacade from "../controller/InsightFacade";
+import {InsightDataset, InsightDatasetKind} from "../controller/IInsightFacade";
 
 /**
  * This configures the REST endpoints for the server.
@@ -13,6 +15,7 @@ export default class Server {
 
     private port: number;
     private rest: restify.Server;
+    public static insightFacade = new InsightFacade();
 
     constructor(port: number) {
         Log.info("Server::<init>( " + port + " )");
@@ -64,6 +67,11 @@ export default class Server {
                 that.rest.get("/echo/:msg", Server.echo);
 
                 // NOTE: your endpoints should go here
+                // TODO uncomment!!
+                // that.rest.put("/dataset/:id/:kind", Server.putDataset);
+                // that.rest.del("/dataset/:id", Server.deleteDataset);
+                // that.rest.post("/query", Server.postQuery);
+                that.rest.get("/datasets", Server.getDatasets);
 
                 // This must be the last endpoint!
                 that.rest.get("/.*", Server.getStatic);
@@ -109,6 +117,16 @@ export default class Server {
         } else {
             return "Message not provided";
         }
+    }
+
+    private static getDatasets(req: restify.Request, res: restify.Response, next: restify.Next) {
+        Log.trace("Server::echo(..) - params: " + JSON.stringify(req.params));
+        Log.info("Server::echo(..) - responding " + 200);
+        // Server.performGetDatasets().then((response) => {
+        Server.insightFacade.listDatasets().then((response) => {
+            res.json(200, {result: response});
+        });
+        return next();
     }
 
     private static getStatic(req: restify.Request, res: restify.Response, next: restify.Next) {

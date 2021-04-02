@@ -2,11 +2,12 @@
  * Created by rtholmes on 2016-06-19.
  */
 
-import fs = require("fs");
 import restify = require("restify");
 import Log from "../Util";
 import InsightFacade from "../controller/InsightFacade";
-import {InsightDataset, InsightDatasetKind} from "../controller/IInsightFacade";
+import RestHandler from "./RestHandler";
+import * as fs from "fs";
+import {InsightDatasetKind} from "../controller/IInsightFacade";
 
 /**
  * This configures the REST endpoints for the server.
@@ -16,6 +17,7 @@ export default class Server {
     private port: number;
     private rest: restify.Server;
     public static insightFacade = new InsightFacade();
+    // public static restHandler = new RestHandler();
 
     constructor(port: number) {
         Log.info("Server::<init>( " + port + " )");
@@ -67,10 +69,9 @@ export default class Server {
                 that.rest.get("/echo/:msg", Server.echo);
 
                 // NOTE: your endpoints should go here
-                // TODO uncomment!!
-                // that.rest.put("/dataset/:id/:kind", Server.putDataset);
-                // that.rest.del("/dataset/:id", Server.deleteDataset);
-                // that.rest.post("/query", Server.postQuery);
+                that.rest.put("/dataset/:id/:kind", Server.putDataset);
+                that.rest.del("/dataset/:id", Server.deleteDataset);
+                that.rest.post("/query", Server.postQuery);
                 that.rest.get("/datasets", Server.getDatasets);
 
                 // This must be the last endpoint!
@@ -98,6 +99,7 @@ export default class Server {
     // The next two methods handle the echo service.
     // These are almost certainly not the best place to put these, but are here for your reference.
     // By updating the Server.echo function pointer above, these methods can be easily moved.
+
     private static echo(req: restify.Request, res: restify.Response, next: restify.Next) {
         Log.trace("Server::echo(..) - params: " + JSON.stringify(req.params));
         try {
@@ -119,10 +121,31 @@ export default class Server {
         }
     }
 
+    private static putDataset(req: restify.Request, res: restify.Response, next: restify.Next) {
+        Log.trace("Server::putDataset(..) - params: " + JSON.stringify(req.params));
+        try {
+            const content = (req.body).toString("base64");
+            const id: string = req.params.id;
+            const kind: InsightDatasetKind = req.params.kind;
+            Server.insightFacade.addDataset(id, content, kind).then((response) => {
+                    res.json(200, {result: response});
+            });
+        } catch (err) {
+            res.json(400, {error: err});
+        }
+        return next();
+    }
+
+    private static deleteDataset(req: restify.Request, res: restify.Response, next: restify.Next) {
+        return next();
+    }
+
+    private static postQuery(req: restify.Request, res: restify.Response, next: restify.Next) {
+        return next();
+    }
+
     private static getDatasets(req: restify.Request, res: restify.Response, next: restify.Next) {
-        Log.trace("Server::echo(..) - params: " + JSON.stringify(req.params));
-        Log.info("Server::echo(..) - responding " + 200);
-        // Server.performGetDatasets().then((response) => {
+        Log.trace("Server::getDatasets(..) - params: " + JSON.stringify(req.params));
         Server.insightFacade.listDatasets().then((response) => {
             res.json(200, {result: response});
         });
@@ -149,3 +172,4 @@ export default class Server {
     }
 
 }
+

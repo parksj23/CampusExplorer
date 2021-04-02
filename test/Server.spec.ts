@@ -1,13 +1,13 @@
 import Server from "../src/rest/Server";
 
 import InsightFacade from "../src/controller/InsightFacade";
-import {expect} from "chai";
-import Log from "../src/Util";
-import * as fs from "fs-extra";
-import {InsightDatasetKind} from "../src/controller/IInsightFacade";
 import chai = require("chai");
 import chaiHttp = require("chai-http");
 import Response = ChaiHttp.Response;
+import {expect} from "chai";
+import Log from "../src/Util";
+import * as JSZip from "jszip";
+import * as fs from "fs-extra";
 
 describe("Facade D3", function () {
 
@@ -44,61 +44,39 @@ describe("Facade D3", function () {
     });
 
     // Sample on how to format PUT requests
-    it("PUT test for courses dataset", function () {
-        const ZIP_FILE_DATA = fs.readFileSync("./test/data/courses.zip");
-        try {
-            return chai.request("http://localhost:4321")
-                .put("/dataset/courses/courses")
-                .send(ZIP_FILE_DATA)
-                .set("Content-Type", "application/x-zip-compressed")
-                .then(function (res: Response) {
-                    // some logging here please!
-                    Log.info("PUT - SUCCESS");
-                    expect(res.status).to.be.equal(200);
-                })
-                .catch(function (err) {
-                    // some logging here please!
-                    Log.error("PUT - ERROR: " + err.message);
-                    expect.fail();
-                });
-        } catch (err) {
-            // and some more logging here!
-            Log.error("PUT - ERROR: " + err.message);
-            expect.fail();
-        }
-    });
-
-    it("ECHO- succeeds silently!", function () {   // <= No done callback
-        chai.request("http://localhost:4321")
-            .get("/echo/hello")
-            .end(function (err, res) {
-                Log.info("SUCCESS");
-                expect(res.status).to.be.equal(200);    // <= Test completes before this runs
-            });
-    });
+    // TODO uncomment
+    // it("PUT test for courses dataset", function () {
+    //     const ZIP_FILE_DATA = fs.readFileSync("./test/data/courses.zip").toString("base64");
+    //     try {
+    //         return chai.request("http://localhost:4321")
+    //             .put("/dataset/:id/:kind")
+    //             .send(ZIP_FILE_DATA)
+    //             .set("Content-Type", "application/x-zip-compressed")
+    //             .then(function (res: Response) {
+    //                 // some logging here please!
+    //                 Log.error("PUT - SUCCESS");
+    //                 expect(res.status).to.be.equal(204);
+    //             })
+    //             .catch(function (err) {
+    //                 // some logging here please!
+    //                 Log.error("PUT - ERROR: " + err.message);
+    //                 expect.fail();
+    //             });
+    //     } catch (err) {
+    //         // and some more logging here!
+    //         Log.error("PUT - ERROR: " + err.message);
+    //         expect.fail();
+    //     }
+    // });
+    //
+    //
+    // it("GET test for courses Dataset, success code", function () {
+    //     chai.request("http://localhost:4321")
+    //         .get("/datasets")
+    //         .end(function (err, res) {
+    //             expect(res).to.have.status(200);
+    //         });
+    // });
 
     // The other endpoints work similarly. You should be able to find all instructions at the chai-http documentation
-
-    it("GET test for courses Dataset, success code", function () {
-        chai.request("http://localhost:4321")
-            .get("/datasets")
-            .end(function (err, res) {
-                expect(res).to.have.status(200);
-            });
-    });
-
-    it("GET test for courses Dataset, previous add", function () {
-        const content = fs
-            .readFileSync("./test/data/courses.zip")
-            .toString("base64");
-        return facade.addDataset("courses", content, InsightDatasetKind.Courses).then((reeee) => {
-            chai.request("http://localhost:4321")
-                .get("/datasets")
-                .end(function (err, res) {
-                    expect(res).to.have.status(200);
-                });
-        });
-    });
-
 });
-

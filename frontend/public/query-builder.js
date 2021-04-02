@@ -13,7 +13,6 @@ mfields = ["avg", "pass", "fail", "audit", "year", "lat", "lon", "seats"];
 
 CampusExplorer.buildQuery = () => {
     let query = {};
-    // TODO: implement!
     console.log("Let's start building the query.");
     let active = document.getElementsByClassName("tab-panel active")[0];
     let datasetKind = active.getAttribute("data-type");
@@ -39,10 +38,19 @@ CampusExplorer.buildQuery = () => {
     let apply = [];
 
     where = buildWhere(datasetKind);
+    // console.log("Where);
     columns = buildColumns(datasetKind);
+    // console.log("Columns");
+    // console.log(columns);
     order = buildOrder(datasetKind);
+    // console.log("Got order: ");
+    // console.log(order);
     group = buildGroup(datasetKind);
+    // console.log("Got group: ");
+    // console.log(group);
     apply = buildApply(datasetKind);
+    // console.log("Got apply: ");
+    // console.log(apply);
 
     query["WHERE"] = where;
     query["OPTIONS"] = options;
@@ -56,9 +64,13 @@ CampusExplorer.buildQuery = () => {
         transformations["GROUP"] = group;
         if (!(apply.length === 0)) {
             transformations["APPLY"] = apply;
+        } else {
+            query["TRANSFORMATIONS"] = transformations;
         }
-        query["TRANSFORMATIONS"] = transformations;
+    } else {
+        return query;
     }
+    console.log(query);
     return query;
 };
 
@@ -80,16 +92,14 @@ function buildWhere(datasetKind) {
 
     console.log("The main filter is: " + condition);
 
-    let condPanel = active.getElementsByClassName("form-group conditions")[0];
-    let conditions = condPanel.getElementsByClassName("conditions-container")[0].children;
-
-    let filters = getFilters(datasetKind, condPanel, conditions);
+    let filters = getFilters(datasetKind);
+    console.log(filters);
 
     if (filters.length === 0) {
         return {};
     }
 
-    if(filters.length === 1) {
+    if (filters.length === 1) {
         return filters[0];
     }
 
@@ -105,12 +115,15 @@ function buildWhere(datasetKind) {
         let orNot = {OR: filters};
         return {NOT: orNot};
     }
-
     return {};
 }
 
-function getFilters(datasetKind, condButtons, conditions) {
+function getFilters(datasetKind) {
     let filters = [];
+    let active = document.getElementsByClassName("tab-panel active")[0];
+    let condPanel = active.getElementsByClassName("form-group conditions")[0];
+    let conditions = condPanel.getElementsByClassName("conditions-container")[0].children;
+
     for (let cond of conditions) {
         let isNotChecked = cond.getElementsByClassName("control not")[0].getElementsByTagName("input")[0].checked;
 
@@ -243,9 +256,54 @@ function buildOrder(datasetKind) {
 }
 
 function buildGroup(datasetKind) {
-    return null;
+    let groupArray = [];
+    let active = document.getElementsByClassName("tab-panel active")[0];
+    let groupsPanel = active.getElementsByClassName("form-group groups")[0];
+    let groupInputs = groupsPanel.getElementsByClassName("control-group")[0].getElementsByTagName("input");
+
+    for (let input of groupInputs) {
+        if (input.checked) {
+            let finalField = datasetKind + "_" + input.value;
+            groupArray.push(finalField);
+        }
+    }
+    return groupArray;
 }
 
 function buildApply(datasetKind) {
-    return null;
+    let applyArray = [];
+    let active = document.getElementsByClassName("tab-panel active")[0];
+    let transformationsPanel = active.getElementsByClassName("transformations-container")[0];
+    let applyInputs = transformationsPanel.children;
+
+    for (let input of applyInputs) {
+        // Get the applykey that the user inputted
+        let applykey = input.getElementsByClassName("control term").value;
+
+        // Get the dropdown token
+        let applytokens = input.getElementsByClassName("control operators")[0].getElementsByTagName("option");
+        let applytoken = "";
+        for (let token of applytokens) {
+            if (token.selected) {
+                applytoken = token.value;
+            }
+        }
+
+        // Get the dropdown smfield
+        let smfields = input.getElementsByClassName("control fields")[0].getElementsByTagName("option");
+        let key = "";
+        for (let field of smfields) {
+            if (field.selected) {
+                key = datasetKind + "_" + field.value;
+            }
+        }
+
+        // Make the apply object and push onto apply array
+        let applyOuterObj = {};
+        let applyInnerObj = {};
+        applyInnerObj[applytoken] = key;
+        applyOuterObj[applykey] = applyInnerObj;
+        applyArray.push(applyOuterObj);
+    }
+    return applyArray;
 }

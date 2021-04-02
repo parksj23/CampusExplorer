@@ -1,13 +1,13 @@
 import Server from "../src/rest/Server";
 
 import InsightFacade from "../src/controller/InsightFacade";
-import {expect} from "chai";
-import Log from "../src/Util";
-import * as fs from "fs-extra";
-import {InsightDatasetKind} from "../src/controller/IInsightFacade";
 import chai = require("chai");
 import chaiHttp = require("chai-http");
 import Response = ChaiHttp.Response;
+import {expect} from "chai";
+import Log from "../src/Util";
+import * as JSZip from "jszip";
+import * as fs from "fs-extra";
 
 describe("Facade D3", function () {
 
@@ -44,7 +44,7 @@ describe("Facade D3", function () {
     });
 
     // Sample on how to format PUT requests
-    // it("PUT test for courses dataset", function () {
+  // it("PUT test for courses dataset", function () {
     //     const ZIP_FILE_DATA = fs.readFileSync("./test/data/courses.zip");
     //     try {
     //         return chai.request("http://localhost:4321")
@@ -99,6 +99,4 @@ describe("Facade D3", function () {
     //             });
     //     });
     // });
-
 });
-

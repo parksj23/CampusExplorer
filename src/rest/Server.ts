@@ -2,12 +2,11 @@
  * Created by rtholmes on 2016-06-19.
  */
 
+import fs = require("fs");
 import restify = require("restify");
 import Log from "../Util";
 import InsightFacade from "../controller/InsightFacade";
-import RestHandler from "./RestHandler";
-import * as fs from "fs";
-import {InsightDatasetKind} from "../controller/IInsightFacade";
+import {InsightDataset, InsightDatasetKind} from "../controller/IInsightFacade";
 
 /**
  * This configures the REST endpoints for the server.
@@ -17,7 +16,6 @@ export default class Server {
     private port: number;
     private rest: restify.Server;
     public static insightFacade = new InsightFacade();
-    // public static restHandler = new RestHandler();
 
     constructor(port: number) {
         Log.info("Server::<init>( " + port + " )");
@@ -99,7 +97,6 @@ export default class Server {
     // The next two methods handle the echo service.
     // These are almost certainly not the best place to put these, but are here for your reference.
     // By updating the Server.echo function pointer above, these methods can be easily moved.
-
     private static echo(req: restify.Request, res: restify.Response, next: restify.Next) {
         Log.trace("Server::echo(..) - params: " + JSON.stringify(req.params));
         try {
@@ -143,9 +140,10 @@ export default class Server {
     // private static postQuery(req: restify.Request, res: restify.Response, next: restify.Next) {
     //     return next();
     // }
-
     private static getDatasets(req: restify.Request, res: restify.Response, next: restify.Next) {
-        Log.trace("Server::getDatasets(..) - params: " + JSON.stringify(req.params));
+        Log.trace("Server::echo(..) - params: " + JSON.stringify(req.params));
+        Log.info("Server::echo(..) - responding " + 200);
+        // Server.performGetDatasets().then((response) => {
         Server.insightFacade.listDatasets().then((response) => {
             res.json(200, {result: response});
         });
@@ -172,4 +170,3 @@ export default class Server {
     }
 
 }
-

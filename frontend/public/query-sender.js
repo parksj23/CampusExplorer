@@ -13,7 +13,6 @@ CampusExplorer.sendQuery = (query) => {
 
             request.onload = (() => {
                 let result = JSON.parse(request.responseText);
-                console.log(result);
                 if (request.status = 200) {
                     return resolve(result);
                 } else {

@@ -67,7 +67,6 @@ export default class Server {
                 that.rest.get("/echo/:msg", Server.echo);
 
                 // NOTE: your endpoints should go here
-                // TODO uncomment!!
                 // that.rest.put("/dataset/:id/:kind", Server.putDataset);
                 // that.rest.del("/dataset/:id", Server.deleteDataset);
                 // that.rest.post("/query", Server.postQuery);
@@ -119,6 +118,28 @@ export default class Server {
         }
     }
 
+    // private static putDataset(req: restify.Request, res: restify.Response, next: restify.Next) {
+    //     Log.trace("Server::putDataset(..) - params: " + JSON.stringify(req.params));
+    //     try {
+    //         const content = (req.body).toString("base64");
+    //         const id: string = req.params.id;
+    //         const kind: InsightDatasetKind = req.params.kind;
+    //         Server.insightFacade.addDataset(id, content, kind).then((response) => {
+    //                 res.json(200, {result: response});
+    //         });
+    //     } catch (err) {
+    //         res.json(400, {error: err});
+    //     }
+    //     return next();
+    // }
+
+    // private static deleteDataset(req: restify.Request, res: restify.Response, next: restify.Next) {
+    //     return next();
+    // }
+    //
+    // private static postQuery(req: restify.Request, res: restify.Response, next: restify.Next) {
+    //     return next();
+    // }
     private static getDatasets(req: restify.Request, res: restify.Response, next: restify.Next) {
         Log.trace("Server::echo(..) - params: " + JSON.stringify(req.params));
         Log.info("Server::echo(..) - responding " + 200);

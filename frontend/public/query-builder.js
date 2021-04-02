@@ -38,20 +38,19 @@ CampusExplorer.buildQuery = () => {
     let apply = [];
 
     where = buildWhere(datasetKind);
-    console.log("Where");
-    console.log(where);
+    // console.log("Where);
     columns = buildColumns(datasetKind);
-    console.log("Columns");
-    console.log(columns);
+    // console.log("Columns");
+    // console.log(columns);
     order = buildOrder(datasetKind);
-    console.log("Got order: ");
-    console.log(order);
+    // console.log("Got order: ");
+    // console.log(order);
     group = buildGroup(datasetKind);
-    console.log("Got group: ");
-    console.log(group);
+    // console.log("Got group: ");
+    // console.log(group);
     apply = buildApply(datasetKind);
-    console.log("Got apply: ");
-    console.log(apply);
+    // console.log("Got apply: ");
+    // console.log(apply);
 
     query["WHERE"] = where;
     query["OPTIONS"] = options;

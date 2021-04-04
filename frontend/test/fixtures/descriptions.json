@@ -1,3 +1,5 @@
 {
-    "query1": "simple query IS comparison for department with two columns and old order syntax"
+    "query1": "simple query IS comparison for department with two columns and old order syntax",
+    "query2": "NONE comparison for latitude with 5 columns, double order descending, groups and trans",
+    "query3": "2 filters in WHERE"
 }

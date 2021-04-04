@@ -17,50 +17,6 @@
         </div>
         <div class="conditions-container"><div class="control-group condition">
             <div class="control not">
-                <input type="checkbox" checked="checked">
-                <label>Not</label>
-            </div>
-            <div class="control fields">
-                <select>
-                    <option value="audit">
-                        Audit
-                    </option>                <option value="avg" selected="selected">
-                    Average
-                </option>                <option value="dept">
-                    Department
-                </option>                <option value="fail">
-                    Fail
-                </option>                <option value="id">
-                    ID
-                </option>                <option value="instructor">
-                    Instructor
-                </option>                <option value="pass">
-                    Pass
-                </option>                <option value="title">
-                    Title
-                </option>                <option value="uuid">
-                    UUID
-                </option>                <option value="year">
-                    Year
-                </option>    </select>
-            </div>
-            <div class="control operators">
-                <select>
-                    <option value="EQ">
-                        EQ
-                    </option>                <option value="GT" selected="selected">
-                    GT
-                </option>                <option value="IS">
-                    IS
-                </option>                <option value="LT">
-                    LT
-                </option>    </select>
-            </div>
-            <div class="control term">
-                <input type="text" value="70">
-            </div>    <a class="icon icon-minus" href="#"></a>
-        </div><div class="control-group condition">
-            <div class="control not">
                 <input type="checkbox">
                 <label>Not</label>
             </div>
@@ -70,7 +26,7 @@
                         Audit
                     </option>                <option value="avg">
                     Average
-                </option>                <option value="dept" selected="selected">
+                </option>                <option value="dept">
                     Department
                 </option>                <option value="fail">
                     Fail
@@ -78,7 +34,7 @@
                     ID
                 </option>                <option value="instructor">
                     Instructor
-                </option>                <option value="pass">
+                </option>                <option value="pass" selected="selected">
                     Pass
                 </option>                <option value="title">
                     Title
@@ -90,18 +46,18 @@
             </div>
             <div class="control operators">
                 <select>
-                    <option value="EQ">
+                    <option value="EQ" selected="selected">
                         EQ
                     </option>                <option value="GT">
                     GT
-                </option>                <option value="IS" selected="selected">
+                </option>                <option value="IS">
                     IS
                 </option>                <option value="LT">
                     LT
                 </option>    </select>
             </div>
             <div class="control term">
-                <input type="text" value="engl">
+                <input type="text" value="1">
             </div>    <a class="icon icon-minus" href="#"></a>
         </div></div>
         <div class="icon-container"><a class="icon icon-plus" href="#"></a></div>
@@ -126,7 +82,7 @@
                 <label for="courses-columns-field-fail">Fail</label>
             </div>
             <div class="control field">
-                <input type="checkbox" id="courses-columns-field-id" data-key="id" value="id" checked="checked">
+                <input type="checkbox" id="courses-columns-field-id" data-key="id" value="id">
                 <label for="courses-columns-field-id">ID</label>
             </div>
             <div class="control field">
@@ -138,7 +94,7 @@
                 <label for="courses-columns-field-pass">Pass</label>
             </div>
             <div class="control field">
-                <input type="checkbox" id="courses-columns-field-title" data-key="title" value="title">
+                <input type="checkbox" id="courses-columns-field-title" data-key="title" value="title" checked="checked">
                 <label for="courses-columns-field-title">Title</label>
             </div>
             <div class="control field">
@@ -150,12 +106,16 @@
                 <label for="courses-columns-field-year">Year</label>
             </div>
             <div class="control transformation">
-                <input type="checkbox" data-key="countDept" value="countDept" checked="checked">
-                <label>countDept</label>
+                <input type="checkbox" data-key="maxAudit" value="maxAudit" checked="checked">
+                <label>maxAudit</label>
             </div>
             <div class="control transformation">
-                <input type="checkbox" value="countYear" data-key="countYear" checked="checked">
-                <label>countYear</label>
+                <input type="checkbox" data-key="avgFail" value="avgFail" checked="checked">
+                <label>avgFail</label>
+            </div>
+            <div class="control transformation">
+                <input type="checkbox" data-key="avgYear" value="avgYear" checked="checked">
+                <label>avgYear</label>
             </div>
         </div>
     </div>
@@ -184,7 +144,7 @@
                     UUID
                 </option>                <option value="year">
                     Year
-                </option>    <option class="transformation" value="countDept" selected="selected">countDept</option><option class="transformation" value="countYear">countYear</option></select>
+                </option>    <option class="transformation" value="maxAudit">maxAudit</option><option class="transformation" value="avgFail" selected="selected">avgFail</option><option class="transformation" value="avgYear">avgYear</option></select>
             </div>
             <div class="control descending">
                 <input type="checkbox" id="courses-order">
@@ -204,7 +164,7 @@
                 <label for="courses-groups-field-avg">Average</label>
             </div>
             <div class="control field">
-                <input type="checkbox" id="courses-groups-field-dept" data-key="dept" value="dept" checked="checked">
+                <input type="checkbox" id="courses-groups-field-dept" data-key="dept" value="dept">
                 <label for="courses-groups-field-dept">Department</label>
             </div>
             <div class="control field">
@@ -212,7 +172,7 @@
                 <label for="courses-groups-field-fail">Fail</label>
             </div>
             <div class="control field">
-                <input type="checkbox" id="courses-groups-field-id" data-key="id" value="id" checked="checked">
+                <input type="checkbox" id="courses-groups-field-id" data-key="id" value="id">
                 <label for="courses-groups-field-id">ID</label>
             </div>
             <div class="control field">
@@ -224,7 +184,7 @@
                 <label for="courses-groups-field-pass">Pass</label>
             </div>
             <div class="control field">
-                <input type="checkbox" id="courses-groups-field-title" data-key="title" value="title">
+                <input type="checkbox" id="courses-groups-field-title" data-key="title" value="title" checked="checked">
                 <label for="courses-groups-field-title">Title</label>
             </div>
             <div class="control field">
@@ -232,7 +192,7 @@
                 <label for="courses-groups-field-uuid">UUID</label>
             </div>
             <div class="control field">
-                <input type="checkbox" id="courses-groups-field-year" data-key="year" value="year" checked="checked">
+                <input type="checkbox" id="courses-groups-field-year" data-key="year" value="year">
                 <label for="courses-groups-field-year">Year</label>
             </div>
         </div>
@@ -241,14 +201,14 @@
         <legend>Transformations</legend>
         <div class="transformations-container"><div class="control-group transformation">
             <div class="control term">
-                <input type="text" value="countDept">
+                <input type="text" value="maxAudit">
             </div>    <div class="control operators">
             <select>
-                <option value="COUNT" selected="selected">
+                <option value="COUNT">
                     COUNT
                 </option>                <option value="AVG">
                 AVG
-            </option>                <option value="MAX">
+            </option>                <option value="MAX" selected="selected">
                 MAX
             </option>                <option value="MIN">
                 MIN
@@ -258,11 +218,11 @@
         </div>
             <div class="control fields">
                 <select>
-                    <option value="audit">
+                    <option value="audit" selected="selected">
                         Audit
                     </option>                <option value="avg">
                     Average
-                </option>                <option value="dept" selected="selected">
+                </option>                <option value="dept">
                     Department
                 </option>                <option value="fail">
                     Fail
@@ -283,12 +243,54 @@
             <a class="icon icon-minus" href="#"></a>
         </div><div class="control-group transformation">
             <div class="control term">
-                <input type="text" value="countYear">
+                <input type="text" value="avgFail">
             </div>    <div class="control operators">
             <select>
-                <option value="COUNT" selected="selected">
+                <option value="COUNT">
                     COUNT
-                </option>                <option value="AVG">
+                </option>                <option value="AVG" selected="selected">
+                AVG
+            </option>                <option value="MAX">
+                MAX
+            </option>                <option value="MIN">
+                MIN
+            </option>                <option value="SUM">
+                SUM
+            </option>    </select>
+        </div>
+            <div class="control fields">
+                <select>
+                    <option value="audit">
+                        Audit
+                    </option>                <option value="avg">
+                    Average
+                </option>                <option value="dept">
+                    Department
+                </option>                <option value="fail" selected="selected">
+                    Fail
+                </option>                <option value="id">
+                    ID
+                </option>                <option value="instructor">
+                    Instructor
+                </option>                <option value="pass">
+                    Pass
+                </option>                <option value="title">
+                    Title
+                </option>                <option value="uuid">
+                    UUID
+                </option>                <option value="year">
+                    Year
+                </option>    </select>
+            </div>
+            <a class="icon icon-minus" href="#"></a>
+        </div><div class="control-group transformation">
+            <div class="control term">
+                <input type="text" value="avgYear">
+            </div>    <div class="control operators">
+            <select>
+                <option value="COUNT">
+                    COUNT
+                </option>                <option value="AVG" selected="selected">
                 AVG
             </option>                <option value="MAX">
                 MAX

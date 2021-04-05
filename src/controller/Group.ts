@@ -51,8 +51,6 @@ export default class Group {
             }
         }
 
-        let result: any[] = [];
-
         return groupMap;
     }
 }

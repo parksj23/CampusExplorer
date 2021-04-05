@@ -13,10 +13,10 @@ mfields = ["avg", "pass", "fail", "audit", "year", "lat", "lon", "seats"];
 
 CampusExplorer.buildQuery = () => {
     let query = {};
-    console.log("Let's start building the query.");
+    // console.log("Let's start building the query.");
     let active = document.getElementsByClassName("tab-panel active")[0];
     let datasetKind = active.getAttribute("data-type");
-    console.log("Dataset kind is: " + datasetKind.toString());
+    // console.log("Dataset kind is: " + datasetKind.toString());
 
     fields = [];
     if (datasetKind === "courses") {
@@ -26,7 +26,7 @@ CampusExplorer.buildQuery = () => {
     if (datasetKind === "rooms") {
         fields = roomsFields;
     }
-    console.log("Fields are: " + fields.toString());
+    // console.log("Fields are: " + fields.toString());
 
 
     let where = {};
@@ -60,17 +60,14 @@ CampusExplorer.buildQuery = () => {
         options["ORDER"] = order;
     }
 
-    if (!(group.length === 0)) {
-        transformations["GROUP"] = group;
-        if (!(apply.length === 0)) {
-            transformations["APPLY"] = apply;
-        } else {
-            query["TRANSFORMATIONS"] = transformations;
-        }
-    } else {
+    if (group.length === 0 && apply.length === 0) {
         return query;
     }
-    console.log(query);
+
+    transformations["GROUP"] = group;
+    transformations["APPLY"] = apply;
+    query["TRANSFORMATIONS"] = transformations;
+
     return query;
 };
 
@@ -90,10 +87,10 @@ function buildWhere(datasetKind) {
         condition = "NONE"; // OR and then NOT
     }
 
-    console.log("The main filter is: " + condition);
+    // console.log("The main filter is: " + condition);
 
     let filters = getFilters(datasetKind);
-    console.log(filters);
+    // console.log(filters);
 
     if (filters.length === 0) {
         return {};
@@ -212,26 +209,31 @@ function buildOrder(datasetKind) {
         .getElementsByTagName("input")[0];
     let isDescendingSelected = descendingButton.checked;
 
-    switch(orderArray.length) {
+    switch (orderArray.length) {
         case 0: {
             return [];
             break;
         }
 
-        case 1: {
-            if (!isDescendingSelected) {
-                return orderArray[0];
-            }
-
-            if (isDescendingSelected) {
-                let dir = "DOWN";
-                return {
-                    dir: dir,
-                    keys: orderArray
-                }
-            }
-            break;
-        }
+        // case 1: {
+        //     if (!isDescendingSelected) {
+        //         // return orderArray[0];
+        //         let dir = "UP";
+        //         return {
+        //             dir: dir,
+        //             keys: orderArray
+        //         }
+        //     }
+        //
+        //     if (isDescendingSelected) {
+        //         let dir = "DOWN";
+        //         return {
+        //             dir: dir,
+        //             keys: orderArray
+        //         }
+        //     }
+        //     break;
+        // }
 
         default: {
             if (!isDescendingSelected) {
@@ -278,7 +280,7 @@ function buildApply(datasetKind) {
 
     for (let input of applyInputs) {
         // Get the applykey that the user inputted
-        let applykey = input.getElementsByClassName("control term").value;
+        let applykey = input.getElementsByClassName("control term")[0].getElementsByTagName("input")[0].value;
 
         // Get the dropdown token
         let applytokens = input.getElementsByClassName("control operators")[0].getElementsByTagName("option");

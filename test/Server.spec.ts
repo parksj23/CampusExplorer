@@ -44,84 +44,84 @@ describe("Facade D3", function () {
     });
 
     // Sample on how to format PUT requests
-    // it("PUT test for courses dataset -- response code on success", function () {
-    //     const ZIP_FILE_DATA = fs.readFileSync("./test/data/courses.zip");
-    //     try {
-    //         return chai.request("http://localhost:4321")
-    //             .put("/dataset/courses/courses")
-    //             .send(ZIP_FILE_DATA)
-    //             .set("Content-Type", "application/x-zip-compressed")
-    //             .then(function (res: Response) {
-    //                 // some logging here please!
-    //                 Log.info("PUT - SUCCESS");
-    //                 expect(res.status).to.be.equal(200);
-    //             })
-    //             .catch(function (err) {
-    //                 // some logging here please!
-    //                 Log.error("PUT - ERROR: " + err.message);
-    //                 expect.fail();
-    //             });
-    //     } catch (err) {
-    //         // and some more logging here!
-    //         Log.error("PUT - ERROR: " + err.message);
-    //         expect.fail();
-    //     }
-    // });
-    //
-    // it("PUT test for rooms dataset -- response code on success", function () {
-    //     const ZIP_FILE_DATA = fs.readFileSync("./test/data/rooms.zip");
-    //     try {
-    //         return chai.request("http://localhost:4321")
-    //             .put("/dataset/rooms/rooms")
-    //             .send(ZIP_FILE_DATA)
-    //             .set("Content-Type", "application/x-zip-compressed")
-    //             .then(function (res: Response) {
-    //                 // some logging here please!
-    //                 Log.info("PUT - SUCCESS");
-    //                 expect(res.status).to.be.equal(200);
-    //             })
-    //             .catch(function (err) {
-    //                 // some logging here please!
-    //                 Log.error("PUT - ERROR: " + err.message);
-    //                 expect.fail();
-    //             });
-    //     } catch (err) {
-    //         // and some more logging here!
-    //         Log.error("PUT - ERROR: " + err.message);
-    //         expect.fail();
-    //     }
-    // });
-    //
-    // it("PUT test for courses dataset -- response body on success", function () {
-    //     const ZIP_FILE_DATA = fs.readFileSync("./test/data/courses.zip");
-    //     try {
-    //         return chai.request("http://localhost:4321")
-    //             .put("/dataset/courses/courses")
-    //             .send(ZIP_FILE_DATA)
-    //             .set("Content-Type", "application/x-zip-compressed")
-    //             .then(function (res: Response) {
-    //                 Log.info("PUT - SUCCESS");
-    //                 expect(res.body.result[0]).to.be.equal("courses");
-    //             })
-    //             .catch(function (err) {
-    //                 Log.error("PUT - ERROR: " + err.message);
-    //                 expect.fail();
-    //             });
-    //     } catch (err) {
-    //         // and some more logging here!
-    //         Log.error("PUT - ERROR: " + err.message);
-    //         expect.fail();
-    //     }
-    // });
-    //
-    // it("ECHO- succeeds silently!", function () {   // <= No done callback
-    //     chai.request("http://localhost:4321")
-    //         .get("/echo/hello")
-    //         .end(function (err, res) {
-    //             Log.info("SUCCESS");
-    //             expect(res.status).to.be.equal(200);    // <= Test completes before this runs
-    //         });
-    // });
+    it("PUT test for courses dataset -- response code on success", function () {
+        const ZIP_FILE_DATA = fs.readFileSync("./test/data/courses.zip");
+        try {
+            return chai.request("http://localhost:4321")
+                .put("/dataset/courses/courses")
+                .send(ZIP_FILE_DATA)
+                .set("Content-Type", "application/x-zip-compressed")
+                .then(function (res: Response) {
+                    // some logging here please!
+                    Log.info("PUT - SUCCESS");
+                    expect(res.status).to.be.equal(200);
+                })
+                .catch(function (err) {
+                    // some logging here please!
+                    Log.error("PUT - ERROR: " + err.message);
+                    expect.fail();
+                });
+        } catch (err) {
+            // and some more logging here!
+            Log.error("PUT - ERROR: " + err.message);
+            expect.fail();
+        }
+    });
+
+    it("PUT test for rooms dataset -- response code on success", function () {
+        const ZIP_FILE_DATA = fs.readFileSync("./test/data/rooms.zip");
+        try {
+            return chai.request("http://localhost:4321")
+                .put("/dataset/rooms/rooms")
+                .send(ZIP_FILE_DATA)
+                .set("Content-Type", "application/x-zip-compressed")
+                .then(function (res: Response) {
+                    // some logging here please!
+                    Log.info("PUT - SUCCESS");
+                    expect(res.status).to.be.equal(200);
+                })
+                .catch(function (err) {
+                    // some logging here please!
+                    Log.error("PUT - ERROR: " + err.message);
+                    expect.fail();
+                });
+        } catch (err) {
+            // and some more logging here!
+            Log.error("PUT - ERROR: " + err.message);
+            expect.fail();
+        }
+    });
+
+    it("PUT test for courses dataset -- response body on success", function () {
+        const ZIP_FILE_DATA = fs.readFileSync("./test/data/courses.zip");
+        try {
+            return chai.request("http://localhost:4321")
+                .put("/dataset/courses/courses")
+                .send(ZIP_FILE_DATA)
+                .set("Content-Type", "application/x-zip-compressed")
+                .then(function (res: Response) {
+                    Log.info("PUT - SUCCESS");
+                    expect(res.body.result[0]).to.be.equal("courses");
+                })
+                .catch(function (err) {
+                    Log.error("PUT - ERROR: " + err.message);
+                    expect.fail();
+                });
+        } catch (err) {
+            // and some more logging here!
+            Log.error("PUT - ERROR: " + err.message);
+            expect.fail();
+        }
+    });
+
+    it("ECHO- succeeds silently!", function () {   // <= No done callback
+        chai.request("http://localhost:4321")
+            .get("/echo/hello")
+            .end(function (err, res) {
+                Log.info("SUCCESS");
+                expect(res.status).to.be.equal(200);    // <= Test completes before this runs
+            });
+    });
     //
     // // The other endpoints work similarly. You should be able to find all instructions at the chai-http documentation
     //

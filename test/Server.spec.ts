@@ -45,6 +45,7 @@ describe("Facade D3", function () {
 
     // Sample on how to format PUT requests
     it("PUT test for courses dataset -- response code on success", function () {
+        this.timeout(3000);
         const ZIP_FILE_DATA = fs.readFileSync("./test/data/courses.zip");
         try {
             return chai.request("http://localhost:4321")
@@ -68,6 +69,7 @@ describe("Facade D3", function () {
         }
     });
 
+    // // The other endpoints work similarly. You should be able to find all instructions at the chai-http documentation
     it("PUT test for rooms dataset -- response code on success", function () {
         const ZIP_FILE_DATA = fs.readFileSync("./test/data/rooms.zip");
         try {
@@ -93,6 +95,7 @@ describe("Facade D3", function () {
     });
 
     it("PUT test for courses dataset -- response body on success", function () {
+        this.timeout(3000);
         const ZIP_FILE_DATA = fs.readFileSync("./test/data/courses.zip");
         try {
             return chai.request("http://localhost:4321")
@@ -122,16 +125,14 @@ describe("Facade D3", function () {
                 expect(res.status).to.be.equal(200);    // <= Test completes before this runs
             });
     });
-    //
-    // // The other endpoints work similarly. You should be able to find all instructions at the chai-http documentation
-    //
-    // it("GET test for courses Dataset, success code", function () {
-    //     chai.request("http://localhost:4321")
-    //         .get("/datasets")
-    //         .end(function (err, res) {
-    //             expect(res).to.have.status(200);
-    //         });
-    // });
+
+    it("GET test for courses Dataset, success code", function () {
+        chai.request("http://localhost:4321")
+            .get("/datasets")
+            .end(function (err, res) {
+                expect(res).to.have.status(200);
+            });
+    });
     //
     // it("GET test for courses Dataset, previous add", function () {
     //     const content = fs

@@ -120,21 +120,16 @@ export default class Server {
 
     private static putDataset(req: restify.Request, res: restify.Response, next: restify.Next) {
         Log.trace("Server::putDataset(..) - params: " + JSON.stringify(req.params));
-        try {
-            const content = (req.body).toString("base64");
-            const id: string = req.params.id;
-            const kind: InsightDatasetKind = req.params.kind;
-            Server.insightFacade.addDataset(id, content, kind).then((response) => {
-                res.json(200, {result: response});
-                return next();
-            }).catch((err) => {
-                res.json(400, {error: err});
-                return next();
-            });
-        } catch (err) {
+        const content = (req.body).toString("base64");
+        const id: string = req.params.id;
+        const kind: InsightDatasetKind = req.params.kind;
+        return Server.insightFacade.addDataset(id, content, kind).then((response) => {
+            res.json(200, {result: response});
+            return next();
+        }).catch((err) => {
             res.json(400, {error: err});
             return next();
-        }
+        });
         return next();
     }
 

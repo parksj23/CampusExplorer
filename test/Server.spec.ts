@@ -215,16 +215,4 @@ describe("Facade D3", function () {
             });
     });
 
-    // it("GET test for courses Dataset, previous add", function () {
-    //     const content = fs
-    //         .readFileSync("./test/data/courses.zip")
-    //         .toString("base64");
-    //     return facade.addDataset("courses", content, InsightDatasetKind.Courses).then((reeee) => {
-    //         chai.request("http://localhost:4321")
-    //             .get("/datasets")
-    //             .end(function (err, res) {
-    //                 expect(res).to.have.status(200);
-    //             });
-    //     });
-    // });
 });

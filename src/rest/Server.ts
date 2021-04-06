@@ -132,13 +132,13 @@ export default class Server {
         });
     }
 
-    private static deleteDataset(req: restify.Request, res: restify.Response, next: restify.Next) {
-        return next();
-    }
+    // private static deleteDataset(req: restify.Request, res: restify.Response, next: restify.Next) {
+    //     return next();
+    // }
 
-    private static postQuery(req: restify.Request, res: restify.Response, next: restify.Next) {
-        return next();
-    }
+    // private static postQuery(req: restify.Request, res: restify.Response, next: restify.Next) {
+    //     return next();
+    // }
 
     private static getDatasets(req: restify.Request, res: restify.Response, next: restify.Next) {
         Log.trace("Server::echo(..) - params: " + JSON.stringify(req.params));

@@ -12,63 +12,56 @@ roomsFields = ["fullname", "shortname", "number", "name", "address", "type", "fu
 mfields = ["avg", "pass", "fail", "audit", "year", "lat", "lon", "seats"];
 
 CampusExplorer.buildQuery = () => {
-    let query = {};
-    // console.log("Let's start building the query.");
-    let active = document.getElementsByClassName("tab-panel active")[0];
-    let datasetKind = active.getAttribute("data-type");
-    // console.log("Dataset kind is: " + datasetKind.toString());
+    try {
+        let query = {};
+        // console.log("Let's start building the query.");
+        let active = document.getElementsByClassName("tab-panel active")[0];
+        let datasetKind = active.getAttribute("data-type");
+        // console.log("Dataset kind is: " + datasetKind.toString());
 
-    fields = [];
-    if (datasetKind === "courses") {
-        fields = coursesFields;
-    }
+        fields = [];
+        if (datasetKind === "courses") {
+            fields = coursesFields;
+        }
 
-    if (datasetKind === "rooms") {
-        fields = roomsFields;
-    }
-    // console.log("Fields are: " + fields.toString());
+        if (datasetKind === "rooms") {
+            fields = roomsFields;
+        }
 
+        let where = {};
+        let options = {};
+        let transformations = {};
+        let columns = [];
+        let order = {};
+        let group = [];
+        let apply = [];
 
-    let where = {};
-    let options = {};
-    let transformations = {};
-    let columns = [];
-    let order = {};
-    let group = [];
-    let apply = [];
+        where = buildWhere(datasetKind);
+        columns = buildColumns(datasetKind);
+        order = buildOrder(datasetKind);
+        group = buildGroup(datasetKind);
+        apply = buildApply(datasetKind);
 
-    where = buildWhere(datasetKind);
-    // console.log("Where);
-    columns = buildColumns(datasetKind);
-    // console.log("Columns");
-    // console.log(columns);
-    order = buildOrder(datasetKind);
-    // console.log("Got order: ");
-    // console.log(order);
-    group = buildGroup(datasetKind);
-    // console.log("Got group: ");
-    // console.log(group);
-    apply = buildApply(datasetKind);
-    // console.log("Got apply: ");
-    // console.log(apply);
+        query["WHERE"] = where;
+        query["OPTIONS"] = options;
+        options["COLUMNS"] = columns;
 
-    query["WHERE"] = where;
-    query["OPTIONS"] = options;
-    options["COLUMNS"] = columns;
+        if (!(order === null) || !(order.keys.length < 0)) {
+            options["ORDER"] = order;
+        }
 
-    if (!(order === null)) {
-        options["ORDER"] = order;
-    }
+        if (group.length === 0) {
+            return query;
+        }
 
-    if (group.length === 0 && apply.length === 0) {
+        transformations["GROUP"] = group;
+        transformations["APPLY"] = apply;
+        query["TRANSFORMATIONS"] = transformations;
+
         return query;
+    } catch (err) {
+        return err;
     }
-
-    transformations["GROUP"] = group;
-    transformations["APPLY"] = apply;
-    query["TRANSFORMATIONS"] = transformations;
-
-    return query;
 };
 
 function buildWhere(datasetKind) {
@@ -87,10 +80,7 @@ function buildWhere(datasetKind) {
         condition = "NONE"; // OR and then NOT
     }
 
-    // console.log("The main filter is: " + condition);
-
     let filters = getFilters(datasetKind);
-    // console.log(filters);
 
     if (filters.length === 0) {
         return {};

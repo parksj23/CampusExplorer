@@ -1,18 +1,19 @@
-<form data-type="rooms">
+
+<form data-type="courses">
     <div class="form-group conditions">
         <legend>Conditions</legend>
         <div class="control-group condition-type">
             <div class="control conditions-all-radio">
-                <input checked="" id="rooms-conditiontype-all" name="conditionType" value="all" type="radio">
-                <label for="rooms-conditiontype-all">All of the following</label>
+                <input checked="" id="courses-conditiontype-all" name="conditionType" value="all" type="radio">
+                <label for="courses-conditiontype-all">All of the following</label>
             </div>
             <div class="control conditions-any-radio">
-                <input id="rooms-conditiontype-any" name="conditionType" value="any" type="radio">
-                <label for="rooms-conditiontype-any">Any of the following</label>
+                <input id="courses-conditiontype-any" name="conditionType" value="any" type="radio">
+                <label for="courses-conditiontype-any">Any of the following</label>
             </div>
             <div class="control conditions-none-radio">
-                <input id="rooms-conditiontype-none" name="conditionType" value="none" type="radio">
-                <label for="rooms-conditiontype-none">None of the following</label>
+                <input id="courses-conditiontype-none" name="conditionType" value="none" type="radio">
+                <label for="courses-conditiontype-none">None of the following</label>
             </div>
         </div>
         <div class="conditions-container"><div class="control-group condition">
@@ -22,74 +23,26 @@
             </div>
             <div class="control fields">
                 <select>
-                    <option value="address">
-                        Address
-                    </option>                <option value="fullname">
-                    Full Name
-                </option>                <option value="furniture" selected="selected">
-                    Furniture
-                </option>                <option value="href">
-                    Link
-                </option>                <option value="lat">
-                    Latitude
-                </option>                <option value="lon">
-                    Longitude
-                </option>                <option value="name">
-                    Name
-                </option>                <option value="number">
-                    Number
-                </option>                <option value="seats">
-                    Seats
-                </option>                <option value="shortname">
-                    Short Name
-                </option>                <option value="type">
-                    Type
-                </option>    </select>
-            </div>
-            <div class="control operators">
-                <select>
-                    <option value="EQ">
-                        EQ
-                    </option>                <option value="GT">
-                    GT
-                </option>                <option value="IS" selected="selected">
-                    IS
-                </option>                <option value="LT">
-                    LT
-                </option>    </select>
-            </div>
-            <div class="control term">
-                <input type="text" value="*Tables*">
-            </div>    <a class="icon icon-minus" href="#"></a>
-        </div><div class="control-group condition">
-            <div class="control not">
-                <input type="checkbox">
-                <label>Not</label>
-            </div>
-            <div class="control fields">
-                <select>
-                    <option value="address">
-                        Address
-                    </option>                <option value="fullname">
-                    Full Name
-                </option>                <option value="furniture">
-                    Furniture
-                </option>                <option value="href">
-                    Link
-                </option>                <option value="lat">
-                    Latitude
-                </option>                <option value="lon">
-                    Longitude
-                </option>                <option value="name">
-                    Name
-                </option>                <option value="number">
-                    Number
-                </option>                <option value="seats" selected="selected">
-                    Seats
-                </option>                <option value="shortname">
-                    Short Name
-                </option>                <option value="type">
-                    Type
+                    <option value="audit" selected="selected">
+                        Audit
+                    </option>                <option value="avg">
+                    Average
+                </option>                <option value="dept">
+                    Department
+                </option>                <option value="fail">
+                    Fail
+                </option>                <option value="id">
+                    ID
+                </option>                <option value="instructor">
+                    Instructor
+                </option>                <option value="pass">
+                    Pass
+                </option>                <option value="title">
+                    Title
+                </option>                <option value="uuid">
+                    UUID
+                </option>                <option value="year">
+                    Year
                 </option>    </select>
             </div>
             <div class="control operators">
@@ -105,7 +58,7 @@
                 </option>    </select>
             </div>
             <div class="control term">
-                <input type="text" value="300">
+                <input type="text" value="20">
             </div>    <a class="icon icon-minus" href="#"></a>
         </div></div>
         <div class="icon-container"><a class="icon icon-plus" href="#"></a></div>
@@ -114,52 +67,52 @@
         <legend>Columns</legend>
         <div class="control-group">
             <div class="control field">
-                <input type="checkbox" id="rooms-columns-field-address" data-key="address" value="address">
-                <label for="rooms-columns-field-address">Address</label>
+                <input type="checkbox" id="courses-columns-field-audit" data-key="audit" value="audit">
+                <label for="courses-columns-field-audit">Audit</label>
             </div>
             <div class="control field">
-                <input type="checkbox" id="rooms-columns-field-fullname" data-key="fullname" value="fullname">
-                <label for="rooms-columns-field-fullname">Full Name</label>
+                <input type="checkbox" id="courses-columns-field-avg" data-key="avg" value="avg" checked="checked">
+                <label for="courses-columns-field-avg">Average</label>
             </div>
             <div class="control field">
-                <input type="checkbox" id="rooms-columns-field-furniture" data-key="furniture" value="furniture" checked="checked">
-                <label for="rooms-columns-field-furniture">Furniture</label>
+                <input type="checkbox" id="courses-columns-field-dept" data-key="dept" value="dept" checked="checked">
+                <label for="courses-columns-field-dept">Department</label>
             </div>
             <div class="control field">
-                <input type="checkbox" id="rooms-columns-field-href" data-key="href" value="href">
-                <label for="rooms-columns-field-href">Link</label>
+                <input type="checkbox" id="courses-columns-field-fail" data-key="fail" value="fail">
+                <label for="courses-columns-field-fail">Fail</label>
             </div>
             <div class="control field">
-                <input type="checkbox" id="rooms-columns-field-lat" data-key="lat" value="lat">
-                <label for="rooms-columns-field-lat">Latitude</label>
+                <input type="checkbox" id="courses-columns-field-id" data-key="id" value="id">
+                <label for="courses-columns-field-id">ID</label>
             </div>
             <div class="control field">
-                <input type="checkbox" id="rooms-columns-field-lon" data-key="lon" value="lon">
-                <label for="rooms-columns-field-lon">Longitude</label>
+                <input type="checkbox" id="courses-columns-field-instructor" data-key="instructor" value="instructor">
+                <label for="courses-columns-field-instructor">Instructor</label>
             </div>
             <div class="control field">
-                <input type="checkbox" id="rooms-columns-field-name" data-key="name" value="name">
-                <label for="rooms-columns-field-name">Name</label>
+                <input type="checkbox" id="courses-columns-field-pass" data-key="pass" value="pass">
+                <label for="courses-columns-field-pass">Pass</label>
             </div>
             <div class="control field">
-                <input type="checkbox" id="rooms-columns-field-number" data-key="number" value="number">
-                <label for="rooms-columns-field-number">Number</label>
+                <input type="checkbox" id="courses-columns-field-title" data-key="title" value="title">
+                <label for="courses-columns-field-title">Title</label>
             </div>
             <div class="control field">
-                <input type="checkbox" id="rooms-columns-field-seats" data-key="seats" value="seats">
-                <label for="rooms-columns-field-seats">Seats</label>
+                <input type="checkbox" id="courses-columns-field-uuid" data-key="uuid" value="uuid">
+                <label for="courses-columns-field-uuid">UUID</label>
             </div>
             <div class="control field">
-                <input type="checkbox" id="rooms-columns-field-shortname" data-key="shortname" value="shortname" checked="checked">
-                <label for="rooms-columns-field-shortname">Short Name</label>
-            </div>
-            <div class="control field">
-                <input type="checkbox" id="rooms-columns-field-type" data-key="type" value="type">
-                <label for="rooms-columns-field-type">Type</label>
+                <input type="checkbox" id="courses-columns-field-year" data-key="year" value="year">
+                <label for="courses-columns-field-year">Year</label>
             </div>
             <div class="control transformation">
-                <input type="checkbox" data-key="maxSeats" value="maxSeats" checked="checked">
-                <label>maxSeats</label>
+                <input type="checkbox" data-key="countAudit" value="countAudit" checked="checked">
+                <label>countAudit</label>
+            </div>
+            <div class="control transformation">
+                <input type="checkbox" data-key="maxFail" value="maxFail" checked="checked">
+                <label>maxFail</label>
             </div>
         </div>
     </div>
@@ -168,33 +121,31 @@
         <div class="control-group">
             <div class="control order fields">
                 <select multiple="">
-                    <option value="address">
-                        Address
-                    </option>                <option value="fullname">
-                    Full Name
-                </option>                <option value="furniture">
-                    Furniture
-                </option>                <option value="href">
-                    Link
-                </option>                <option value="lat">
-                    Latitude
-                </option>                <option value="lon">
-                    Longitude
-                </option>                <option value="name">
-                    Name
-                </option>                <option value="number">
-                    Number
-                </option>                <option value="seats">
-                    Seats
-                </option>                <option value="shortname">
-                    Short Name
-                </option>                <option value="type">
-                    Type
-                </option>    <option class="transformation" value="maxSeats" selected="selected">maxSeats</option></select>
+                    <option value="audit">
+                        Audit
+                    </option>                <option value="avg">
+                    Average
+                </option>                <option value="dept" selected="selected">
+                    Department
+                </option>                <option value="fail">
+                    Fail
+                </option>                <option value="id">
+                    ID
+                </option>                <option value="instructor">
+                    Instructor
+                </option>                <option value="pass">
+                    Pass
+                </option>                <option value="title">
+                    Title
+                </option>                <option value="uuid">
+                    UUID
+                </option>                <option value="year">
+                    Year
+                </option>    <option class="transformation" value="countAudit">countAudit</option><option class="transformation" value="maxFail">maxFail</option></select>
             </div>
             <div class="control descending">
-                <input type="checkbox" id="rooms-order" checked="checked">
-                <label for="rooms-order">Descending</label>
+                <input type="checkbox" id="courses-order" checked="checked">
+                <label for="courses-order">Descending</label>
             </div>
         </div>
     </div>
@@ -202,48 +153,44 @@
         <legend>Groups</legend>
         <div class="control-group">
             <div class="control field">
-                <input type="checkbox" id="rooms-groups-field-address" data-key="address" value="address">
-                <label for="rooms-groups-field-address">Address</label>
+                <input type="checkbox" id="courses-groups-field-audit" data-key="audit" value="audit" checked="checked">
+                <label for="courses-groups-field-audit">Audit</label>
             </div>
             <div class="control field">
-                <input type="checkbox" id="rooms-groups-field-fullname" data-key="fullname" value="fullname">
-                <label for="rooms-groups-field-fullname">Full Name</label>
+                <input type="checkbox" id="courses-groups-field-avg" data-key="avg" value="avg" checked="checked">
+                <label for="courses-groups-field-avg">Average</label>
             </div>
             <div class="control field">
-                <input type="checkbox" id="rooms-groups-field-furniture" data-key="furniture" value="furniture" checked="checked">
-                <label for="rooms-groups-field-furniture">Furniture</label>
+                <input type="checkbox" id="courses-groups-field-dept" data-key="dept" value="dept" checked="checked">
+                <label for="courses-groups-field-dept">Department</label>
             </div>
             <div class="control field">
-                <input type="checkbox" id="rooms-groups-field-href" data-key="href" value="href">
-                <label for="rooms-groups-field-href">Link</label>
+                <input type="checkbox" id="courses-groups-field-fail" data-key="fail" value="fail">
+                <label for="courses-groups-field-fail">Fail</label>
             </div>
             <div class="control field">
-                <input type="checkbox" id="rooms-groups-field-lat" data-key="lat" value="lat">
-                <label for="rooms-groups-field-lat">Latitude</label>
+                <input type="checkbox" id="courses-groups-field-id" data-key="id" value="id">
+                <label for="courses-groups-field-id">ID</label>
             </div>
             <div class="control field">
-                <input type="checkbox" id="rooms-groups-field-lon" data-key="lon" value="lon">
-                <label for="rooms-groups-field-lon">Longitude</label>
+                <input type="checkbox" id="courses-groups-field-instructor" data-key="instructor" value="instructor">
+                <label for="courses-groups-field-instructor">Instructor</label>
             </div>
             <div class="control field">
-                <input type="checkbox" id="rooms-groups-field-name" data-key="name" value="name">
-                <label for="rooms-groups-field-name">Name</label>
+                <input type="checkbox" id="courses-groups-field-pass" data-key="pass" value="pass">
+                <label for="courses-groups-field-pass">Pass</label>
             </div>
             <div class="control field">
-                <input type="checkbox" id="rooms-groups-field-number" data-key="number" value="number">
-                <label for="rooms-groups-field-number">Number</label>
+                <input type="checkbox" id="courses-groups-field-title" data-key="title" value="title">
+                <label for="courses-groups-field-title">Title</label>
             </div>
             <div class="control field">
-                <input type="checkbox" id="rooms-groups-field-seats" data-key="seats" value="seats">
-                <label for="rooms-groups-field-seats">Seats</label>
+                <input type="checkbox" id="courses-groups-field-uuid" data-key="uuid" value="uuid">
+                <label for="courses-groups-field-uuid">UUID</label>
             </div>
             <div class="control field">
-                <input type="checkbox" id="rooms-groups-field-shortname" data-key="shortname" value="shortname" checked="checked">
-                <label for="rooms-groups-field-shortname">Short Name</label>
-            </div>
-            <div class="control field">
-                <input type="checkbox" id="rooms-groups-field-type" data-key="type" value="type">
-                <label for="rooms-groups-field-type">Type</label>
+                <input type="checkbox" id="courses-groups-field-year" data-key="year" value="year">
+                <label for="courses-groups-field-year">Year</label>
             </div>
         </div>
     </div>
@@ -251,7 +198,49 @@
         <legend>Transformations</legend>
         <div class="transformations-container"><div class="control-group transformation">
             <div class="control term">
-                <input type="text" value="maxSeats">
+                <input type="text" value="countAudit">
+            </div>    <div class="control operators">
+            <select>
+                <option value="COUNT" selected="selected">
+                    COUNT
+                </option>                <option value="AVG">
+                AVG
+            </option>                <option value="MAX">
+                MAX
+            </option>                <option value="MIN">
+                MIN
+            </option>                <option value="SUM">
+                SUM
+            </option>    </select>
+        </div>
+            <div class="control fields">
+                <select>
+                    <option value="audit" selected="selected">
+                        Audit
+                    </option>                <option value="avg">
+                    Average
+                </option>                <option value="dept">
+                    Department
+                </option>                <option value="fail">
+                    Fail
+                </option>                <option value="id">
+                    ID
+                </option>                <option value="instructor">
+                    Instructor
+                </option>                <option value="pass">
+                    Pass
+                </option>                <option value="title">
+                    Title
+                </option>                <option value="uuid">
+                    UUID
+                </option>                <option value="year">
+                    Year
+                </option>    </select>
+            </div>
+            <a class="icon icon-minus" href="#"></a>
+        </div><div class="control-group transformation">
+            <div class="control term">
+                <input type="text" value="maxFail">
             </div>    <div class="control operators">
             <select>
                 <option value="COUNT">
@@ -268,28 +257,26 @@
         </div>
             <div class="control fields">
                 <select>
-                    <option value="address">
-                        Address
-                    </option>                <option value="fullname">
-                    Full Name
-                </option>                <option value="furniture">
-                    Furniture
-                </option>                <option value="href">
-                    Link
-                </option>                <option value="lat">
-                    Latitude
-                </option>                <option value="lon">
-                    Longitude
-                </option>                <option value="name">
-                    Name
-                </option>                <option value="number">
-                    Number
-                </option>                <option value="seats" selected="selected">
-                    Seats
-                </option>                <option value="shortname">
-                    Short Name
-                </option>                <option value="type">
-                    Type
+                    <option value="audit">
+                        Audit
+                    </option>                <option value="avg">
+                    Average
+                </option>                <option value="dept">
+                    Department
+                </option>                <option value="fail" selected="selected">
+                    Fail
+                </option>                <option value="id">
+                    ID
+                </option>                <option value="instructor">
+                    Instructor
+                </option>                <option value="pass">
+                    Pass
+                </option>                <option value="title">
+                    Title
+                </option>                <option value="uuid">
+                    UUID
+                </option>                <option value="year">
+                    Year
                 </option>    </select>
             </div>
             <a class="icon icon-minus" href="#"></a>

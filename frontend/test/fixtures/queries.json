@@ -180,5 +180,110 @@
                 }
             ]
         }
+    },
+    "query6": {
+        "WHERE": {
+            "GT": {
+                "courses_audit": 20
+            }
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "courses_avg",
+                "courses_dept",
+                "countAudit",
+                "maxFail"
+            ],
+            "ORDER": {
+                "dir": "DOWN",
+                "keys": [
+                    "courses_dept"
+                ]
+            }
+        },
+        "TRANSFORMATIONS": {
+            "GROUP": [
+                "courses_audit",
+                "courses_avg",
+                "courses_dept"
+            ],
+            "APPLY": [
+                {
+                    "countAudit": {
+                        "COUNT": "courses_audit"
+                    }
+                },
+                {
+                    "maxFail": {
+                        "MAX": "courses_fail"
+                    }
+                }
+            ]
+        }
+    },
+    "query7": {
+        "WHERE": {
+            "IS": {
+                "rooms_fullname": "M*"
+            }
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "rooms_address",
+                "rooms_fullname",
+                "rooms_furniture"
+            ],
+            "ORDER": {
+                "dir": "UP",
+                "keys": [
+                    "rooms_address"
+                ]
+            }
+        }
+    },
+    "query8": {
+        "WHERE": {
+            "IS": {
+                "rooms_fullname": "M*"
+            }
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "rooms_fullname",
+                "rooms_furniture",
+                "countAddr",
+                "sumSeats",
+                "maxLong"
+            ],
+            "ORDER": {
+                "dir": "DOWN",
+                "keys": [
+                    "rooms_fullname"
+                ]
+            }
+        },
+        "TRANSFORMATIONS": {
+            "GROUP": [
+                "rooms_fullname",
+                "rooms_furniture"
+            ],
+            "APPLY": [
+                {
+                    "countAddr": {
+                        "COUNT": "rooms_address"
+                    }
+                },
+                {
+                    "sumSeats": {
+                        "SUM": "rooms_seats"
+                    }
+                },
+                {
+                    "maxLong": {
+                        "MAX": "rooms_lon"
+                    }
+                }
+            ]
+        }
     }
 }

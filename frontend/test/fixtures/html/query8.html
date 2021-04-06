@@ -69,7 +69,7 @@
         <legend>Columns</legend>
         <div class="control-group">
             <div class="control field">
-                <input type="checkbox" id="rooms-columns-field-address" data-key="address" value="address" checked="checked">
+                <input type="checkbox" id="rooms-columns-field-address" data-key="address" value="address">
                 <label for="rooms-columns-field-address">Address</label>
             </div>
             <div class="control field">
@@ -112,6 +112,18 @@
                 <input type="checkbox" id="rooms-columns-field-type" data-key="type" value="type">
                 <label for="rooms-columns-field-type">Type</label>
             </div>
+            <div class="control transformation">
+                <input type="checkbox" data-key="countAddr" value="countAddr" checked="checked">
+                <label>countAddr</label>
+            </div>
+            <div class="control transformation">
+                <input type="checkbox" data-key="sumSeats" value="sumSeats" checked="checked">
+                <label>sumSeats</label>
+            </div>
+            <div class="control transformation">
+                <input type="checkbox" data-key="maxLong" value="maxLong" checked="checked">
+                <label>maxLong</label>
+            </div>
         </div>
     </div>
     <div class="form-group order">
@@ -119,9 +131,9 @@
         <div class="control-group">
             <div class="control order fields">
                 <select multiple="">
-                    <option value="address" selected="selected">
+                    <option value="address">
                         Address
-                    </option>                <option value="fullname">
+                    </option>                <option value="fullname" selected="selected">
                     Full Name
                 </option>                <option value="furniture">
                     Furniture
@@ -141,10 +153,10 @@
                     Short Name
                 </option>                <option value="type">
                     Type
-                </option>    </select>
+                </option>    <option class="transformation" value="countAddr">countAddr</option><option class="transformation" value="sumSeats">sumSeats</option><option class="transformation" value="maxLong">maxLong</option></select>
             </div>
             <div class="control descending">
-                <input type="checkbox" id="rooms-order">
+                <input type="checkbox" id="rooms-order" checked="checked">
                 <label for="rooms-order">Descending</label>
             </div>
         </div>
@@ -157,11 +169,11 @@
                 <label for="rooms-groups-field-address">Address</label>
             </div>
             <div class="control field">
-                <input type="checkbox" id="rooms-groups-field-fullname" data-key="fullname" value="fullname">
+                <input type="checkbox" id="rooms-groups-field-fullname" data-key="fullname" value="fullname" checked="checked">
                 <label for="rooms-groups-field-fullname">Full Name</label>
             </div>
             <div class="control field">
-                <input type="checkbox" id="rooms-groups-field-furniture" data-key="furniture" value="furniture">
+                <input type="checkbox" id="rooms-groups-field-furniture" data-key="furniture" value="furniture" checked="checked">
                 <label for="rooms-groups-field-furniture">Furniture</label>
             </div>
             <div class="control field">
@@ -200,7 +212,139 @@
     </div>
     <div class="form-group transformations">
         <legend>Transformations</legend>
-        <div class="transformations-container"></div>
+        <div class="transformations-container"><div class="control-group transformation">
+            <div class="control term">
+                <input type="text" value="countAddr">
+            </div>    <div class="control operators">
+            <select>
+                <option value="COUNT" selected="selected">
+                    COUNT
+                </option>                <option value="AVG">
+                AVG
+            </option>                <option value="MAX">
+                MAX
+            </option>                <option value="MIN">
+                MIN
+            </option>                <option value="SUM">
+                SUM
+            </option>    </select>
+        </div>
+            <div class="control fields">
+                <select>
+                    <option value="address" selected="selected">
+                        Address
+                    </option>                <option value="fullname">
+                    Full Name
+                </option>                <option value="furniture">
+                    Furniture
+                </option>                <option value="href">
+                    Link
+                </option>                <option value="lat">
+                    Latitude
+                </option>                <option value="lon">
+                    Longitude
+                </option>                <option value="name">
+                    Name
+                </option>                <option value="number">
+                    Number
+                </option>                <option value="seats">
+                    Seats
+                </option>                <option value="shortname">
+                    Short Name
+                </option>                <option value="type">
+                    Type
+                </option>    </select>
+            </div>
+            <a class="icon icon-minus" href="#"></a>
+        </div><div class="control-group transformation">
+            <div class="control term">
+                <input type="text" value="sumSeats">
+            </div>    <div class="control operators">
+            <select>
+                <option value="COUNT">
+                    COUNT
+                </option>                <option value="AVG">
+                AVG
+            </option>                <option value="MAX">
+                MAX
+            </option>                <option value="MIN">
+                MIN
+            </option>                <option value="SUM" selected="selected">
+                SUM
+            </option>    </select>
+        </div>
+            <div class="control fields">
+                <select>
+                    <option value="address">
+                        Address
+                    </option>                <option value="fullname">
+                    Full Name
+                </option>                <option value="furniture">
+                    Furniture
+                </option>                <option value="href">
+                    Link
+                </option>                <option value="lat">
+                    Latitude
+                </option>                <option value="lon">
+                    Longitude
+                </option>                <option value="name">
+                    Name
+                </option>                <option value="number">
+                    Number
+                </option>                <option value="seats" selected="selected">
+                    Seats
+                </option>                <option value="shortname">
+                    Short Name
+                </option>                <option value="type">
+                    Type
+                </option>    </select>
+            </div>
+            <a class="icon icon-minus" href="#"></a>
+        </div><div class="control-group transformation">
+            <div class="control term">
+                <input type="text" value="maxLong">
+            </div>    <div class="control operators">
+            <select>
+                <option value="COUNT">
+                    COUNT
+                </option>                <option value="AVG">
+                AVG
+            </option>                <option value="MAX" selected="selected">
+                MAX
+            </option>                <option value="MIN">
+                MIN
+            </option>                <option value="SUM">
+                SUM
+            </option>    </select>
+        </div>
+            <div class="control fields">
+                <select>
+                    <option value="address">
+                        Address
+                    </option>                <option value="fullname">
+                    Full Name
+                </option>                <option value="furniture">
+                    Furniture
+                </option>                <option value="href">
+                    Link
+                </option>                <option value="lat">
+                    Latitude
+                </option>                <option value="lon" selected="selected">
+                    Longitude
+                </option>                <option value="name">
+                    Name
+                </option>                <option value="number">
+                    Number
+                </option>                <option value="seats">
+                    Seats
+                </option>                <option value="shortname">
+                    Short Name
+                </option>                <option value="type">
+                    Type
+                </option>    </select>
+            </div>
+            <a class="icon icon-minus" href="#"></a>
+        </div></div>
         <div class="icon-container"><a class="icon icon-plus" href="#"></a></div>
     </div>
 </form>

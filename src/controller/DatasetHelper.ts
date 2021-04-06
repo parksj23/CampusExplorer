@@ -29,7 +29,7 @@ export default class DatasetHelper {
             const filePath: string = directory + id;
             fs.writeFileSync(filePath, JSON.stringify(datasetContent));
         } catch (e) {
-            throw new InsightError("Data was parsed correctly but not saved");
+            throw new InsightError("Data was parsed correctly but not saved.");
         }
     }
 

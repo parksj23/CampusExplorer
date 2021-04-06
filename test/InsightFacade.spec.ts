@@ -343,6 +343,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
         const futureResult = insightFacade.addDataset(id, datasets[id], InsightDatasetKind.Rooms);
         return expect(futureResult).to.eventually.deep.equal(expected);
     });
+
     // it("c2- Should add a valid dataset of type rooms with two tables in index- first invalid", function () {
     //     const id = "twoTablesInIndex";
     //     const expected = [id];

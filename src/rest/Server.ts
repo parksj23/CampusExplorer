@@ -127,7 +127,7 @@ export default class Server {
             res.json(200, {result: response});
             return next();
         }).catch((err) => {
-            res.json(400, {error: err});
+            res.json(400, {error: err.message});
             return next();
         });
     }

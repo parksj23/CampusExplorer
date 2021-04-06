@@ -14,10 +14,8 @@ mfields = ["avg", "pass", "fail", "audit", "year", "lat", "lon", "seats"];
 CampusExplorer.buildQuery = () => {
     try {
         let query = {};
-        // console.log("Let's start building the query.");
         let active = document.getElementsByClassName("tab-panel active")[0];
         let datasetKind = active.getAttribute("data-type");
-        // console.log("Dataset kind is: " + datasetKind.toString());
 
         fields = [];
         if (datasetKind === "courses") {
@@ -57,6 +55,8 @@ CampusExplorer.buildQuery = () => {
         transformations["GROUP"] = group;
         transformations["APPLY"] = apply;
         query["TRANSFORMATIONS"] = transformations;
+
+        console.log(query);
 
         return query;
     } catch (err) {

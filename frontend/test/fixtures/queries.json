@@ -285,5 +285,49 @@
                 }
             ]
         }
+    },
+    "query9": {
+        "WHERE": {
+            "EQ": {
+                "courses_audit": 10
+            }
+        },
+        "OPTIONS": {
+            "COLUMNS": [
+                "courses_instructor",
+                "countPass",
+                "minFail",
+                "maxYear"
+            ],
+            "ORDER": {
+                "dir": "DOWN",
+                "keys": [
+                    "countPass"
+                ]
+            }
+        },
+        "TRANSFORMATIONS": {
+            "GROUP": [
+                "courses_avg",
+                "courses_instructor"
+            ],
+            "APPLY": [
+                {
+                    "countPass": {
+                        "COUNT": "courses_pass"
+                    }
+                },
+                {
+                    "minFail": {
+                        "MIN": "courses_fail"
+                    }
+                },
+                {
+                    "maxYear": {
+                        "MAX": "courses_year"
+                    }
+                }
+            ]
+        }
     }
 }

@@ -48,15 +48,15 @@ CampusExplorer.buildQuery = () => {
             options["ORDER"] = order;
         }
 
-        if (group.length === 0) {
+        if (group.length === 0 && apply.length === 0) {
             return query;
         }
 
-        transformations["GROUP"] = group;
-        transformations["APPLY"] = apply;
+        transformations = {
+            "GROUP": group,
+            "APPLY": apply
+        }
         query["TRANSFORMATIONS"] = transformations;
-
-        console.log(query);
 
         return query;
     } catch (err) {

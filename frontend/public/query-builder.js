@@ -41,22 +41,25 @@ CampusExplorer.buildQuery = () => {
         apply = buildApply(datasetKind);
 
         query["WHERE"] = where;
-        query["OPTIONS"] = options;
-        options["COLUMNS"] = columns;
 
         if (!(order === null) || !(order.keys.length < 0)) {
-            options["ORDER"] = order;
+            query["OPTIONS"] = {
+                COLUMNS: columns,
+                ORDER: order
+            };
+        } else {
+            query["OPTIONS"] = {
+                COLUMNS: columns
+            };
         }
 
-        if (group.length === 0 && apply.length === 0) {
-            return query;
+        if (group.length > 0) {
+            transformations = {
+                GROUP: group,
+                APPLY: apply
+            }
+            query["TRANSFORMATIONS"] = transformations;
         }
-
-        transformations = {
-            "GROUP": group,
-            "APPLY": apply
-        }
-        query["TRANSFORMATIONS"] = transformations;
 
         return query;
     } catch (err) {

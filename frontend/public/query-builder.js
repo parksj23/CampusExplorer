@@ -125,7 +125,7 @@ function getFilters(datasetKind) {
         }
 
         // Get the dropdown logical operator (GT, LT, EQ, IS)
-        let logicOp = null;
+        let logicOp = "";
         for (let op of cond.getElementsByClassName("control operators")[0].getElementsByTagName("option")) {
             if (op.selected) {
                 logicOp = op.value;

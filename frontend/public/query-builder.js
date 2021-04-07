@@ -42,26 +42,39 @@ CampusExplorer.buildQuery = () => {
 
         query["WHERE"] = where;
 
-        if (!(order === null) || !(order.keys.length < 0)) {
-            query["OPTIONS"] = {
-                COLUMNS: columns,
-                ORDER: order
-            };
-        } else {
-            query["OPTIONS"] = {
-                COLUMNS: columns
-            };
-        }
+        // if (!(order === null) || !(order.keys.length < 0)) {
+        //     query["OPTIONS"] = {
+        //         COLUMNS: columns,
+        //         ORDER: order
+        //     };
+        // } else {
+        //     query["OPTIONS"] = {
+        //         COLUMNS: columns
+        //     };
+        // }
+        //
+        // if (group.length > 0) {
+        //     transformations = {
+        //         GROUP: group,
+        //         APPLY: apply
+        //     }
+        //     query["TRANSFORMATIONS"] = transformations;
+        // }
 
-        if (group.length > 0) {
-            transformations = {
-                GROUP: group,
-                APPLY: apply
-            }
-            query["TRANSFORMATIONS"] = transformations;
+        // TODO: maybe it's just supposed to build the query whether it's valid or not...
+        query["OPTIONS"] = {
+            COLUMNS: columns,
+            ORDER: order
+        };
+
+        transformations = {
+            GROUP: group,
+            APPLY: apply
         }
+        query["TRANSFORMATIONS"] = transformations;
 
         return query;
+
     } catch (err) {
         return err;
     }

@@ -9,18 +9,22 @@ CampusExplorer.sendQuery = (query) => {
         try {
             let request = new XMLHttpRequest();
             request.open("POST", "/query", true);
+            request.setRequestHeader("Content-Type", "application/json");
 
             request.onload = (() => {
                 let result = JSON.parse(request.responseText);
-                if (request.status = 200) {
+                if (request.status === 200) {
                     return resolve(result);
                 } else {
                     return reject(result);
                 }
             });
 
-            request.setRequestHeader("Content-Type", "application/json");
-            request.send(JSON.stringify(query));
+            try {
+                request.send(JSON.stringify(query));
+            } catch (err) {
+                return reject(err);
+            }
         } catch (err) {
             reject (err);
         }

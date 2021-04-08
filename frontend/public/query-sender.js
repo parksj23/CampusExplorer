@@ -9,7 +9,6 @@ CampusExplorer.sendQuery = (query) => {
         try {
             let request = new XMLHttpRequest();
             request.open("POST", "/query", true);
-            request.setRequestHeader("Content-Type", "application/JSON");
 
             request.onload = (() => {
                 let result = JSON.parse(request.responseText);
@@ -20,10 +19,7 @@ CampusExplorer.sendQuery = (query) => {
                 }
             });
 
-            request.onerror = (() => {
-                reject("The request cannot be made.");
-            });
-
+            request.setRequestHeader("Content-Type", "application/json");
             request.send(JSON.stringify(query));
         } catch (err) {
             reject (err);

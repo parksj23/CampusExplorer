@@ -3,5 +3,9 @@
     "query2": "c2Valid2COUNT",
     "query3": "c2ValidCourses",
     "query4": "c2ValidTripleAPPLY",
-    "query5": "c2ValidRoomsExampleWithAddedColumn"
+    "query5": "c2ValidRoomsExampleWithAddedColumn",
+    "query6": "Trying stuff on reference UI",
+    "query7": "Reference UI rooms",
+    "query8": "Reference UI rooms w trans",
+    "query9": "After seeing how to debug"
 }

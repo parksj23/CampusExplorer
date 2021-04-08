@@ -42,36 +42,36 @@ CampusExplorer.buildQuery = () => {
 
         query["WHERE"] = where;
 
-        // if (!(order === null) || !(order.keys.length < 0)) {
-        //     query["OPTIONS"] = {
-        //         COLUMNS: columns,
-        //         ORDER: order
-        //     };
-        // } else {
-        //     query["OPTIONS"] = {
-        //         COLUMNS: columns
-        //     };
-        // }
-        //
-        // if (group.length > 0) {
-        //     transformations = {
-        //         GROUP: group,
-        //         APPLY: apply
-        //     }
-        //     query["TRANSFORMATIONS"] = transformations;
-        // }
-
-        // TODO: maybe it's just supposed to build the query whether it's valid or not...
-        query["OPTIONS"] = {
-            COLUMNS: columns,
-            ORDER: order
-        };
-
-        transformations = {
-            GROUP: group,
-            APPLY: apply
+        if (!(order === null) || !(order.keys.length < 0)) {
+            query["OPTIONS"] = {
+                COLUMNS: columns,
+                ORDER: order
+            };
+        } else {
+            query["OPTIONS"] = {
+                COLUMNS: columns
+            };
         }
-        query["TRANSFORMATIONS"] = transformations;
+
+        if (group.length > 0) {
+            transformations = {
+                GROUP: group,
+                APPLY: apply
+            }
+            query["TRANSFORMATIONS"] = transformations;
+        }
+
+        // // TODO: maybe it's just supposed to build the query whether it's valid or not...
+        // query["OPTIONS"] = {
+        //     COLUMNS: columns,
+        //     ORDER: order
+        // };
+        //
+        // transformations = {
+        //     GROUP: group,
+        //     APPLY: apply
+        // }
+        // query["TRANSFORMATIONS"] = transformations;
 
         return query;
 
@@ -221,25 +221,20 @@ function buildOrder(datasetKind) {
             break;
         }
 
-        // case 1: {
-        //     if (!isDescendingSelected) {
-        //         // return orderArray[0];
-        //         let dir = "UP";
-        //         return {
-        //             dir: dir,
-        //             keys: orderArray
-        //         }
-        //     }
-        //
-        //     if (isDescendingSelected) {
-        //         let dir = "DOWN";
-        //         return {
-        //             dir: dir,
-        //             keys: orderArray
-        //         }
-        //     }
-        //     break;
-        // }
+        case 1: {
+            if (!isDescendingSelected) {
+                return orderArray[0];
+            }
+
+            if (isDescendingSelected) {
+                let dir = "DOWN";
+                return {
+                    dir: dir,
+                    keys: orderArray
+                }
+            }
+            break;
+        }
 
         default: {
             if (!isDescendingSelected) {

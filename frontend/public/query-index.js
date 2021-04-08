@@ -10,7 +10,9 @@
 document.getElementById("submit-button").addEventListener("click", () => {
     let query = CampusExplorer.buildQuery();
     CampusExplorer.sendQuery(query).then((result) => {
-        CampusExplorer.renderResult(JSON.parse(result));
+        // https://stackoverflow.com/questions/38380462/syntaxerror-unexpected-token-o-in-json-at-position-1
+        // CampusExplorer.renderResult(JSON.parse(result));
+        CampusExplorer.renderResult(result);
     }).catch((err) => {
         CampusExplorer.renderResult(err);
     });

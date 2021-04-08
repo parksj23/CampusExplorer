@@ -117,6 +117,87 @@ describe("Facade D3", function () {
         }
     });
 
+    it("PUT test for rooms dataset -- response body on success", function () {
+        const ZIP_FILE_DATA = fs.readFileSync("./test/data/rooms.zip");
+        try {
+            return chai.request("http://localhost:4321")
+                .put("/dataset/rooms/rooms")
+                .send(ZIP_FILE_DATA)
+                .set("Content-Type", "application/x-zip-compressed")
+                .then(function (res: Response) {
+                    Log.info("PUT - SUCCESS");
+                    expect(res.body.result[0]).to.be.equal("rooms");
+                })
+                .catch(function (err) {
+                    Log.error("PUT - ERROR: " + err.message);
+                    expect.fail();
+                });
+        } catch (err) {
+            // and some more logging here!
+            Log.error("PUT - ERROR: " + err.message);
+            expect.fail();
+        }
+    });
+
+    it("PUT test -- two consecutive requests", function () {
+        this.timeout(5000);
+        const ZIP_FILE_DATA = fs.readFileSync("./test/data/rooms.zip");
+        const ZIP_FILE_DATA2 = fs.readFileSync("./test/data/courses.zip");
+        try {
+            return chai.request("http://localhost:4321")
+                .put("/dataset/rooms/rooms")
+                .send(ZIP_FILE_DATA)
+                .set("Content-Type", "application/x-zip-compressed")
+                .then(function (res: Response) {
+                    Log.info("PUT - SUCCESS");
+                    expect(res.body.result[0]).to.be.equal("rooms");
+                }).then(() => {
+                    return chai.request("http://localhost:4321")
+                        .put("/dataset/courses/courses")
+                        .send(ZIP_FILE_DATA2)
+                        .set("Content-Type", "application/x-zip-compressed")
+                        .then(function (res: Response) {
+                            Log.info("PUT - SUCCESS");
+                            expect(res.body.result[1]).to.be.equal("courses");
+                        }).catch(function (err) {
+                            Log.error("PUT - ERROR: " + err.message);
+                            expect.fail();
+                        });
+                }).catch(function (err) {
+                    Log.error("PUT - ERROR: " + err.message);
+                    expect.fail();
+                });
+        } catch (err) {
+            // and some more logging here!
+            Log.error("PUT - ERROR: " + err.message);
+            expect.fail();
+        }
+    });
+
+    it("PUT test for rooms dataset -- response code on fail -- Invalid ID", function () {
+        const ZIP_FILE_DATA = fs.readFileSync("./test/data/rooms.zip");
+        try {
+            return chai.request("http://localhost:4321")
+                .put("/dataset/_rooms_/rooms")
+                .send(ZIP_FILE_DATA)
+                .set("Content-Type", "application/x-zip-compressed")
+                .then(function (res: Response) {
+                    // some logging here please!
+                    Log.info("PUT - SUCCESS");
+                    expect(res.status).to.be.equal(200);
+                }).catch(function (err) {
+                    // some logging here please!
+                    Log.error("PUT - ERROR: " + err.message);
+                    expect(err.response.res.body).to.be.deep.equal({error: "Invalid id."});
+                    // expect.fail();
+                });
+        } catch (err) {
+            // and some more logging here!
+            Log.error("PUT - ERROR: " + err.message);
+            expect.fail();
+        }
+    });
+
     it("ECHO- succeeds silently!", function () {   // <= No done callback
         chai.request("http://localhost:4321")
             .get("/echo/hello")
@@ -133,17 +214,178 @@ describe("Facade D3", function () {
                 expect(res).to.have.status(200);
             });
     });
-    //
-    // it("GET test for courses Dataset, previous add", function () {
-    //     const content = fs
-    //         .readFileSync("./test/data/courses.zip")
-    //         .toString("base64");
-    //     return facade.addDataset("courses", content, InsightDatasetKind.Courses).then((reeee) => {
-    //         chai.request("http://localhost:4321")
-    //             .get("/datasets")
-    //             .end(function (err, res) {
-    //                 expect(res).to.have.status(200);
+
+    it("GET test for courses Dataset, empty array", function () {
+        chai.request("http://localhost:4321")
+            .get("/datasets")
+            .end(function (err, res) {
+                expect(res.body.length).to.be.equal(0);
+            });
+    });
+
+    it("GET test for courses Dataset, success code after after PUT", function () {
+        this.timeout(10000);
+        const ZIP_FILE_DATA = fs.readFileSync("./test/data/rooms.zip");
+        try {
+            return chai.request("http://localhost:4321")
+                .put("/dataset/rooms/rooms")
+                .send(ZIP_FILE_DATA)
+                .set("Content-Type", "application/x-zip-compressed")
+                .then(function (res: Response) {
+                    Log.info("PUT - SUCCESS");
+                    expect(res.body.result[0]).to.be.equal("rooms");
+                }).then(() => {
+                    return chai.request("http://localhost:4321")
+                        .get("/datasets")
+                        .then(function (res: Response) {
+                            Log.info("GET - SUCCESS");
+                            expect(res.body.result[0].id).to.be.equal("rooms");
+                        }).catch(function (err) {
+                            Log.error("GET EXPECT- ERROR: " + err.message);
+                            expect.fail();
+                        });
+                }).catch(function (err) {
+                    Log.error("GET - ERROR: " + err.message);
+                    expect.fail();
+                });
+        } catch (err) {
+            // and some more logging here!
+            Log.error("PUT - ERROR: " + err.message);
+            expect.fail();
+        }
+    });
+
+    it("DELETE test for rooms dataset -- response code on success", function () {
+        this.timeout(10000);
+        const ZIP_FILE_DATA = fs.readFileSync("./test/data/rooms.zip");
+        try {
+            return chai.request("http://localhost:4321")
+                .put("/dataset/rooms/rooms")
+                .send(ZIP_FILE_DATA)
+                .set("Content-Type", "application/x-zip-compressed")
+                .then(function (res: Response) {
+                    Log.info("PUT - SUCCESS");
+                    expect(res.body.result[0]).to.be.equal("rooms");
+                }).then(() => {
+                    return chai.request("http://localhost:4321")
+                        .del("/dataset/rooms")
+                        .then(function (res: Response) {
+                            Log.info("PUT - SUCCESS");
+                            expect(res.body.result).to.be.equal("rooms");
+                        }).catch(function (err) {
+                            Log.error("DELETE EXPECT- ERROR: " + err.message);
+                            expect.fail();
+                        });
+                }).catch(function (err) {
+                    Log.error("DELETE - ERROR: " + err.message);
+                    expect.fail();
+                });
+        } catch (err) {
+            // and some more logging here!
+            Log.error("PUT - ERROR: " + err.message);
+            expect.fail();
+        }
+    });
+
+    it("DELETE test for rooms dataset -- response code and body on InsightError", function () {
+        this.timeout(10000);
+        const ZIP_FILE_DATA = fs.readFileSync("./test/data/rooms.zip");
+        try {
+            return chai.request("http://localhost:4321")
+                .put("/dataset/rooms/rooms")
+                .send(ZIP_FILE_DATA)
+                .set("Content-Type", "application/x-zip-compressed")
+                .then(function (res: Response) {
+                    Log.info("PUT - SUCCESS");
+                    expect(res.body.result[0]).to.be.equal("rooms");
+                }).then(() => {
+                    return chai.request("http://localhost:4321")
+                        .del("/dataset/_rooms")
+                        .then(function (res: Response) {
+                            Log.info("PUT - SUCCESS");
+                            expect(res.body.result).to.be.equal("rooms");
+                        }).catch(function (err) {
+                            Log.error("DELETE - ERROR: " + err.message);
+                            expect(err.status).to.be.equal(400);
+                            expect(err.response.res.body).to.be.deep.equal({error: "Invalid id."});
+                        });
+                }).catch(function (err) {
+                    Log.error("DELETE - ERROR: " + err.message);
+                    expect.fail();
+                });
+        } catch (err) {
+            // and some more logging here!
+            Log.error("PUT - ERROR: " + err.message);
+            expect.fail();
+        }
+    });
+
+    it("DELETE test for rooms dataset -- response code and body on NotFoundError", function () {
+        this.timeout(10000);
+        const ZIP_FILE_DATA = fs.readFileSync("./test/data/rooms.zip");
+        try {
+            return chai.request("http://localhost:4321")
+                .put("/dataset/rooms/rooms")
+                .send(ZIP_FILE_DATA)
+                .set("Content-Type", "application/x-zip-compressed")
+                .then(function (res: Response) {
+                    Log.info("PUT - SUCCESS");
+                    expect(res.body.result[0]).to.be.equal("rooms");
+                }).then(() => {
+                    return chai.request("http://localhost:4321")
+                        .del("/dataset/courses")
+                        .then(function (res: Response) {
+                            Log.info("PUT - SUCCESS");
+                            expect(res.body.result).to.be.equal("rooms");
+                        }).catch(function (err) {
+                            Log.error("DELETE - ERROR: " + err.message);
+                            expect(err.status).to.be.equal(404);
+                            expect(err.response.res.body).to.be.deep.equal({error: "Dataset not found."});
+                        });
+                }).catch(function (err) {
+                    Log.error("DELETE - ERROR: " + err.message);
+                    expect.fail();
+                });
+        } catch (err) {
+            // and some more logging here!
+            Log.error("PUT - ERROR: " + err.message);
+            expect.fail();
+        }
+    });
+
+    // it("POST test for rooms dataset -- response code on fail", function () {
+    //     this.timeout(10000);
+    //     const ZIP_FILE_DATA = fs.readFileSync("./test/data/rooms.zip");
+    //     const QUERY_JSON = 1;
+    //     try {
+    //         return chai.request("http://localhost:4321")
+    //             .put("/dataset/rooms/rooms")
+    //             .send(ZIP_FILE_DATA)
+    //             .set("Content-Type", "application/x-zip-compressed")
+    //             .then(function (res: Response) {
+    //                 Log.info("PUT - SUCCESS");
+    //                 expect(res.body.result[0]).to.be.equal("rooms");
+    //             }).then(() => {
+    //                 return chai.request("http://localhost:4321")
+    //                     .post("/query")
+    //                     .send(QUERY_JSON)
+    //                     .then(function (res: Response) {
+    //                         Log.info("PUT - SUCCESS");
+    //                         expect(res.body.result).to.be.equal("rooms");
+    //                     }).catch(function (err) {
+    //                         Log.error("DELETE - ERROR: " + err.message);
+    //                         expect(err.status).to.be.equal(400);
+    //                         expect(err.response.res.body).to.be.deep.equal({error: "Invalid id."});
+    //                     });
+    //             }).catch(function (err) {
+    //                 Log.error("DELETE - ERROR: " + err.message);
+    //                 expect.fail();
     //             });
-    //     });
+    //     } catch (err) {
+    //         // and some more logging here!
+    //         Log.error("PUT - ERROR: " + err.message);
+    //         expect.fail();
+    //     }
     // });
+
 });

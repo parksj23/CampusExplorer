@@ -27,7 +27,6 @@ export default class CoursesDatasetHelper {
                 promiseArray.push(asyncPromiseReadFile);
                 fileCount++;
             });
-            // TODO error here not caught
             if (fileCount < 1) {
                 throw new InsightError("Invalid dataset: Empty or non-existent courses root directory.");
             }

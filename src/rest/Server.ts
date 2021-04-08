@@ -68,7 +68,7 @@ export default class Server {
 
                 // NOTE: your endpoints should go here
                 that.rest.put("/dataset/:id/:kind", Server.putDataset);
-                // that.rest.del("/dataset/:id", Server.deleteDataset);
+                that.rest.del("/dataset/:id", Server.deleteDataset);
                 // that.rest.post("/query", Server.postQuery);
                 that.rest.get("/datasets", Server.getDatasets);
 
@@ -127,24 +127,43 @@ export default class Server {
             res.json(200, {result: response});
             return next();
         }).catch((err) => {
-            res.json(400, {error: err});
+            res.json(400, {error: err.message});
             return next();
         });
     }
 
     private static deleteDataset(req: restify.Request, res: restify.Response, next: restify.Next) {
-        return next();
+        Log.trace("Server::deleteDataset(..) - params: " + JSON.stringify(req.params));
+        const id: string = req.params.id;
+        return Server.insightFacade.removeDataset(id).then((response) => {
+            res.json(200, {result: response});
+            return next();
+        }).catch((err) => {
+            const hello = err.constructor.name;
+            if (err.constructor.name === "InsightError") {
+                res.json(400, {error: err.message});
+                return next();
+            }
+            if (err.constructor.name === "NotFoundError") {
+                res.json(404, {error: err.message});
+                return next();
+            }
+        });
     }
 
-    private static postQuery(req: restify.Request, res: restify.Response, next: restify.Next) {
-        return next();
-    }
+    // private static deleteDataset(req: restify.Request, res: restify.Response, next: restify.Next) {
+    //     return next();
+    // }
+
+    // private static postQuery(req: restify.Request, res: restify.Response, next: restify.Next) {
+    //     return next();
+    // }
 
     private static getDatasets(req: restify.Request, res: restify.Response, next: restify.Next) {
         Log.trace("Server::echo(..) - params: " + JSON.stringify(req.params));
         Log.info("Server::echo(..) - responding " + 200);
-        // Server.performGetDatasets().then((response) => {
         return Server.insightFacade.listDatasets().then((response) => {
+            // res.json(200, {result: response});
             res.json(200, {result: response});
             return next();
         });

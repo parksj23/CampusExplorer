@@ -69,7 +69,7 @@ export default class Server {
                 // NOTE: your endpoints should go here
                 that.rest.put("/dataset/:id/:kind", Server.putDataset);
                 that.rest.del("/dataset/:id", Server.deleteDataset);
-                // that.rest.post("/query", Server.postQuery);
+                that.rest.post("/query", Server.postQuery);
                 that.rest.get("/datasets", Server.getDatasets);
 
                 // This must be the last endpoint!
@@ -151,13 +151,18 @@ export default class Server {
         });
     }
 
-    // private static deleteDataset(req: restify.Request, res: restify.Response, next: restify.Next) {
-    //     return next();
-    // }
-
-    // private static postQuery(req: restify.Request, res: restify.Response, next: restify.Next) {
-    //     return next();
-    // }
+    private static postQuery(req: restify.Request, res: restify.Response, next: restify.Next) {
+        Log.trace("Server::postQuery(..) - params: " + JSON.stringify(req.params));
+        const id: string = req.params.id;
+        const kind: InsightDatasetKind = req.params.kind;
+        return Server.insightFacade.performQuery(req.params).then((response) => {
+            res.json(200, {result: response});
+            return next();
+        }).catch((err) => {
+            res.json(400, {error: err.message});
+            return next();
+        });
+    }
 
     private static getDatasets(req: restify.Request, res: restify.Response, next: restify.Next) {
         Log.trace("Server::echo(..) - params: " + JSON.stringify(req.params));

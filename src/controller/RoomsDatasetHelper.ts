@@ -48,9 +48,11 @@ export default class RoomsDatasetHelper {
                     } else {
                         return resolve(validRooms);
                     }
-                }); // TODO: need a catch here
+                }).catch((e) => {
+                    return reject(new InsightError("Error with Valid Rooms."));
+                });
             }).catch((e) => {
-                return reject(new InsightError());
+                return reject(new InsightError("getDataset Error."));
             });
         });
     }
@@ -87,7 +89,9 @@ export default class RoomsDatasetHelper {
                     }
                 }
                 return resolve(validRooms);
-            }); // TODO: need a catch here
+            }).catch((e) => {
+                return reject(new InsightError("Error fetching fields."));
+            });
         });
     }
 
@@ -108,10 +112,10 @@ export default class RoomsDatasetHelper {
                 return this.getBuildingHTMLArray(root, buildingPathArray).then((allBuildingsHTMLArray) => {
                     return resolve(allBuildingsHTMLArray);
                 }).catch((e) => {
-                    return reject(new InsightError("No rooms."));
+                    return reject(new InsightError("Could not get Building HTML array."));
                 });
             }).catch((e) => {
-                return reject(new InsightError("Parsing error."));
+                return reject(new InsightError("Building Parsing error."));
             });
         });
     }
@@ -144,7 +148,6 @@ export default class RoomsDatasetHelper {
     }
 
     public findRoomTable(element: any): any {
-        // TODO return multiple?
         if (element.nodeName === "table"
             && element.attrs[0].value === "views-table cols-5 table"
             && element.childNodes.length > 2
@@ -170,19 +173,19 @@ export default class RoomsDatasetHelper {
             const rootDir: JSZip = root.folder("rooms");
             pathArray.forEach((path) => {
                 const splittedPath: string[] = path.split("/");
-                let almostRoom: JSZip = rootDir;
+                let almostBuilding: JSZip = rootDir;
                 for (let i = 1; i < splittedPath.length - 1; i++) {
                     const folder: string = splittedPath[i];
-                    almostRoom = almostRoom.folder(folder);
+                    almostBuilding = almostBuilding.folder(folder);
                 }
-                const room: JSZipObject = almostRoom.file(splittedPath[splittedPath.length - 1]);
+                const room: JSZipObject = almostBuilding.file(splittedPath[splittedPath.length - 1]);
                 let asyncPromiseReadFile: Promise<string> = room.async("string");
                 promiseArray.push(asyncPromiseReadFile);
             });
             return Promise.all(promiseArray).then((htmlArray: string[]) => {
                 return resolve(htmlArray);
             }).catch((e) => {
-                return reject(new InsightError("No buildings."));
+                return reject(new InsightError("Error finding or parsing building."));
             });
         });
     }

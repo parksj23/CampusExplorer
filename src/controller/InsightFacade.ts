@@ -61,7 +61,7 @@ export default class InsightFacade implements IInsightFacade {
                         datasetArray = array;
                         return array;
                     }).catch((e) => {
-                        return reject(new InsightError("Course getDataset didn't work"));
+                        return reject(new InsightError("Course getDataset error."));
                     });
                 }
 
@@ -71,12 +71,12 @@ export default class InsightFacade implements IInsightFacade {
                         datasetArray = array;
                         return array;
                     }).catch ((e) => {
-                        return reject(new InsightError("Rooms getDataset didn't work"));
+                        return reject(new InsightError("Rooms getDataset error."));
                     });
                 }
             }).then(() => {
                 if (datasetArray.length < 1) {
-                    return reject(new InsightError("No valid sections."));
+                    return reject(new InsightError("No valid sections/rooms."));
                 } else {
                     this.d.saveData(id, insightKind, datasetArray);
                     return resolve(this.d.memory);

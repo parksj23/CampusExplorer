@@ -2,13 +2,11 @@
 import restify = require("restify");
 import Log from "../Util";
 import InsightFacade from "../controller/InsightFacade";
-import {InsightDataset, InsightDatasetKind} from "../controller/IInsightFacade";
+import {InsightDatasetKind} from "../controller/IInsightFacade";
 import fs = require("fs");
 
 export default class RestHandler {
 
-    private port: number;
-    private rest: restify.Server;
     public static insightFacade = new InsightFacade();
 
     // TODO move all restHandlers here
@@ -58,7 +56,6 @@ export default class RestHandler {
             res.json(200, {result: response});
             return next();
         }).catch((err) => {
-            const hello = err.constructor.name;
             if (err.constructor.name === "InsightError") {
                 res.json(400, {error: err.message});
                 return next();
@@ -72,8 +69,6 @@ export default class RestHandler {
 
     public static postQuery(req: restify.Request, res: restify.Response, next: restify.Next) {
         Log.trace("Server::postQuery(..) - params: " + JSON.stringify(req.params));
-        const id: string = req.params.id;
-        const kind: InsightDatasetKind = req.params.kind;
         return RestHandler.insightFacade.performQuery(req.params).then((response) => {
             res.json(200, {result: response});
             return next();
@@ -87,7 +82,6 @@ export default class RestHandler {
         Log.trace("Server::echo(..) - params: " + JSON.stringify(req.params));
         Log.info("Server::echo(..) - responding " + 200);
         return RestHandler.insightFacade.listDatasets().then((response) => {
-            // res.json(200, {result: response});
             res.json(200, {result: response});
             return next();
         });

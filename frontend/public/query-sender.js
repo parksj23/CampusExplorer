@@ -29,7 +29,7 @@ CampusExplorer.sendQuery = (query) => {
 
             request.onerror = (() => {
                 reject("Failed.");
-            })
+            });
 
             try {
                 request.send(JSON.stringify(query));

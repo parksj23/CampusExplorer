@@ -11,14 +11,8 @@ CampusExplorer.sendQuery = (query) => {
             request.open("POST", "/query", true);
             request.setRequestHeader("Content-Type", "application/json");
 
-//             try {
-//                 request.send(JSON.stringify(query));
-//             } catch (err) {
-//                 return reject(err);
-//             }
-
             request.onload = (() => {
-//                 let result = JSON.parse(request.responseText);
+                // let result = JSON.parse(request.responseText);
                 let result = request.response;
                 if (request.status === 200) {
                     resolve(result);

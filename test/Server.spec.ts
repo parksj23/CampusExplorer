@@ -6,7 +6,6 @@ import chaiHttp = require("chai-http");
 import Response = ChaiHttp.Response;
 import {expect} from "chai";
 import Log from "../src/Util";
-import * as JSZip from "jszip";
 import * as fs from "fs-extra";
 
 describe("Facade D3", function () {
@@ -20,7 +19,6 @@ describe("Facade D3", function () {
         Log.test(`Before all`);
         facade = new InsightFacade();
         server = new Server(4321);
-        // okTODO: start server here once and handle errors properly
         server.start().then(function (val: boolean) {
             Log.info("Server started: " + val);
         }).catch(function (err: Error) {
@@ -29,7 +27,6 @@ describe("Facade D3", function () {
     });
 
     after(function () {
-        // okTODO: stop server here once!
         server.stop();
     });
 
@@ -43,7 +40,6 @@ describe("Facade D3", function () {
         Log.test(`AfterTest: ${this.currentTest.title}`);
     });
 
-    // Sample on how to format PUT requests
     it("PUT test for courses dataset -- response code on success", function () {
         this.timeout(3000);
         const ZIP_FILE_DATA = fs.readFileSync("./test/data/courses.zip");
@@ -53,24 +49,20 @@ describe("Facade D3", function () {
                 .send(ZIP_FILE_DATA)
                 .set("Content-Type", "application/x-zip-compressed")
                 .then(function (res: Response) {
-                    // some logging here please!
                     Log.info("PUT - SUCCESS");
                     expect(res.status).to.be.equal(200);
                     expect(res.body.result[0]).to.be.equal("courses");
                 })
                 .catch(function (err) {
-                    // some logging here please!
                     Log.error("PUT - ERROR: " + err.message);
                     expect.fail();
                 });
         } catch (err) {
-            // and some more logging here!
             Log.error("PUT - ERROR: " + err.message);
             expect.fail();
         }
     });
 
-    // // The other endpoints work similarly. You should be able to find all instructions at the chai-http documentation
     it("PUT test for rooms dataset -- response code on success", function () {
         this.timeout(3000);
         const ZIP_FILE_DATA = fs.readFileSync("./test/data/rooms.zip");
@@ -80,13 +72,11 @@ describe("Facade D3", function () {
                 .send(ZIP_FILE_DATA)
                 .set("Content-Type", "application/x-zip-compressed")
                 .then(function (res: Response) {
-                    // some logging here please!
                     Log.info("PUT - SUCCESS");
                     expect(res.status).to.be.equal(200);
-                    // expect(res.body.result[0]).to.be.equal("rooms");
+                    expect(res.body.result[0]).to.be.equal("rooms");
                 })
                 .catch(function (err) {
-                    // some logging here please!
                     Log.error("PUT - ERROR: " + err.message);
                     expect.fail();
                 });
@@ -96,52 +86,6 @@ describe("Facade D3", function () {
             expect.fail();
         }
     });
-
-    // it("PUT test for courses dataset -- response body on success", function () {
-    //     this.timeout(3000);
-    //     const ZIP_FILE_DATA = fs.readFileSync("./test/data/courses.zip");
-    //     try {
-    //         return chai.request("http://localhost:4321")
-    //             .put("/dataset/courses/courses")
-    //             .send(ZIP_FILE_DATA)
-    //             .set("Content-Type", "application/x-zip-compressed")
-    //             .then(function (res: Response) {
-    //                 Log.info("PUT - SUCCESS");
-    //                 expect(res.body.result[0]).to.be.equal("courses");
-    //             })
-    //             .catch(function (err) {
-    //                 Log.error("PUT - ERROR: " + err.message);
-    //                 expect.fail();
-    //             });
-    //     } catch (err) {
-    //         // and some more logging here!
-    //         Log.error("PUT - ERROR: " + err.message);
-    //         expect.fail();
-    //     }
-    // });
-
-    // it("PUT test for rooms dataset -- response body on success", function () {
-    //     const ZIP_FILE_DATA = fs.readFileSync("./test/data/rooms.zip");
-    //     try {
-    //         return chai.request("http://localhost:4321")
-    //             .put("/dataset/rooms/rooms")
-    //             .send(ZIP_FILE_DATA)
-    //             .set("Content-Type", "application/x-zip-compressed")
-    //             .then(function (res: Response) {
-    //                 Log.info("PUT - SUCCESS");
-    //                 expect(res.body.result[0]).to.be.equal("rooms");
-    //             })
-    //             .catch(function (err) {
-    //                 Log.error("PUT - ERROR: " + err.message);
-    //                 expect.fail();
-    //             });
-    //     } catch (err) {
-    //         // and some more logging here!
-    //         Log.error("PUT - ERROR: " + err.message);
-    //         expect.fail();
-    //     }
-    // });
-    //
 
     it("PUT test -- two consecutive requests", function () {
         this.timeout(5000);
@@ -172,7 +116,6 @@ describe("Facade D3", function () {
                     expect.fail();
                 });
         } catch (err) {
-            // and some more logging here!
             Log.error("PUT - ERROR: " + err.message);
             expect.fail();
         }
@@ -186,28 +129,24 @@ describe("Facade D3", function () {
                 .send(ZIP_FILE_DATA)
                 .set("Content-Type", "application/x-zip-compressed")
                 .then(function (res: Response) {
-                    // some logging here please!
                     Log.info("PUT - SUCCESS");
                     expect.fail();
                 }).catch(function (err) {
-                    // some logging here please!
                     Log.error("PUT - ERROR: " + err.message);
                     expect(err.response.res.body).to.be.deep.equal({error: "Invalid id."});
-                    // expect.fail();
                 });
         } catch (err) {
-            // and some more logging here!
             Log.error("PUT - ERROR: " + err.message);
             expect.fail();
         }
     });
 
-    it("ECHO- succeeds silently!", function () {   // <= No done callback
+    it("ECHO- succeeds silently!", function () {
         chai.request("http://localhost:4321")
             .get("/echo/hello")
             .end(function (err, res) {
                 Log.info("SUCCESS");
-                expect(res.status).to.be.equal(200);    // <= Test completes before this runs
+                expect(res.status).to.be.equal(200);
             });
     });
 
@@ -255,7 +194,6 @@ describe("Facade D3", function () {
                     expect.fail();
                 });
         } catch (err) {
-            // and some more logging here!
             Log.error("PUT - ERROR: " + err.message);
             expect.fail();
         }
@@ -287,7 +225,6 @@ describe("Facade D3", function () {
                     expect.fail();
                 });
         } catch (err) {
-            // and some more logging here!
             Log.error("PUT - ERROR: " + err.message);
             expect.fail();
         }
@@ -320,7 +257,6 @@ describe("Facade D3", function () {
                     expect.fail();
                 });
         } catch (err) {
-            // and some more logging here!
             Log.error("PUT - ERROR: " + err.message);
             expect.fail();
         }
@@ -353,7 +289,6 @@ describe("Facade D3", function () {
                     expect.fail();
                 });
         } catch (err) {
-            // and some more logging here!
             Log.error("PUT - ERROR: " + err.message);
             expect.fail();
         }
@@ -402,7 +337,6 @@ describe("Facade D3", function () {
                     expect.fail();
                 });
         } catch (err) {
-            // and some more logging here!
             Log.error("PUT - ERROR: " + err.message);
             expect.fail();
         }
@@ -440,7 +374,6 @@ describe("Facade D3", function () {
                     expect.fail();
                 });
         } catch (err) {
-            // and some more logging here!
             Log.error("PUT - ERROR: " + err.message);
             expect.fail();
         }

@@ -9,7 +9,6 @@ export default class RestHandler {
 
     public static insightFacade = new InsightFacade();
 
-    // TODO move all restHandlers here
     public constructor() {
         Log.trace("RestHandler::init()");
     }

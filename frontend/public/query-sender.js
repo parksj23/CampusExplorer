@@ -11,26 +11,31 @@ CampusExplorer.sendQuery = (query) => {
             request.open("POST", "/query", true);
             request.setRequestHeader("Content-Type", "application/json");
 
-            try {
-                request.send(JSON.stringify(query));
-            } catch (err) {
-                return reject(err);
-            }
+//             try {
+//                 request.send(JSON.stringify(query));
+//             } catch (err) {
+//                 return reject(err);
+//             }
 
             request.onload = (() => {
-                let result = JSON.parse(request.responseText);
+//                 let result = JSON.parse(request.responseText);
+                let result = request.response;
                 if (request.status === 200) {
-                    return resolve(result);
+                    resolve(result);
                 } else {
-                    return reject(result);
+                    reject(result);
                 }
             });
 
-            // try {
-            //     request.send(JSON.stringify(query));
-            // } catch (err) {
-            //     return reject(err);
-            // }
+            request.onerror = (() => {
+                reject("Failed.");
+            })
+
+            try {
+                request.send(JSON.stringify(query));
+            } catch (err) {
+                reject(err);
+            }
         } catch (err) {
             reject (err);
         }

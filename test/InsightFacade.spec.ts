@@ -382,11 +382,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
         const futureResult = insightFacade.addDataset(id, datasets[id], InsightDatasetKind.Rooms);
         return expect(futureResult).to.be.rejectedWith(InsightError);
     });
-    // it("c2- Fail to add dataset of building with geoLocation error", function () {
-    //     const id = "geoLocationError";
-    //     const futureResult = insightFacade.addDataset(id, datasets[id], InsightDatasetKind.Rooms);
-    //     return expect(futureResult).to.be.rejectedWith(InsightError);
-    // });
+
     it("c2- Fail to add duplicate dataset -- rooms", function () {
         const id = "oneValidRoom";
         const expected = [id];

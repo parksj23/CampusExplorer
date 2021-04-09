@@ -49,13 +49,13 @@ CampusExplorer.buildQuery = () => {
         }
 
 
-        if (group.length === 0 && apply.length === 0) {
-            return query;
+        if (group.length > 0) {
+            transformations = {
+                GROUP: group,
+                APPLY: apply
+            }
+            query["TRANSFORMATIONS"] = transformations;
         }
-
-        transformations["GROUP"] = group;
-        transformations["APPLY"] = apply;
-        query["TRANSFORMATIONS"] = transformations;
 
         // // TODO: maybe it's just supposed to build the query whether it's valid or not...
         // query["OPTIONS"] = {

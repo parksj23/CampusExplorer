@@ -12,8 +12,8 @@ CampusExplorer.sendQuery = (query) => {
             request.setRequestHeader("Content-Type", "application/json");
 
             request.onload = (() => {
-                // let result = JSON.parse(request.responseText);
-                let result = request.response;
+                let result = JSON.parse(request.responseText);
+                // let result = request.response;
                 if (request.status === 200) {
                     resolve(result);
                 } else {

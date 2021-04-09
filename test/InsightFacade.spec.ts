@@ -95,19 +95,19 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
 
     // This is a unit test. You should create more like this!
 
-    // addDataset tests
-    it("Should add a valid dataset", function () {
-        this.timeout(10000);
-        const id: string = "courses";
-        const expected: string[] = [id];
-        const futureResult: Promise<string[]> = insightFacade.addDataset(
-            id,
-            datasets[id],
-            InsightDatasetKind.Courses,
-        );
-        return expect(futureResult).to.eventually.deep.equal(expected);
-    });
-
+    // // addDataset tests
+    // it("Should add a valid dataset", function () {
+    //     this.timeout( 3000);
+    //     const id: string = "courses";
+    //     const expected: string[] = [id];
+    //     const futureResult: Promise<string[]> = insightFacade.addDataset(
+    //         id,
+    //         datasets[id],
+    //         InsightDatasetKind.Courses,
+    //     );
+    //     return expect(futureResult).to.eventually.deep.equal(expected);
+    // });
+    //
     // it("Should add two valid datasets in a row", function () {
     //     this.timeout( 10000);
     //     const id1: string = "courses";
@@ -130,7 +130,6 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     //     const expected2: string[] = [id1, id2];
     //     const futureResult1: Promise<string[]> = insightFacade.addDataset(id1, datasets[id1],
     //         InsightDatasetKind.Courses);
-    //     // arrays do equal but not enough time to write file into data ?
     //     return expect(futureResult1).to.eventually.deep.equal(expected1).then(() => {
     //          const futureResult2: Promise<string[]> = insightFacade.addDataset(id2, datasets[id2],
     //              InsightDatasetKind.Courses);
@@ -188,8 +187,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     // });
     //
     // it("Fail to add dataset -- id is whitespace", function () {
-    //     const id: string = "  ";
-    //     const expected: string[] = [id];
+    //     const id: string = "    ";
     //     const futureResult: Promise<string[]> = insightFacade.addDataset(
     //         id,
     //         datasets[id],
@@ -200,7 +198,6 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     //
     // it("Fail to add dataset -- id with underscore", function () {
     //     const id: string = "courses_underscore";
-    //     const expected: string[] = [id];
     //     const futureResult: Promise<string[]> = insightFacade.addDataset(
     //         id,
     //         datasets[id],
@@ -211,7 +208,6 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     //
     // it("Fail to add dataset -- null id", function () {
     //     const id: string = null;
-    //     const expected: string[] = [id];
     //     const futureResult: Promise<string[]> = insightFacade.addDataset(
     //         id,
     //         datasets[id],
@@ -222,7 +218,6 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     //
     // it("Fail to add dataset -- undefined id", function () {
     //     const id: string = undefined;
-    //     const expected: string[] = [id];
     //     const futureResult: Promise<string[]> = insightFacade.addDataset(
     //         id,
     //         datasets[id],
@@ -233,7 +228,6 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     //
     // it("Fail to add dataset -- non-zip folder", function () {
     //     const id: string = "nonZipCourses";
-    //     const expected: string[] = [id];
     //     const futureResult: Promise<string[]> = insightFacade.addDataset(
     //         id,
     //         datasets[id],
@@ -244,7 +238,6 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     //
     // it("Fail to add dataset -- zipped but no courses root directory", function () {
     //     const id: string = "noFolder";
-    //     const expected: string[] = [id];
     //     const futureResult: Promise<string[]> = insightFacade.addDataset(
     //         id,
     //         datasets[id],
@@ -255,7 +248,6 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     //
     // it("Fail to add dataset -- empty folder", function () {
     //     const id: string = "coursesEmpty";
-    //     const expected: string[] = [id];
     //     const futureResult: Promise<string[]> = insightFacade.addDataset(
     //         id,
     //         datasets[id],
@@ -266,7 +258,6 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     //
     // it("Fail to add dataset -- no course sections", function () {
     //     const id: string = "noSections";
-    //     const expected: string[] = [id];
     //     const futureResult: Promise<string[]> = insightFacade.addDataset(
     //         id,
     //         datasets[id],
@@ -277,7 +268,6 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     //
     // it("Fail to add dataset -- invalid dataset", function () {
     //     const id: string = "coursesInvalid";
-    //     const expected: string[] = [id];
     //     const futureResult: Promise<string[]> = insightFacade.addDataset(
     //         id,
     //         datasets[id],
@@ -337,13 +327,14 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     //     );
     //     return expect(futureResult).to.be.rejectedWith(InsightError);
     // });
-    it("c2- Should add a valid dataset of type rooms", function () {
-        const id = "rooms";
-        const expected = [id];
-        const futureResult = insightFacade.addDataset(id, datasets[id], InsightDatasetKind.Rooms);
-        return expect(futureResult).to.eventually.deep.equal(expected);
-    });
-
+    //
+    // it("c2- Should add a valid dataset of type rooms", function () {
+    //     const id = "rooms";
+    //     const expected = [id];
+    //     const futureResult = insightFacade.addDataset(id, datasets[id], InsightDatasetKind.Rooms);
+    //     return expect(futureResult).to.eventually.deep.equal(expected);
+    // });
+    //
     // it("c2- Should add a valid dataset of type rooms with two tables in index- first invalid", function () {
     //     const id = "twoTablesInIndex";
     //     const expected = [id];
@@ -391,11 +382,7 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     //     const futureResult = insightFacade.addDataset(id, datasets[id], InsightDatasetKind.Rooms);
     //     return expect(futureResult).to.be.rejectedWith(InsightError);
     // });
-    // // it("c2- Fail to add dataset of building with geoLocation error", function () {
-    // //     const id = "geoLocationError";
-    // //     const futureResult = insightFacade.addDataset(id, datasets[id], InsightDatasetKind.Rooms);
-    // //     return expect(futureResult).to.be.rejectedWith(InsightError);
-    // // });
+    //
     // it("c2- Fail to add duplicate dataset -- rooms", function () {
     //     const id = "oneValidRoom";
     //     const expected = [id];
@@ -1060,9 +1047,8 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     //         .addDataset(id1, datasets[id1], InsightDatasetKind.Rooms)
     //         .then((result1) => {
     //             expect(result1).deep.equal(expected1);
-    //             const hdi = 2;
     //             return insightFacade
-    //                 .addDataset(id2, datasets[id2], InsightDatasetKind.Rooms).then((result2) => {
+    //                 .addDataset(id2, datasets[id2], InsightDatasetKind.Courses).then((result2) => {
     //                     expect(result2).deep.equal(expected2);
     //                     return insightFacade
     //                         .listDatasets()
@@ -1076,22 +1062,15 @@ describe("InsightFacade Add/Remove/List Dataset", function () {
     //                 });
     //         });
     // });
-    //
-    // // getAddress tests
-    // it("c2- Should get address - ACU Building ", function () {
-    //     const expected: string = "2211 Wesbrook Mall";
-    //     const id: string = "rooms";
-    //     const fileContent = datasets[id];
-    //     insightFacade.getBuildingAddress(fileContent).then((futureResult) => {
-    //         return expect(futureResult).to.eventually.deep.equal(expected);
-    //     });
-    // });
+
 });
+
 /*
  * This test suite dynamically generates tests from the JSON files in test/queries.
  * You should not need to modify it; instead, add additional files to the queries directory.
  * You can still make tests the normal way, this is just a convenient tool for a majority of queries.
  */
+
 describe("InsightFacade PerformQuery", () => {
     const datasetsToQuery: {
         [id: string]: { path: string; kind: InsightDatasetKind };

@@ -18,15 +18,8 @@ export default class Dataset {
         return this.datasetId;
     }
 
-    public setDatasetId(id: string) {
-        this.datasetId = id;
-    }
-
     public getCoursesArray(): any[] {
         return this.coursesArray;
     }
 
-    public setCoursesArray(array: any[]) {
-        this.coursesArray = array;
-    }
 }

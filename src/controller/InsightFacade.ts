@@ -43,16 +43,12 @@ export default class InsightFacade implements IInsightFacade {
         return new Promise<string[]>((resolve, reject) => {
             let insightKind: InsightDatasetKind;
             let datasetArray: any[] = [];
-            // check if id is valid
             if ((id === null) || (id === undefined) || (!id.trim().length) || (id.includes("_")) || (id.length < 1)) {
                 return reject(new InsightError("Invalid id."));
             }
-            // check if already added
             if (this.d.memory.includes(id)) {
                 return reject(new InsightError("Dataset already added."));
             }
-
-            // TODO potentially split paths here
             let zip: JSZip = new JSZip();
             return zip.loadAsync(content, {base64: true}).then((root: JSZip) => {
                 if (kind === "courses") {

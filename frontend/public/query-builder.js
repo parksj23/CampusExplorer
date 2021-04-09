@@ -41,25 +41,21 @@ CampusExplorer.buildQuery = () => {
         apply = buildApply(datasetKind);
 
         query["WHERE"] = where;
+        query["OPTIONS"] = options;
+        options["COLUMNS"] = columns;
 
-        if (!(order === null) || !(order.keys.length < 0)) {
-            query["OPTIONS"] = {
-                COLUMNS: columns,
-                ORDER: order
-            };
-        } else {
-            query["OPTIONS"] = {
-                COLUMNS: columns
-            };
+        if (order !== null && order.length !== 0) {
+            options["ORDER"] = order;
         }
 
-        if (group.length > 0) {
-            transformations = {
-                GROUP: group,
-                APPLY: apply
-            }
-            query["TRANSFORMATIONS"] = transformations;
+
+        if (group.length === 0 && apply.length === 0) {
+            return query;
         }
+
+        transformations["GROUP"] = group;
+        transformations["APPLY"] = apply;
+        query["TRANSFORMATIONS"] = transformations;
 
         // // TODO: maybe it's just supposed to build the query whether it's valid or not...
         // query["OPTIONS"] = {

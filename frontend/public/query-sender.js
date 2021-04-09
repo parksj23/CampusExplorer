@@ -13,17 +13,22 @@ CampusExplorer.sendQuery = (query) => {
 
             request.onload = (() => {
                 let result = JSON.parse(request.responseText);
+                // let result = request.response;
                 if (request.status === 200) {
-                    return resolve(result);
+                    resolve(result);
                 } else {
-                    return reject(result);
+                    reject(result);
                 }
+            });
+
+            request.onerror = (() => {
+                reject("Failed.");
             });
 
             try {
                 request.send(JSON.stringify(query));
             } catch (err) {
-                return reject(err);
+                reject(err);
             }
         } catch (err) {
             reject (err);

@@ -41,17 +41,13 @@ CampusExplorer.buildQuery = () => {
         apply = buildApply(datasetKind);
 
         query["WHERE"] = where;
+        query["OPTIONS"] = options;
+        options["COLUMNS"] = columns;
 
-        if (!(order === null) || !(order.keys.length < 0)) {
-            query["OPTIONS"] = {
-                COLUMNS: columns,
-                ORDER: order
-            };
-        } else {
-            query["OPTIONS"] = {
-                COLUMNS: columns
-            };
+        if (order !== null && order.length !== 0) {
+            options["ORDER"] = order;
         }
+
 
         if (group.length > 0) {
             transformations = {
